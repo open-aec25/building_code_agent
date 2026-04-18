@@ -1,0 +1,43 @@
+Step,Stage,Component or Layer,Logic / Action,Input or Trigger,Output / Next Step,Key Rule or Source
+1,Start,Frontend Chat UI,User opens the conversational interface,User visits the app,Chat UI is ready for a new or existing session,ARCHITECTURE.md Project Overview
+2,Session setup,Frontend and FastAPI Backend,Frontend starts or resumes a backend session,Page load or new session action,Backend creates or returns session state,POST /session/new
+3,User message,Frontend Chat UI,User sends a chat message,Typed user input,Message is sent to backend over REST,POST /session/{session_id}/message
+4,Request routing,FastAPI Backend,Backend routes message and current session state to chatbot layer,Incoming REST message,Chatbot receives message plus stored phase and inputs,System Architecture
+5,Conversation control,Chatbot Layer,Chatbot decides the next question or action using the conversation flow,User message and session state,One next question or a state update,conversation_flow.json
+6,Phase 1 - Building classification,Chatbot Layer,Ask primary building use, free text building use,Occupancy information is stored,Conversation Flow Summary
+7,Phase 1 - Building classification,Chatbot Layer,Ask occupant load at peak times,Occupant load answer,Occupant load is stored,Conversation Flow Summary
+8,Phase 1 - Building classification,Chatbot Layer,Ask if the building is essential after a disaster,Yes or no answer,Essential facility flag is stored,Conversation Flow Summary
+9,Phase 1 - Building classification,Chatbot Layer,Ask if hazardous materials are present,Yes or no answer,Hazardous materials flag is stored,Conversation Flow Summary
+10,Phase 1 derivation,Chatbot Layer and JSON Data Layer,Derive risk category from collected classification answers,Use; occupancy; occupant load; essential flag; hazardous flag,Risk Category I II III or IV is stored,risk_category.json
+11,Phase 2 - Site and wind speed,Chatbot Layer,Ask for city state or ZIP code,Location answer,Location value is stored,Conversation Flow Summary
+12,Phase 2 lookup,Chatbot Layer and JSON Data Layer,Look up basic wind speed V for the location and risk category,Location plus derived risk category,Basic wind speed V is confirmed or manual entry is requested,wind_speed_lookup.json
+13,Phase 3 - Exposure category,Chatbot Layer,Ask about surrounding terrain using guided options,Terrain description,Exposure Category B C or D is stored,conversation_flow.json
+14,Phase 4 - Topographic feature,Chatbot Layer,Ask whether a topographic feature is present,Yes or no answer,Branch to topographic detail questions or default Kzt,Conversation Flow Summary
+15,Phase 4 branch - No topographic feature,Chatbot Layer and Calculation Inputs,Set Kzt default path when no topographic feature exists,Topographic feature answer is no,Kzt is treated as 1.0,Hardcoded Defaults and Phase 4 rules
+16,Phase 4 branch - Topographic feature present,Chatbot Layer,Collect feature type H Lh and x,Topographic feature answer is yes,Topographic inputs are stored for engine calculation,kzt_topographic_26_8.json
+17,Phase 5 - Building geometry,Chatbot Layer,Ask mean roof height h,Height answer,Mean roof height is stored,Conversation Flow Summary
+18,Phase 5 - Building geometry,Chatbot Layer,Ask building length L parallel to wind,Length answer,Building length is stored,Conversation Flow Summary
+19,Phase 5 - Building geometry,Chatbot Layer,Ask building width B perpendicular to wind,Width answer,Building width is stored,Conversation Flow Summary
+20,Phase 5 - Roof geometry,Chatbot Layer,Ask roof type and branch if needed,Roof type answer,Flat roof skips slope and ridge orientation; other roofs continue,Conversation Flow Summary
+21,Phase 5 branch - Sloped roof,Chatbot Layer,Collect roof slope and ridge orientation for non-flat roofs,Roof type is gable hip or monoslope,Roof slope and ridge orientation are stored,Conversation Flow Summary
+22,Phase 6 - Design intent,Chatbot Layer,Ask analysis type,MWFRS C&C or both answer,Analysis type is stored,Conversation Flow Summary
+23,Phase 6 - Design intent,Chatbot Layer,Ask design standard,LRFD or ASD answer,Design standard is stored,Conversation Flow Summary
+24,Phase 7 - Confirmation,Chatbot Layer,Display a full input summary and ask for confirmation,All collected inputs,User confirms or corrects fields,Conversation Flow Summary
+25,Correction loop,Chatbot Layer and Session Store,Apply any user corrections and re-confirm,User correction message,Updated session state and refreshed summary,Chatbot Conversation Layer requirements
+26,Build calculation input,FastAPI Backend and Chatbot Layer,Assemble BuildingInputs after confirmation,Confirmed session state,Structured inputs are ready for the engine,Calculation Engine Public API
+27,Calculation execution,Calculation Engine,Run deterministic wind load calculation,BuildingInputs object,Full results dictionary is returned,run_wind_load_calculation(inputs)
+28,Reference lookup,Calculation Engine and JSON Data Layer,Read constants tables and coefficient JSON files during calculation,BuildingInputs plus JSON reference files,Kz Kzt Cp defaults and other lookup values are available,Data Layer Files
+29,Apply defaults,Calculation Engine,Apply v1 hardcoded defaults,Calculation run starts,G Ke Kd GCpi and enclosure defaults are included and flagged,Hardcoded Defaults
+30,Velocity pressure,Calculation Engine,Calculate exposure coefficients and velocity pressure,Height exposure wind speed Kzt and constants,Kz Kh qz and qh values are calculated,ASCE 7-16 Eq. 26.10-1 and Table 26.10-1
+31,Pressure coefficients,Calculation Engine,Determine wall and roof Cp values,Geometry roof type slope and ratios,Wall Cp and roof zone Cp values are calculated,ASCE 7-16 Figures 27.3-1 and 27.3-2
+32,Design pressures,Calculation Engine,Calculate wall and roof design pressures,Velocity pressure Cp qi and GCpi,Surface pressures are calculated for applicable cases,ASCE 7-16 Eq. 27.3-1
+33,Minimum pressure check,Calculation Engine,Apply minimum load checks to calculated pressures,Calculated pressures by surface,Final governing pressures and minimum flags are returned,ASCE 7-16 Section 27.1.5
+34,Result structure,Calculation Engine,Return complete traceable results dictionary,Completed calculation,Inputs constants Kzt velocity pressure Cp values pressures and summary,Calculation Engine Output Structure
+35,Report formatting,Report Formatter,Convert raw calculation results into UI friendly and markdown formats,Full results dictionary,Structured display data or markdown calculation report,Task 07 Results Report Formatter
+36,Backend response,FastAPI Backend,Return results or next chatbot response to frontend,Chatbot output or calculation output,Frontend receives structured response,System Architecture
+37,Display output,Frontend Results UI,Render readable results instead of raw JSON,Structured backend response,User sees tables summaries and intermediate values,Production Frontend requirements
+38,TTS response split,Chatbot Layer,Generate display_text for the UI and spoken_text for audio,Assistant response content,Two response versions are available,TTS Spoken Text Rules
+39,TTS generation,TTS Module,Send spoken_text to server-side TTS module if enabled,Plain prose spoken_text,OpenAI TTS request is made,tts.py and OpenAI TTS API
+40,TTS playback,Frontend Audio Player,Play returned audio stream for the assistant response,audio/mpeg stream,User hears spoken assistant response,System Architecture
+41,Graceful degradation,TTS Module and Frontend,Continue conversation if TTS fails,TTS API failure or disabled setting,Text chat continues without audio,Task NEW-B graceful degradation
+42,Core architectural rule,Whole Application,LLM handles conversation interpretation and explanation while Python performs arithmetic,Any user interaction and calculation request,Calculations remain deterministic and traceable,Core Design Principles

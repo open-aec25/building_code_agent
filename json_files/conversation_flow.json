@@ -1,0 +1,311 @@
+{
+  "description": "ASCE 7-16 Wind Load Chatbot — Conversation Flow Schema",
+  "version": "1.0",
+  "phases": [
+
+    {
+      "phase": 1,
+      "name": "Building Classification",
+      "goal": "Derive Risk Category from occupancy questions — never ask user for Risk Category directly",
+      "questions": [
+        {
+          "id": "Q1",
+          "field": "occupancy_description",
+          "text": "What is the primary use of this building? (e.g. office, warehouse, retail, school, hospital, residential)",
+          "type": "free_text",
+          "why": "Used to map occupancy type and derive Risk Category per ASCE 7-16 Table 1.5-1",
+          "llm_action": "Map user response to occupancy_type_map in risk_category.json — extract best matching key",
+          "next": "Q2"
+        },
+        {
+          "id": "Q2",
+          "field": "occupant_load",
+          "text": "Approximately how many people occupy the building at peak times?",
+          "type": "integer",
+          "why": "Occupant load affects Risk Category — buildings with 300+ occupants or assembly use are Risk Cat III",
+          "next": "Q3"
+        },
+        {
+          "id": "Q3",
+          "field": "essential_post_disaster",
+          "text": "Is this building designated as essential for post-disaster response? (e.g. hospital, fire station, emergency operations center, water treatment facility)",
+          "type": "boolean",
+          "why": "Essential facilities are Risk Category IV and use a higher wind speed map",
+          "next": "Q4"
+        },
+        {
+          "id": "Q4",
+          "field": "hazardous_materials",
+          "text": "Does the building store or handle hazardous materials that could pose a public risk if released?",
+          "type": "boolean",
+          "why": "Hazardous material storage elevates the building to Risk Category III minimum",
+          "next": "DERIVE_RISK_CATEGORY"
+        }
+      ],
+      "derivation": {
+        "action": "DERIVE_RISK_CATEGORY",
+        "logic_file": "risk_category.json",
+        "output_field": "risk_category",
+        "confirm_to_user": "Based on your answers, this building is classified as Risk Category {risk_category} per ASCE 7-16 Table 1.5-1. This means we will use wind speed map Figure {wind_speed_figure}."
+      }
+    },
+
+    {
+      "phase": 2,
+      "name": "Site and Wind Speed",
+      "goal": "Look up basic wind speed V from JSON based on location and risk category",
+      "questions": [
+        {
+          "id": "Q5",
+          "field": "location",
+          "text": "What city and state is the project located in? A zip code also works.",
+          "type": "free_text",
+          "why": "Used to look up the basic wind speed (V) from ASCE 7-16 Figure 26.5-1",
+          "llm_action": "Match to nearest entry in wind_speed_lookup.json using city/state or zip. Return V in mph.",
+          "next": "LOOKUP_WIND_SPEED"
+        }
+      ],
+      "derivation": {
+        "action": "LOOKUP_WIND_SPEED",
+        "logic_file": "wind_speed_lookup.json",
+        "output_field": "basic_wind_speed_V",
+        "confirm_to_user": "Based on your location, the basic wind speed is {V} mph per ASCE 7-16 Figure {wind_speed_figure}. Does that look correct?",
+        "fallback": "If location is not found in lookup table, ask: 'I was not able to automatically determine the wind speed for your location. Please look up the basic wind speed on ASCE 7-16 Figure {wind_speed_figure} and enter the value in mph.'"
+      }
+    },
+
+    {
+      "phase": 3,
+      "name": "Exposure Category",
+      "goal": "Determine Exposure B, C, or D based on upwind terrain description",
+      "questions": [
+        {
+          "id": "Q6",
+          "field": "exposure_category",
+          "text": "How would you describe the terrain surrounding the building for at least half a mile in most directions? Choose the best match:\n  A) Dense urban or suburban area, wooded terrain, or closely spaced structures (houses, trees, small buildings) — Exposure B\n  B) Open terrain with scattered obstructions generally less than 30 ft tall (fields, farmland, open lots, grasslands) — Exposure C\n  C) Flat, unobstructed area near a large body of water such as ocean, bay, or large lake — Exposure D",
+          "type": "enum",
+          "options": ["B", "C", "D"],
+          "why": "Exposure category controls how wind speed varies with height (Kz values). A more exposed site = higher wind pressures at all heights.",
+          "guidance": "If the site is near a boundary between two categories, or if you are unsure, select the less sheltered option (e.g. C over B) for a conservative result.",
+          "next": "Q7"
+        }
+      ]
+    },
+
+    {
+      "phase": 4,
+      "name": "Topographic Feature",
+      "goal": "Determine if Kzt > 1.0 applies or if we default to 1.0",
+      "questions": [
+        {
+          "id": "Q7",
+          "field": "topographic_feature_present",
+          "text": "Is the building located on or near a hill, ridge, or escarpment (a cliff-like slope)?",
+          "type": "boolean",
+          "why": "Buildings on elevated terrain experience higher wind speeds. If yes, we need a few more measurements to calculate the topographic factor Kzt per ASCE 7-16 §26.8.",
+          "branch": {
+            "false": {
+              "action": "SET Kzt = 1.0",
+              "next": "PHASE_5"
+            },
+            "true": {
+              "next": "Q7a"
+            }
+          }
+        },
+        {
+          "id": "Q7a",
+          "field": "topo_feature_type",
+          "text": "What type of topographic feature is the building near?",
+          "type": "enum",
+          "options": ["2D Ridge (long ridge running perpendicular to wind)", "2D Escarpment (cliff-like slope)", "3D Hill (isolated hill)"],
+          "why": "The shape of the feature affects how much the wind speed increases at the crest.",
+          "next": "Q7b"
+        },
+        {
+          "id": "Q7b",
+          "field": "topo_H",
+          "text": "What is the height of the topographic feature (H) in feet? This is the vertical distance from the base to the crest.",
+          "type": "float",
+          "units": "ft",
+          "next": "Q7c"
+        },
+        {
+          "id": "Q7c",
+          "field": "topo_Lh",
+          "text": "What is the horizontal distance from the crest to the point upwind where the elevation equals H/2 (called Lh)? This characterizes how steep the feature is.",
+          "type": "float",
+          "units": "ft",
+          "next": "Q7d"
+        },
+        {
+          "id": "Q7d",
+          "field": "topo_x",
+          "text": "What is the horizontal distance from the crest of the feature to the building site (x) in feet?",
+          "type": "float",
+          "units": "ft",
+          "next": "DERIVE_KZT"
+        }
+      ],
+      "derivation": {
+        "action": "DERIVE_KZT",
+        "logic_file": "kzt_topographic_26_8.json",
+        "output_field": "Kzt",
+        "confirm_to_user": "The topographic factor Kzt = {Kzt} has been calculated per ASCE 7-16 Figure 26.8-1."
+      }
+    },
+
+    {
+      "phase": 5,
+      "name": "Building Geometry",
+      "goal": "Collect all dimensional inputs needed for Kz, h/L ratio, and Cp lookups",
+      "questions": [
+        {
+          "id": "Q8",
+          "field": "mean_roof_height_h",
+          "text": "What is the mean roof height (h) of the building in feet? This is measured from grade to the midpoint of the roof slope. For a flat roof, this is just the eave height.",
+          "type": "float",
+          "units": "ft",
+          "next": "Q9"
+        },
+        {
+          "id": "Q9",
+          "field": "building_length_L",
+          "text": "What is the length (L) of the building in feet? This is the horizontal dimension parallel to the wind direction being analyzed.",
+          "type": "float",
+          "units": "ft",
+          "next": "Q10"
+        },
+        {
+          "id": "Q10",
+          "field": "building_width_B",
+          "text": "What is the width (B) of the building in feet? This is the horizontal dimension perpendicular to the wind direction.",
+          "type": "float",
+          "units": "ft",
+          "note_to_llm": "After collecting B, compute and store h/L and L/B ratios — these are needed for Cp lookups",
+          "next": "Q11"
+        },
+        {
+          "id": "Q11",
+          "field": "roof_type",
+          "text": "What type of roof does the building have?",
+          "type": "enum",
+          "options": [
+            "Flat (slope less than 2 degrees or 1/2:12 pitch)",
+            "Gable (two slopes meeting at a ridge)",
+            "Hip (four sloping sides meeting at a ridge)",
+            "Monoslope (single slope, one direction)"
+          ],
+          "why": "Roof type and slope determine the external pressure coefficients (Cp) on the roof surfaces.",
+          "branch": {
+            "flat": {
+              "next": "PHASE_6"
+            },
+            "gable": {
+              "next": "Q12"
+            },
+            "hip": {
+              "next": "Q12"
+            },
+            "monoslope": {
+              "next": "Q12"
+            }
+          }
+        },
+        {
+          "id": "Q12",
+          "field": "roof_slope_deg",
+          "text": "What is the roof slope in degrees? (If you know it as rise:run, divide rise by run and take the arctangent — e.g. 4:12 pitch = 18.4 degrees)",
+          "type": "float",
+          "units": "degrees",
+          "next": "Q13"
+        },
+        {
+          "id": "Q13",
+          "field": "ridge_orientation",
+          "text": "Relative to the wind direction being analyzed, is the wind blowing normal (perpendicular) to the ridge or parallel (along) the ridge?",
+          "type": "enum",
+          "options": ["Normal to ridge", "Parallel to ridge"],
+          "why": "Wind direction relative to the ridge line produces different pressure distributions on the roof slopes.",
+          "skip_if": "roof_type = monoslope",
+          "next": "PHASE_6"
+        }
+      ]
+    },
+
+    {
+      "phase": 6,
+      "name": "Design Intent",
+      "goal": "Scope the output before running calculations",
+      "questions": [
+        {
+          "id": "Q14",
+          "field": "analysis_type",
+          "text": "What are you designing for?",
+          "type": "enum",
+          "options": [
+            "MWFRS — Main Wind Force Resisting System (overall lateral loads on the structural system)",
+            "C&C — Components and Cladding (pressures on individual cladding, windows, roofing, connections)",
+            "Both MWFRS and C&C"
+          ],
+          "next": "Q15"
+        },
+        {
+          "id": "Q15",
+          "field": "design_standard",
+          "text": "Which design standard are you using?",
+          "type": "enum",
+          "options": [
+            "LRFD — Load and Resistance Factor Design",
+            "ASD — Allowable Stress Design"
+          ],
+          "why": "The design standard determines which load combination factors apply when combining wind loads with dead, live, and other loads.",
+          "next": "PHASE_7"
+        }
+      ]
+    },
+
+    {
+      "phase": 7,
+      "name": "Input Confirmation",
+      "goal": "Present all collected inputs to user for review before calculating",
+      "action": "DISPLAY_SUMMARY",
+      "summary_template": {
+        "text": "Before I run the calculations, here is a summary of everything I have collected. Please review and confirm — or let me know what to correct.",
+        "fields": [
+          { "label": "Risk Category",         "field": "risk_category" },
+          { "label": "Basic Wind Speed (V)",   "field": "basic_wind_speed_V",   "units": "mph" },
+          { "label": "Exposure Category",      "field": "exposure_category" },
+          { "label": "Topographic Factor Kzt", "field": "Kzt" },
+          { "label": "Ke (default)",           "value": "1.0" },
+          { "label": "Kd (hardcoded)",         "value": "0.85" },
+          { "label": "G (rigid, hardcoded)",   "value": "0.85" },
+          { "label": "GCpi (enclosed)",        "value": "±0.18" },
+          { "label": "Mean Roof Height (h)",   "field": "mean_roof_height_h",   "units": "ft" },
+          { "label": "Building Length (L)",    "field": "building_length_L",    "units": "ft" },
+          { "label": "Building Width (B)",     "field": "building_width_B",     "units": "ft" },
+          { "label": "h/L ratio",              "field": "h_over_L",             "derived": true },
+          { "label": "L/B ratio",              "field": "L_over_B",             "derived": true },
+          { "label": "Roof Type",              "field": "roof_type" },
+          { "label": "Roof Slope",             "field": "roof_slope_deg",       "units": "degrees", "conditional": "roof_type != flat" },
+          { "label": "Ridge Orientation",      "field": "ridge_orientation",    "conditional": "roof_type IN [gable, hip]" },
+          { "label": "Analysis Type",          "field": "analysis_type" },
+          { "label": "Design Standard",        "field": "design_standard" }
+        ]
+      },
+      "confirmation_prompt": "Does everything look correct? If yes, I will proceed with the calculations. If anything needs to be changed, just let me know which item to update.",
+      "on_confirm": "PROCEED_TO_CALCULATION",
+      "on_correction": "UPDATE_FIELD_AND_REDISPLAY_SUMMARY"
+    }
+
+  ],
+
+  "calculated_outputs_order": [
+    "Kh (from Kz table at z = h)",
+    "qh (velocity pressure at mean roof height)",
+    "qz profile (windward wall — varies with height)",
+    "Cp values (walls and roof per geometry)",
+    "p (design wind pressure per surface)",
+    "Minimum load check (§27.1.5)"
+  ]
+}
