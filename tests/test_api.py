@@ -1,4 +1,4 @@
-"""API tests for the Phase 2 FastAPI backend skeleton."""
+"""API tests for the FastAPI backend and deterministic conversation controller."""
 
 from fastapi.testclient import TestClient
 
@@ -30,6 +30,10 @@ def _valid_calculation_payload(**overrides):
     return payload
 
 
+def _send(session_id: str, message: str):
+    return client.post(f"/session/{session_id}/message", json={"message": message})
+
+
 def test_new_session_returns_session_state():
     response = client.post("/session/new")
 
@@ -38,7 +42,9 @@ def test_new_session_returns_session_state():
     assert body["session_id"]
     assert body["session_state"]["session_id"] == body["session_id"]
     assert body["session_state"]["current_phase"] == 1
+    assert body["session_state"]["current_question_id"] == "Q1"
     assert body["session_state"]["collected_inputs"] == {}
+    assert body["session_state"]["branch_flags"] == {}
     assert body["session_state"]["messages"] == []
     assert body["session_state"]["ready_to_calculate"] is False
 
@@ -54,21 +60,20 @@ def test_get_session_state_returns_existing_session():
     assert body["last_calculation"] is None
 
 
-def test_message_endpoint_persists_user_and_placeholder_assistant_messages():
+def test_message_endpoint_persists_user_and_controller_response_messages():
     session_id = _new_session()
 
-    response = client.post(
-        f"/session/{session_id}/message",
-        json={"message": "Use an office building in Boston."},
-    )
+    response = _send(session_id, "office")
 
     assert response.status_code == 200
     body = response.json()
-    assert "Message received" in body["response"]
+    assert "Approximately how many people" in body["response"]
+    assert body["session_state"]["current_question_id"] == "Q2"
+    assert body["session_state"]["collected_inputs"]["occupancy_type"] == "office"
     messages = body["session_state"]["messages"]
     assert [message["role"] for message in messages] == ["user", "assistant"]
-    assert messages[0]["content"] == "Use an office building in Boston."
-    assert "deterministic conversation controller" in messages[1]["content"]
+    assert messages[0]["content"] == "office"
+    assert "Approximately how many people" in messages[1]["content"]
 
     state_response = client.get(f"/session/{session_id}/state")
     assert state_response.json()["messages"] == messages
@@ -144,10 +149,7 @@ def test_two_sessions_remain_isolated():
     first_session_id = _new_session()
     second_session_id = _new_session()
 
-    first_message = client.post(
-        f"/session/{first_session_id}/message",
-        json={"message": "first session message"},
-    )
+    first_message = _send(first_session_id, "office")
     second_calculation = client.post(
         f"/session/{second_session_id}/calculate",
         json=_valid_calculation_payload(basic_wind_speed_V=130.0),
@@ -160,8 +162,145 @@ def test_two_sessions_remain_isolated():
     second_state = client.get(f"/session/{second_session_id}/state").json()
 
     assert first_state["session_id"] != second_state["session_id"]
-    assert first_state["messages"][0]["content"] == "first session message"
+    assert first_state["messages"][0]["content"] == "office"
     assert first_state["last_calculation"] is None
     assert second_state["messages"] == []
     assert second_state["collected_inputs"]["basic_wind_speed_V"] == 130.0
     assert second_state["last_calculation"]["summary"]["qh_psf"] != 29.929
+
+
+def test_conversation_collects_flat_roof_flow_and_runs_calculation_on_confirm():
+    session_id = _new_session()
+    answers = [
+        "office",
+        "45",
+        "no",
+        "no",
+        "Boston, MA",
+        "115",
+        "C",
+        "no",
+        "40",
+        "100",
+        "50",
+        "flat",
+        "MWFRS",
+        "LRFD",
+    ]
+
+    last_response = None
+    for answer in answers:
+        last_response = _send(session_id, answer)
+        assert last_response.status_code == 200
+
+    body = last_response.json()
+    assert body["session_state"]["current_question_id"] == "CONFIRM"
+    assert body["session_state"]["ready_to_calculate"] is True
+    assert "Before I run the calculations" in body["response"]
+    assert "Roof Type: flat" in body["response"]
+    assert "Ridge Orientation" not in body["response"]
+
+    confirm_response = _send(session_id, "yes")
+
+    assert confirm_response.status_code == 200
+    confirm_body = confirm_response.json()
+    assert "Calculation complete" in confirm_body["response"]
+    assert confirm_body["session_state"]["current_question_id"] == "COMPLETE"
+    assert confirm_body["session_state"]["last_calculation"]["summary"]["qh_psf"] == 29.929
+
+
+def test_conversation_collects_gable_roof_slope_and_ridge_orientation():
+    session_id = _new_session()
+    answers = [
+        "warehouse",
+        "20",
+        "no",
+        "no",
+        "Chicago, IL",
+        "115",
+        "B",
+        "no",
+        "30",
+        "120",
+        "60",
+        "gable",
+        "18.4",
+        "normal",
+        "MWFRS",
+        "ASD",
+    ]
+
+    for answer in answers:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    state = client.get(f"/session/{session_id}/state").json()
+    assert state["current_question_id"] == "CONFIRM"
+    assert state["collected_inputs"]["roof_type"] == "gable"
+    assert state["collected_inputs"]["roof_slope_deg"] == 18.4
+    assert state["collected_inputs"]["ridge_orientation"] == "normal"
+
+
+def test_conversation_topographic_feature_branch_collects_detail_questions():
+    session_id = _new_session()
+    answers = [
+        "office",
+        "20",
+        "no",
+        "no",
+        "Denver, CO",
+        "115",
+        "C",
+        "yes",
+        "3D hill",
+        "100",
+        "200",
+        "50",
+        "40",
+        "100",
+        "50",
+        "flat",
+        "MWFRS",
+        "LRFD",
+    ]
+
+    for answer in answers:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    state = client.get(f"/session/{session_id}/state").json()
+    assert state["branch_flags"]["topographic_feature_present"] is True
+    assert state["collected_inputs"]["topo_feature_type"] == "3D_hill"
+    assert state["collected_inputs"]["topo_H"] == 100.0
+    assert state["current_question_id"] == "CONFIRM"
+
+
+def test_confirmation_correction_updates_field_and_redisplays_summary():
+    session_id = _new_session()
+    answers = [
+        "office",
+        "45",
+        "no",
+        "no",
+        "Boston, MA",
+        "115",
+        "C",
+        "no",
+        "40",
+        "100",
+        "50",
+        "flat",
+        "MWFRS",
+        "LRFD",
+    ]
+    for answer in answers:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    correction = _send(session_id, "change wind speed to 130 mph")
+
+    assert correction.status_code == 200
+    body = correction.json()
+    assert body["session_state"]["current_question_id"] == "CONFIRM"
+    assert body["session_state"]["collected_inputs"]["basic_wind_speed_V"] == 130.0
+    assert "Basic Wind Speed (V): 130.0" in body["response"]

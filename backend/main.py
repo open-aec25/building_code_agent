@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI, HTTPException
 
+from backend.chatbot import process_user_message
 from backend.models import (
     CalculationRequest,
     CalculationResponse,
@@ -55,10 +56,13 @@ def session_message(session_id: str, request: ChatRequest) -> ChatResponse:
     if updated_session is None:
         raise HTTPException(status_code=404, detail=f"Session '{session_id}' was not found.")
 
-    response = (
-        "Message received. The deterministic conversation controller is scheduled "
-        "for a later phase; this Phase 2 endpoint only persists session messages."
-    )
+    try:
+        response, updated_session = process_user_message(session_id, request.message)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=f"Session '{session_id}' was not found.") from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
     updated_session = append_message(session_id, "assistant", response)
     if updated_session is None:
         raise HTTPException(status_code=404, detail=f"Session '{session_id}' was not found.")

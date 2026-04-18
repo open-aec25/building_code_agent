@@ -16,13 +16,16 @@ Last updated: 2026-04-18 by Codex
   - Wired `/session/{session_id}/calculate` to `run_wind_load_calculation()`.
 - Phase 3 - Add Backend API Tests - completed 2026-04-18
   - Added `tests/test_api.py` covering session creation, state lookup, message persistence, valid calculation, validation errors, missing sessions, and session isolation.
+- Phase 4 - Build Deterministic Conversation Controller - completed 2026-04-18
+  - Added `backend/chatbot.py` with deterministic question flow, typed parsing, branch handling, confirmation summary, simple correction handling, and calculation-on-confirm through the existing engine.
+  - Updated `/session/{session_id}/message` to use the deterministic controller instead of the Phase 2 placeholder response.
+  - Extended API tests to cover flat roof, gable roof, topographic branch, correction flow, and calculation from confirmation.
 
 ## In Progress
 - None.
 
 ## Pending
 - Phase 1 - Stabilize The Calculation Core
-- Phase 4 - Build Deterministic Conversation Controller
 - Phase 5 - Add Risk Category And Wind Speed Logic
 - Phase 6 - Add LLM Integration Safely
 - Phase 7 - Add TTS Backend Module
@@ -37,6 +40,7 @@ Last updated: 2026-04-18 by Codex
 - Architecture notes mention 65 passing tests, but this repository currently contains 52 engine tests.
 
 ## Test Status
-- `python -m pytest -q`: 62 passed on 2026-04-18.
+- `python -m pytest -q`: 66 passed on 2026-04-18.
 - Phase 2 API smoke test: session creation, state lookup, message persistence, calculation, and missing-session 404 passed on 2026-04-18.
 - Phase 3 API tests: 10 API tests passing on 2026-04-18.
+- Phase 4 deterministic conversation tests: flat roof, gable roof, topographic branch, correction flow, and confirmation calculation passing on 2026-04-18.

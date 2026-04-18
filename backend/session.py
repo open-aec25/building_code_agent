@@ -23,7 +23,9 @@ def create_session() -> SessionDict:
         "created_at": _utc_now_iso(),
         "updated_at": _utc_now_iso(),
         "current_phase": 1,
+        "current_question_id": "Q1",
         "collected_inputs": {},
+        "branch_flags": {},
         "messages": [],
         "ready_to_calculate": False,
         "last_calculation": None,
@@ -66,6 +68,16 @@ def update_collected_inputs(session_id: str, inputs: dict[str, Any]) -> SessionD
     return deepcopy(session)
 
 
+def update_session(session_id: str, updates: dict[str, Any]) -> SessionDict | None:
+    """Merge top-level values into a session and return the updated session."""
+    session = _sessions.get(session_id)
+    if session is None:
+        return None
+    session.update(deepcopy(updates))
+    session["updated_at"] = _utc_now_iso()
+    return deepcopy(session)
+
+
 def store_calculation_result(
     session_id: str,
     inputs: dict[str, Any],
@@ -80,4 +92,3 @@ def store_calculation_result(
     session["ready_to_calculate"] = True
     session["updated_at"] = _utc_now_iso()
     return deepcopy(session)
-
