@@ -176,7 +176,7 @@ def test_conversation_collects_flat_roof_flow_and_runs_calculation_on_confirm():
         "45",
         "no",
         "no",
-        "Boston, MA",
+        "Chicago, IL",
         "115",
         "C",
         "no",
@@ -207,6 +207,152 @@ def test_conversation_collects_flat_roof_flow_and_runs_calculation_on_confirm():
     assert "Calculation complete" in confirm_body["response"]
     assert confirm_body["session_state"]["current_question_id"] == "COMPLETE"
     assert confirm_body["session_state"]["last_calculation"]["summary"]["qh_psf"] == 29.929
+
+
+def test_location_step_resolves_massachusetts_wind_speed_and_skips_manual_entry():
+    session_id = _new_session()
+    for answer in ["office", "45", "no", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "Boston, MA")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q6"
+    assert body["session_state"]["branch_flags"]["wind_speed_lookup_available"] is True
+    assert body["session_state"]["branch_flags"]["wind_speed_lookup_failed"] is False
+    assert body["session_state"]["collected_inputs"]["basic_wind_speed_V"] == 120.0
+    assert body["session_state"]["collected_inputs"]["resolved_municipality"] == "Boston"
+    assert "780 CMR Table 1604.11" in body["response"]
+    assert "V is 120 mph" in body["response"]
+
+
+def test_massachusetts_lookup_uses_risk_category_specific_wind_speed():
+    session_id = _new_session()
+    for answer in ["minor storage", "3", "no", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "Boston, Massachusetts")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q6"
+    assert body["session_state"]["collected_inputs"]["risk_category"] == "I"
+    assert body["session_state"]["collected_inputs"]["basic_wind_speed_V"] == 110.0
+    assert "Risk Category I" in body["response"]
+    assert "V is 110 mph" in body["response"]
+
+
+def test_massachusetts_lookup_warns_for_note_ref_2_special_wind_region():
+    session_id = _new_session()
+    for answer in ["office", "45", "no", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "Adams, MA")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q6"
+    assert body["session_state"]["collected_inputs"]["basic_wind_speed_V"] == 111.0
+    assert "note ref 2" in body["response"]
+    assert "Special Wind Region" in body["response"]
+
+
+def test_unresolved_massachusetts_location_uses_manual_wind_speed_fallback():
+    session_id = _new_session()
+    for answer in ["office", "45", "no", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "Atlantis, MA")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "MANUAL_WIND_SPEED"
+    assert body["session_state"]["branch_flags"]["wind_speed_lookup_available"] is False
+    assert body["session_state"]["branch_flags"]["wind_speed_lookup_failed"] is True
+    assert "did not resolve to a supported Massachusetts city or town" in body["response"]
+    assert "Figure 26.5-1A" in body["response"]
+
+
+def test_non_massachusetts_location_uses_manual_wind_speed_fallback():
+    session_id = _new_session()
+    for answer in ["office", "45", "no", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "Chicago, IL")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "MANUAL_WIND_SPEED"
+    assert body["session_state"]["branch_flags"]["wind_speed_lookup_available"] is False
+    assert body["session_state"]["branch_flags"]["wind_speed_lookup_failed"] is True
+    assert "Please look up the basic wind speed" in body["response"]
+    assert "Figure 26.5-1A" in body["response"]
+
+
+def test_manual_wind_speed_must_be_positive_and_keeps_question_active():
+    session_id = _new_session()
+    for answer in ["office", "45", "no", "no", "Chicago, IL"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "0")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "MANUAL_WIND_SPEED"
+    assert "number greater than 0" in body["response"]
+    assert "basic_wind_speed_V" not in body["session_state"]["collected_inputs"]
+
+
+def test_risk_category_iii_is_derived_for_large_school():
+    session_id = _new_session()
+    for answer in ["school", "300", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "no")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["collected_inputs"]["risk_category"] == "III"
+    assert body["session_state"]["collected_inputs"]["wind_speed_figure"] == "26.5-1C"
+    assert "Risk Category III" in body["response"]
+
+
+def test_risk_category_iv_is_derived_for_essential_hospital():
+    session_id = _new_session()
+    for answer in ["hospital", "100", "yes"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "no")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["collected_inputs"]["risk_category"] == "IV"
+    assert body["session_state"]["collected_inputs"]["wind_speed_figure"] == "26.5-1C"
+    assert "Risk Category IV" in body["response"]
+
+
+def test_risk_category_i_is_derived_for_minor_storage():
+    session_id = _new_session()
+    for answer in ["minor storage", "3", "no"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "no")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["collected_inputs"]["risk_category"] == "I"
+    assert body["session_state"]["collected_inputs"]["wind_speed_figure"] == "26.5-1B"
+    assert "Risk Category I" in body["response"]
 
 
 def test_conversation_collects_gable_roof_slope_and_ridge_orientation():
@@ -282,7 +428,7 @@ def test_confirmation_correction_updates_field_and_redisplays_summary():
         "45",
         "no",
         "no",
-        "Boston, MA",
+        "Chicago, IL",
         "115",
         "C",
         "no",

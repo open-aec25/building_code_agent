@@ -25,6 +25,9 @@ with (DATA_DIR / "conversation_flow.json").open(encoding="utf-8") as flow_file:
 with (DATA_DIR / "risk_category.json").open(encoding="utf-8") as risk_file:
     RISK_CATEGORY_DATA = json.load(risk_file)
 
+with (DATA_DIR / "ma_780_cmr_table_1604_11.json").open(encoding="utf-8") as ma_wind_file:
+    MA_WIND_DATA = json.load(ma_wind_file)
+
 
 QUESTION_PHASES = {
     "Q1": 1,
@@ -51,13 +54,99 @@ QUESTION_PHASES = {
     "COMPLETE": 7,
 }
 
+WIND_SPEED_LOOKUP_AVAILABLE = False
+MA_WIND_SPEED_LOOKUP_AVAILABLE = True
+
+RISK_CATEGORY_WIND_KEYS = {
+    "I": "risk_category_i",
+    "II": "risk_category_ii",
+    "III": "risk_category_iii",
+    "IV": "risk_category_iv",
+}
+
+STATE_NAMES_BY_ABBR = {
+    "AL": "alabama",
+    "AK": "alaska",
+    "AZ": "arizona",
+    "AR": "arkansas",
+    "CA": "california",
+    "CO": "colorado",
+    "CT": "connecticut",
+    "DE": "delaware",
+    "FL": "florida",
+    "GA": "georgia",
+    "HI": "hawaii",
+    "ID": "idaho",
+    "IL": "illinois",
+    "IA": "iowa",
+    "KS": "kansas",
+    "KY": "kentucky",
+    "LA": "louisiana",
+    "ME": "maine",
+    "MD": "maryland",
+    "MA": "massachusetts",
+    "MI": "michigan",
+    "MN": "minnesota",
+    "MS": "mississippi",
+    "MO": "missouri",
+    "MT": "montana",
+    "NE": "nebraska",
+    "NV": "nevada",
+    "NH": "new hampshire",
+    "NJ": "new jersey",
+    "NM": "new mexico",
+    "NY": "new york",
+    "NC": "north carolina",
+    "ND": "north dakota",
+    "OH": "ohio",
+    "OK": "oklahoma",
+    "PA": "pennsylvania",
+    "RI": "rhode island",
+    "SC": "south carolina",
+    "SD": "south dakota",
+    "TN": "tennessee",
+    "TX": "texas",
+    "UT": "utah",
+    "VT": "vermont",
+    "VA": "virginia",
+    "WA": "washington",
+    "WV": "west virginia",
+    "WI": "wisconsin",
+    "WY": "wyoming",
+    "DC": "district of columbia",
+}
+
+
+def _normalize_location_token(text: str) -> str:
+    normalized = text.lower().replace("&", " and ")
+    normalized = re.sub(r"\bmt\b\.?", "mount", normalized)
+    normalized = re.sub(r"\bw\b\.?", "west", normalized)
+    normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
+    return " ".join(normalized.split())
+
+
+MA_WIND_RECORDS_BY_KEY: dict[str, dict[str, Any]] = {}
+for record in MA_WIND_DATA["records"]:
+    city_town = record["city_town"]
+    aliases = {city_town}
+    if "(" in city_town and ")" in city_town:
+        aliases.add(re.sub(r"\s*\([^)]*\)", "", city_town))
+        aliases.update(re.findall(r"\(([^)]*)\)", city_town))
+    if city_town.startswith("W. "):
+        aliases.add("West " + city_town[3:])
+    if city_town.startswith("Mount "):
+        aliases.add("Mt " + city_town[6:])
+    for alias in aliases:
+        MA_WIND_RECORDS_BY_KEY[_normalize_location_token(alias)] = record
+
+
 QUESTIONS = {
     "Q1": "What is the primary use of this building? For example: office, warehouse, retail, school, hospital, or residential.",
     "Q2": "Approximately how many people occupy the building at peak times?",
     "Q3": "Is this building designated as essential for post-disaster response, such as a hospital, fire station, or emergency operations center?",
     "Q4": "Does the building store or handle hazardous materials that could pose a public risk if released?",
     "Q5": "What city and state is the project located in? A zip code also works.",
-    "MANUAL_WIND_SPEED": "I cannot automatically determine wind speed yet because the lookup table is a later task. Please enter the ASCE 7-16 basic wind speed in mph for this site.",
+    "MANUAL_WIND_SPEED": "I cannot automatically determine wind speed yet because the lookup table is not ready. Please enter the ASCE 7-16 basic wind speed in mph for this site.",
     "Q6": "How would you describe the terrain? Choose B for dense urban, suburban, wooded, or closely spaced obstructions; C for open terrain with scattered obstructions; or D for flat unobstructed terrain near a large body of water.",
     "Q7": "Is the building located on or near a hill, ridge, or escarpment?",
     "Q7a": "What type of topographic feature is it: 2D ridge, 2D escarpment, or 3D hill?",
@@ -159,7 +248,7 @@ def _handle_answer(
 
     if question_id == "Q4":
         collected["hazardous_materials"] = _parse_bool(normalized)
-        risk_category, figure = _derive_risk_category(collected)
+        risk_category, figure = derive_risk_category(collected)
         collected["risk_category"] = risk_category
         collected["wind_speed_figure"] = figure
         lead = (
@@ -170,10 +259,25 @@ def _handle_answer(
 
     if question_id == "Q5":
         collected["location"] = normalized
-        return _next_response("MANUAL_WIND_SPEED"), "MANUAL_WIND_SPEED"
+        lookup_result = _lookup_ma_wind_speed(normalized, collected)
+        if lookup_result is not None:
+            collected["basic_wind_speed_V"] = lookup_result["basic_wind_speed_V"]
+            collected["basic_wind_speed_source"] = "780 CMR Table 1604.11"
+            collected["resolved_municipality"] = lookup_result["municipality"]
+            branch_flags["wind_speed_lookup_available"] = True
+            branch_flags["wind_speed_lookup_failed"] = False
+            branch_flags["wind_speed_lookup_source"] = "780 CMR Table 1604.11"
+            response = _ma_wind_speed_confirmation(lookup_result)
+            return f"{response}\n\n{QUESTIONS['Q6']}", "Q6"
+
+        branch_flags["wind_speed_lookup_available"] = WIND_SPEED_LOOKUP_AVAILABLE
+        branch_flags["wind_speed_lookup_failed"] = True
+        branch_flags["wind_speed_lookup_source"] = None
+        return _manual_wind_speed_prompt(collected), "MANUAL_WIND_SPEED"
 
     if question_id == "MANUAL_WIND_SPEED":
-        collected["basic_wind_speed_V"] = _parse_float(normalized)
+        collected["basic_wind_speed_V"] = _parse_positive_float(normalized)
+        collected["basic_wind_speed_source"] = "manual_user_entry"
         return _next_response("Q6"), "Q6"
 
     if question_id == "Q6":
@@ -194,11 +298,11 @@ def _handle_answer(
         return _next_response("Q7b"), "Q7b"
 
     if question_id == "Q7b":
-        collected["topo_H"] = _parse_float(normalized)
+        collected["topo_H"] = _parse_positive_float(normalized)
         return _next_response("Q7c"), "Q7c"
 
     if question_id == "Q7c":
-        collected["topo_Lh"] = _parse_float(normalized)
+        collected["topo_Lh"] = _parse_positive_float(normalized)
         return _next_response("Q7d"), "Q7d"
 
     if question_id == "Q7d":
@@ -207,17 +311,17 @@ def _handle_answer(
         return _next_response("Q8"), "Q8"
 
     if question_id == "Q8":
-        collected["mean_roof_height_h"] = _parse_float(normalized)
+        collected["mean_roof_height_h"] = _parse_positive_float(normalized)
         _update_geometry_ratios(collected)
         return _next_response("Q9"), "Q9"
 
     if question_id == "Q9":
-        collected["building_length_L"] = _parse_float(normalized)
+        collected["building_length_L"] = _parse_positive_float(normalized)
         _update_geometry_ratios(collected)
         return _next_response("Q10"), "Q10"
 
     if question_id == "Q10":
-        collected["building_width_B"] = _parse_float(normalized)
+        collected["building_width_B"] = _parse_positive_float(normalized)
         _update_geometry_ratios(collected)
         return _next_response("Q11"), "Q11"
 
@@ -277,6 +381,96 @@ def _handle_confirmation(
 
 def _next_response(next_question_id: str) -> str:
     return QUESTIONS[next_question_id]
+
+
+def _lookup_ma_wind_speed(location_text: str, collected: dict[str, Any]) -> dict[str, Any] | None:
+    if not MA_WIND_SPEED_LOOKUP_AVAILABLE or _has_non_ma_state_hint(location_text):
+        return None
+
+    municipality_key = _extract_ma_municipality_key(location_text)
+    if municipality_key is None:
+        return None
+
+    record = MA_WIND_RECORDS_BY_KEY.get(municipality_key)
+    if record is None:
+        return None
+
+    risk_category = collected.get("risk_category")
+    wind_key = RISK_CATEGORY_WIND_KEYS.get(risk_category)
+    if wind_key is None:
+        return None
+
+    wind_speed = record.get("basic_wind_speed_v_mph", {}).get(wind_key)
+    if wind_speed is None:
+        return None
+
+    return {
+        "municipality": record["city_town"],
+        "risk_category": risk_category,
+        "basic_wind_speed_V": float(wind_speed),
+        "note_refs": record.get("note_refs", []),
+    }
+
+
+def _extract_ma_municipality_key(location_text: str) -> str | None:
+    text_without_zip = re.sub(r"\b\d{5}(?:-\d{4})?\b", " ", location_text)
+    normalized = _normalize_location_token(text_without_zip)
+    if not normalized:
+        return None
+
+    state_tokens = {"ma", "mass", "massachusetts"}
+    tokens = [token for token in normalized.split() if token not in state_tokens]
+    if not tokens:
+        return None
+
+    candidates = {
+        " ".join(tokens),
+        _normalize_location_token(re.split(r",", text_without_zip, maxsplit=1)[0]),
+    }
+    candidates.discard("")
+    matches = [candidate for candidate in candidates if candidate in MA_WIND_RECORDS_BY_KEY]
+    if len(matches) == 1:
+        return matches[0]
+    return None
+
+
+def _has_non_ma_state_hint(location_text: str) -> bool:
+    lowered = location_text.lower()
+    for abbr, name in STATE_NAMES_BY_ABBR.items():
+        if abbr == "MA":
+            continue
+        if name in lowered:
+            return True
+        # Keep abbreviation matching conservative so ordinary words like "in" or "or"
+        # are not mistaken for state hints.
+        if re.search(rf"(?:,\s*|\s+){re.escape(abbr.lower())}\.?\s*$", lowered):
+            return True
+    return False
+
+
+def _ma_wind_speed_confirmation(lookup_result: dict[str, Any]) -> str:
+    municipality = lookup_result["municipality"]
+    wind_speed = lookup_result["basic_wind_speed_V"]
+    risk_category = lookup_result["risk_category"]
+    lines = [
+        f"I found {municipality}, Massachusetts in 780 CMR Table 1604.11.",
+        f"For Risk Category {risk_category}, the basic wind speed V is {wind_speed:g} mph per 780 CMR Table 1604.11.",
+    ]
+    if 2 in lookup_result.get("note_refs", []):
+        lines.append(
+            "Note: this municipality has table note ref 2, so Special Wind Region or local-condition review may apply; the AHJ or ASCE hazard data may require a higher value."
+        )
+    return "\n".join(lines)
+
+
+def _manual_wind_speed_prompt(collected: dict[str, Any]) -> str:
+    figure = collected.get("wind_speed_figure", "the applicable ASCE 7-16 wind speed figure")
+    return (
+        "I was not able to automatically determine the wind speed for this location. "
+        "Massachusetts municipalities can be looked up from 780 CMR Table 1604.11, but this input did not resolve to a supported Massachusetts city or town. "
+        "Please look up the basic wind speed "
+        f"using ASCE 7-16 Figure {figure} and enter the value in mph."
+    )
 
 
 def _summary_response(collected: dict[str, Any]) -> str:
@@ -371,6 +565,13 @@ def _parse_float(text: str) -> float:
     return value
 
 
+def _parse_positive_float(text: str) -> float:
+    value = _parse_float(text)
+    if value <= 0:
+        raise ChatbotError("Please provide a number greater than 0.")
+    return value
+
+
 def _parse_exposure(text: str) -> str:
     lowered = text.lower()
     if re.search(r"\bb\b", lowered) or "urban" in lowered or "wood" in lowered:
@@ -456,34 +657,65 @@ def _map_occupancy(text: str) -> str:
     return "office"
 
 
-def _derive_risk_category(collected: dict[str, Any]) -> tuple[str, str]:
+def derive_risk_category(collected: dict[str, Any]) -> tuple[str, str]:
+    """Derive ASCE 7 risk category and wind-speed figure from collected answers."""
     occupancy_type = collected.get("occupancy_type", "office")
+    occupancy_description = collected.get("occupancy_description", "")
     occupant_load = collected.get("occupant_load", 0)
     essential = collected.get("essential_post_disaster", False)
     hazardous = collected.get("hazardous_materials", False)
+    occupancy_map = RISK_CATEGORY_DATA["occupancy_type_map"]
+    mapped_rule = occupancy_map.get(occupancy_type, "risk_category_II")
+    category_rules = RISK_CATEGORY_DATA["derivation_rules"]
 
-    if essential and occupancy_type in {
+    essential_keywords = {
         "hospital",
         "fire_station",
         "police_station",
         "emergency_operations_center",
         "water_treatment_facility",
         "aviation_control_tower",
-    }:
-        return "IV", "26.5-1C"
+    }
+    if essential and (
+        occupancy_type in essential_keywords
+        or mapped_rule == "risk_category_IV"
+        or _contains_any(
+            occupancy_description,
+            ["hospital", "fire station", "police station", "emergency", "water treatment", "control tower"],
+        )
+    ):
+        rule = category_rules["risk_category_IV"]
+        return rule["category"], rule["wind_speed_figure"]
     if hazardous:
-        return "III", "26.5-1C"
+        rule = category_rules["risk_category_III"]
+        return rule["category"], rule["wind_speed_figure"]
     if occupancy_type in {"school", "daycare", "college_university"} and occupant_load >= 250:
-        return "III", "26.5-1C"
+        rule = category_rules["risk_category_III"]
+        return rule["category"], rule["wind_speed_figure"]
     if occupancy_type in {"stadium_arena", "assembly_hall"} and occupant_load >= 300:
-        return "III", "26.5-1C"
+        rule = category_rules["risk_category_III"]
+        return rule["category"], rule["wind_speed_figure"]
+    if occupancy_type in {
+        "hospital",
+    } and occupant_load >= 50:
+        rule = category_rules["risk_category_III"]
+        return rule["category"], rule["wind_speed_figure"]
     if occupancy_type in {"jail_detention", "power_generating_station"}:
-        return "III", "26.5-1C"
+        rule = category_rules["risk_category_III"]
+        return rule["category"], rule["wind_speed_figure"]
     if occupancy_type in {"agricultural_facility", "temporary_facility", "minor_storage"}:
-        return "I", "26.5-1B"
+        rule = category_rules["risk_category_I"]
+        return rule["category"], rule["wind_speed_figure"]
     if occupant_load <= 5 and occupancy_type in {"agricultural_facility", "minor_storage"}:
-        return "I", "26.5-1B"
-    return "II", "26.5-1A"
+        rule = category_rules["risk_category_I"]
+        return rule["category"], rule["wind_speed_figure"]
+    rule = category_rules["risk_category_II"]
+    return rule["category"], rule["wind_speed_figure"]
+
+
+def _contains_any(text: str, needles: list[str]) -> bool:
+    lowered = text.lower()
+    return any(needle in lowered for needle in needles)
 
 
 def _update_geometry_ratios(collected: dict[str, Any]) -> None:
@@ -529,11 +761,11 @@ def _apply_correction(
 
     value_text = lowered.split(" to ", 1)[-1] if " to " in lowered else lowered
     if field == "basic_wind_speed_V":
-        collected[field] = _parse_float(value_text)
+        collected[field] = _parse_positive_float(value_text)
     elif field == "exposure_category":
         collected[field] = _parse_exposure(value_text)
     elif field in {"mean_roof_height_h", "building_length_L", "building_width_B", "roof_slope_deg"}:
-        collected[field] = _parse_float(value_text)
+        collected[field] = _parse_positive_float(value_text)
         _update_geometry_ratios(collected)
     elif field == "roof_type":
         roof_type = _parse_roof_type(value_text)

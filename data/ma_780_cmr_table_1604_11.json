@@ -1,0 +1,6856 @@
+{
+  "metadata": {
+    "title": "780 CMR Table 1604.11 Snow Loads, Wind Speeds, and Seismic Parameters",
+    "source_url": "https://www.law.cornell.edu/regulations/massachusetts/780-CMR-CHAPTER-16",
+    "source_publisher": "Cornell Legal Information Institute",
+    "source_regulation": "780 CMR Chapter 16 Structural Design",
+    "scraped_on": "2026-04-25",
+    "record_count": 351,
+    "units": {
+      "ground_snow_load_pg_psf": "psf",
+      "ground_snow_load_mean_elevation_ft": "ft",
+      "minimum_flat_roof_snow_load_pf_psf": "psf",
+      "basic_wind_speed_v_mph": "mph",
+      "seismic_parameters_g": "g"
+    },
+    "notes": {
+      "1": "The design flat roof snow load shall be the larger of the calculated flat roof snow load using Pg or the value of Pf listed in this table.",
+      "2": "Special Wind Region. Local conditions may cause higher wind speeds than the tabulated values. See ASCE/SEI 7.",
+      "3": "Increase Pg listed by 0.021 x (Site Elevation - Mean Elevation) when the Site Elevation exceeds the Mean Elevation.",
+      "4": "Commentary: The basic wind speed, V, is equivalent to the formally defined ultimate wind speed, Vult, in 780 CMR. Vasd refers to allowable stress wind speeds."
+    },
+    "llm_usage_hint": "Lookup by exact Massachusetts city_town. Use basic_wind_speed_v_mph for wind speed by risk category. If note_refs contains 2, warn that special wind region/local conditions may require ASCE/SEI 7 or AHJ confirmation."
+  },
+  "records": [
+    {
+      "city_town": "Abington",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.224,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Acton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.302,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Acushnet",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 129,
+        "risk_category_iii": 138,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.192,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Adams",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1535,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Agawam",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Alford",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Amesbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.356,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Amherst",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Andover",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.355,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Aquinnah (Gay Head)",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 124,
+        "risk_category_ii": 134,
+        "risk_category_iii": 143,
+        "risk_category_iv": 147
+      },
+      "seismic_parameters_g": {
+        "ss": 0.161,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Arlington",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.286,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ashburnham",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1151,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.288,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ashby",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 929,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.333,
+        "s1": 0.074,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ashfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1338,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ashland",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.235,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Athol",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.211,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Attleboro",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.206,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Auburn",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.199,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Avon",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.226,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ayer",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.322,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Barnstable",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 122,
+        "risk_category_ii": 130,
+        "risk_category_iii": 138,
+        "risk_category_iv": 144
+      },
+      "seismic_parameters_g": {
+        "ss": 0.16,
+        "s1": 0.049,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Barre",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 893,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.202,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Becket",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1566,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Bedford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.309,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Belchertown",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.173,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Bellingham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 121,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.209,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Belmont",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.28,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Berkley",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 116,
+        "risk_category_ii": 126,
+        "risk_category_iii": 135,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.204,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Berlin",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.246,
+        "s1": 0.064,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Bernardston",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.183,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Beverly",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.312,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Billerica",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.333,
+        "s1": 0.073,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Blackstone",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.203,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Blandford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1273,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Bolton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.273,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Boston",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.27,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Bourne",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 129,
+        "risk_category_iii": 137,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.18,
+        "s1": 0.052,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Boxborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.296,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Boxford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.354,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Boylston",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.229,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Braintree",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.238,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Brewster",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 122,
+        "risk_category_ii": 130,
+        "risk_category_iii": 139,
+        "risk_category_iv": 145
+      },
+      "seismic_parameters_g": {
+        "ss": 0.15,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Bridgewater",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 133,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.21,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Brimfield",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.177,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Brockton",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.22,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Brookfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.184,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Brookline",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.263,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Buckland",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.169,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Burlington",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.314,
+        "s1": 0.071,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Cambridge",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.272,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Canton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.231,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Carlisle",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.32,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Carver",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 127,
+        "risk_category_iii": 135,
+        "risk_category_iv": 140
+      },
+      "seismic_parameters_g": {
+        "ss": 0.198,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Charlemont",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 987,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.169,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Charlton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.187,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chatham",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 124,
+        "risk_category_ii": 132,
+        "risk_category_iii": 140,
+        "risk_category_iv": 146
+      },
+      "seismic_parameters_g": {
+        "ss": 0.14,
+        "s1": 0.046,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chelmsford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.346,
+        "s1": 0.075,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chelsea",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.278,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Cheshire",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1453,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chester",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chesterfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1165,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chicopee",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Chilmark",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 125,
+        "risk_category_ii": 134,
+        "risk_category_iii": 143,
+        "risk_category_iv": 147
+      },
+      "seismic_parameters_g": {
+        "ss": 0.158,
+        "s1": 0.047,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Clarksburg",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1504,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Clinton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.257,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Cohasset",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.239,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Colrain",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.175,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Concord",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.297,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Conway",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.169,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Cummington",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1396,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dalton",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1527,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Danvers",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.322,
+        "s1": 0.071,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dartmouth",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 129,
+        "risk_category_iii": 138,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.191,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dedham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.244,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Deerfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.174,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dennis",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 122,
+        "risk_category_ii": 130,
+        "risk_category_iii": 138,
+        "risk_category_iv": 144
+      },
+      "seismic_parameters_g": {
+        "ss": 0.156,
+        "s1": 0.049,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dighton",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 116,
+        "risk_category_ii": 126,
+        "risk_category_iii": 135,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.202,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Douglas",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.196,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dover",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.24,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dracut",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.371,
+        "s1": 0.078,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dudley",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.186,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Dunstable",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.375,
+        "s1": 0.078,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Duxbury",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 133,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.206,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "E. Bridgewater",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 133,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.214,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "E. Brookfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.188,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "E. Longmeadow",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Eastham",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 122,
+        "risk_category_ii": 130,
+        "risk_category_iii": 139,
+        "risk_category_iv": 144
+      },
+      "seismic_parameters_g": {
+        "ss": 0.15,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Easthampton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Easton",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.219,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Edgartown",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 125,
+        "risk_category_ii": 134,
+        "risk_category_iii": 143,
+        "risk_category_iv": 147
+      },
+      "seismic_parameters_g": {
+        "ss": 0.151,
+        "s1": 0.047,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Egremont",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Erving",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.182,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Essex",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.321,
+        "s1": 0.071,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Everett",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.283,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Fairhaven",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 130,
+        "risk_category_iii": 138,
+        "risk_category_iv": 143
+      },
+      "seismic_parameters_g": {
+        "ss": 0.189,
+        "s1": 0.052,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Fall River",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 118,
+        "risk_category_ii": 128,
+        "risk_category_iii": 136,
+        "risk_category_iv": 140
+      },
+      "seismic_parameters_g": {
+        "ss": 0.198,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Falmouth",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 122,
+        "risk_category_ii": 131,
+        "risk_category_iii": 140,
+        "risk_category_iv": 145
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.049,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Fitchburg",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.3,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Florida",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1784,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.169,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Foxborough",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.215,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Framingham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.241,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Franklin",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.213,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Freetown",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 127,
+        "risk_category_iii": 135,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.201,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Gardner",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1073,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.252,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Georgetown",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.356,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Gill",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.185,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Gloucester",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.305,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Goshen",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1349,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Gosnold",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 123,
+        "risk_category_ii": 132,
+        "risk_category_iii": 142,
+        "risk_category_iv": 146
+      },
+      "seismic_parameters_g": {
+        "ss": 0.174,
+        "s1": 0.05,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Grafton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.211,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Granby",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Granville",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Great Barrington",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Greenfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.176,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Groton",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.343,
+        "s1": 0.075,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Groveland",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.361,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hadley",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.169,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Halifax",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 116,
+        "risk_category_ii": 125,
+        "risk_category_iii": 134,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.209,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hamilton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.326,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hampden",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.172,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hancock",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1595,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 124
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hanover",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.221,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hanson",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.216,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hardwick",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.184,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Harvard",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.298,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Harwich",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 123,
+        "risk_category_ii": 131,
+        "risk_category_iii": 139,
+        "risk_category_iv": 146
+      },
+      "seismic_parameters_g": {
+        "ss": 0.146,
+        "s1": 0.047,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hatfield",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Haverhill",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.369,
+        "s1": 0.078,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hawley",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1482,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Heath",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1526,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hingham",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.239,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hinsdale",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1591,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Holbrook",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.229,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Holden",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 116,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.22,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Holland",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.177,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Holliston",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.225,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Holyoke",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.166,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hopedale",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.21,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hopkinton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.224,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hubbardston",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 990,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.226,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hudson",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.26,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Hull",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.248,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Huntington",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ipswich",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 126,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.335,
+        "s1": 0.073,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Kingston",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 116,
+        "risk_category_ii": 126,
+        "risk_category_iii": 134,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.205,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lakeville",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 127,
+        "risk_category_iii": 135,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.201,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lancaster",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.271,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lanesborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1433,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lawrence",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.368,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lee",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Leicester",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 903,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.199,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lenox",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1228,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Leominster",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.284,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Leverett",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.175,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lexington",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.296,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Leyden",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 867,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.179,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lincoln",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.286,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Littleton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.32,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Longmeadow",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.17,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lowell",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.36,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ludlow",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.17,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lunenburg",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 452,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.318,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lynn",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.295,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Lynnfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.32,
+        "s1": 0.071,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Malden",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.288,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Manchester",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.309,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Mansfield",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.213,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Marblehead",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.299,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Marion",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 129,
+        "risk_category_iii": 138,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.186,
+        "s1": 0.052,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Marlborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.249,
+        "s1": 0.064,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Marshfield",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 133,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.214,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Mashpee",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 121,
+        "risk_category_ii": 130,
+        "risk_category_iii": 139,
+        "risk_category_iv": 144
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.049,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Mattapoisett",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 130,
+        "risk_category_iii": 138,
+        "risk_category_iv": 143
+      },
+      "seismic_parameters_g": {
+        "ss": 0.186,
+        "s1": 0.052,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Maynard",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.282,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Medfield",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.229,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Medford",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.287,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Medway",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.219,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Melrose",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.297,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Mendon",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.207,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Merrimac",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.363,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Methuen",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.372,
+        "s1": 0.078,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Middleborough",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 126,
+        "risk_category_iii": 134,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.203,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Middlefield",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1449,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Middleton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.334,
+        "s1": 0.073,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Milford",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.214,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Millbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.203,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Millis",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.224,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Millville",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 129,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.2,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Milton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.246,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Monroe",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1932,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Monson",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 116,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.173,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Montague",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.177,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Monterey",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1491,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Montgomery",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Mount Washington",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Nahant",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.283,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Nantucket",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 128,
+        "risk_category_ii": 137,
+        "risk_category_iii": 147,
+        "risk_category_iv": 150
+      },
+      "seismic_parameters_g": {
+        "ss": 0.123,
+        "s1": 0.043,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Natick",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.246,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Needham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.249,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "New Ashford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1900,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 124
+      },
+      "seismic_parameters_g": {
+        "ss": 0.17,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "New Bedford",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 129,
+        "risk_category_iii": 138,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.19,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "New Braintree",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 826,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.19,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "New Marlborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "New Salem",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 721,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.189,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Newbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.348,
+        "s1": 0.075,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Newburyport",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.35,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Newton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.264,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Norfolk",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.219,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "North Adams",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1250,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 124
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "North Andover",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.365,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "North Attleborough",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.207,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "North Brookfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 804,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.19,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "North Reading",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.332,
+        "s1": 0.073,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Northampton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Northborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.231,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Northbridge",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.207,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Northfield",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.193,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Norton",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.21,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Norwell",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 123,
+        "risk_category_iii": 132,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.226,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Norwood",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 129,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.232,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Oak Bluffs",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 124,
+        "risk_category_ii": 133,
+        "risk_category_iii": 142,
+        "risk_category_iv": 146
+      },
+      "seismic_parameters_g": {
+        "ss": 0.157,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Oakham",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 907,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.203,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Orange",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.199,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Orleans",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 122,
+        "risk_category_ii": 130,
+        "risk_category_iii": 139,
+        "risk_category_iv": 145
+      },
+      "seismic_parameters_g": {
+        "ss": 0.148,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Otis",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1506,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Oxford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.191,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Palmer",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.173,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Paxton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1054,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 116,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.206,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Peabody",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.31,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Pelham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.177,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Pembroke",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 124,
+        "risk_category_iii": 133,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.215,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Pepperell",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.369,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Peru",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1846,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Petersham",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 770,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.202,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Phillipston",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1088,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.22,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Pittsfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1124,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.166,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Plainfield",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1615,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Plainville",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.208,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Plymouth",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 127,
+        "risk_category_iii": 135,
+        "risk_category_iv": 140
+      },
+      "seismic_parameters_g": {
+        "ss": 0.196,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Plympton",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 116,
+        "risk_category_ii": 126,
+        "risk_category_iii": 134,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.205,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Princeton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 959,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.233,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Provincetown",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 118,
+        "risk_category_ii": 127,
+        "risk_category_iii": 135,
+        "risk_category_iv": 140
+      },
+      "seismic_parameters_g": {
+        "ss": 0.181,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Quincy",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.245,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Randolph",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.233,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Raynham",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 133,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.209,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Reading",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.319,
+        "s1": 0.071,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rehoboth",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 134,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.202,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Revere",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.282,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Richmond",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rochester",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 119,
+        "risk_category_ii": 129,
+        "risk_category_iii": 137,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.191,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rockland",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.224,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rockport",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.306,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rowe",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1516,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.17,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rowley",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.344,
+        "s1": 0.074,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Royalston",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 944,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.23,
+        "s1": 0.064,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Russell",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Rutland",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 977,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.214,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Salem",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.307,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Salisbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.348,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sandisfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 1410,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sandwich",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 119,
+        "risk_category_ii": 129,
+        "risk_category_iii": 137,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.176,
+        "s1": 0.051,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Saugus",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.298,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Savoy",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1883,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.166,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Scituate",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 113,
+        "risk_category_ii": 123,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.229,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Seekonk",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 134,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.201,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sharon",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.222,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sheffield",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Shelburne",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.171,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sherborn",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 120,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.236,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Shirley",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.307,
+        "s1": 0.071,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Shrewsbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.222,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Shutesbury",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.18,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Somerset",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 127,
+        "risk_category_iii": 136,
+        "risk_category_iv": 140
+      },
+      "seismic_parameters_g": {
+        "ss": 0.2,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Somerville",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.277,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "South Hadley",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Southampton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Southborough",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.237,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Southbridge",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.182,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Southwick",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.166,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Spencer",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.193,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Springfield",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.168,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sterling",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.255,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Stockbridge",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Stoneham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.306,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Stoughton",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 131,
+        "risk_category_iv": 136
+      },
+      "seismic_parameters_g": {
+        "ss": 0.225,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Stow",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.28,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sturbridge",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.181,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sudbury",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.268,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sunderland",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.172,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Sutton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.199,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Swampscott",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.295,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Swansea",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 117,
+        "risk_category_ii": 127,
+        "risk_category_iii": 135,
+        "risk_category_iv": 139
+      },
+      "seismic_parameters_g": {
+        "ss": 0.2,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Taunton",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 115,
+        "risk_category_ii": 125,
+        "risk_category_iii": 134,
+        "risk_category_iv": 138
+      },
+      "seismic_parameters_g": {
+        "ss": 0.206,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Templeton",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1003,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.233,
+        "s1": 0.064,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Tewksbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.348,
+        "s1": 0.075,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Tisbury",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 124,
+        "risk_category_ii": 133,
+        "risk_category_iii": 142,
+        "risk_category_iv": 146
+      },
+      "seismic_parameters_g": {
+        "ss": 0.16,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Tolland",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.054,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Topsfield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 126,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.339,
+        "s1": 0.074,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Townsend",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.355,
+        "s1": 0.076,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Truro",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 119,
+        "risk_category_ii": 128,
+        "risk_category_iii": 136,
+        "risk_category_iv": 141
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.051,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Tyngsborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.375,
+        "s1": 0.078,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Tyringham",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.162,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Upton",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.211,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Uxbridge",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.2,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wakefield",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.311,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wales",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.176,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Walpole",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 111,
+        "risk_category_ii": 121,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.225,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Waltham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.273,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Ware",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.179,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wareham",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 119,
+        "risk_category_ii": 129,
+        "risk_category_iii": 137,
+        "risk_category_iv": 142
+      },
+      "seismic_parameters_g": {
+        "ss": 0.188,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Warren",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.18,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Warwick",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 915,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.206,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Washington",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1751,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Watertown",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.272,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wayland",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.261,
+        "s1": 0.065,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Webster",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.187,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wellesley",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.25,
+        "s1": 0.063,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wellfleet",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 120,
+        "risk_category_ii": 129,
+        "risk_category_iii": 137,
+        "risk_category_iv": 143
+      },
+      "seismic_parameters_g": {
+        "ss": 0.16,
+        "s1": 0.05,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wendell",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": 960,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.186,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wenham",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.327,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Boylston",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 126,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.23,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Bridgewater",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.213,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Brookfield",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 130
+      },
+      "seismic_parameters_g": {
+        "ss": 0.183,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Newbury",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.362,
+        "s1": 0.077,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Springfield",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.167,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Stockbridge",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.166,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "W. Tisbury",
+      "ground_snow_load_pg_psf": 25,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 124,
+        "risk_category_ii": 133,
+        "risk_category_iii": 142,
+        "risk_category_iv": 146
+      },
+      "seismic_parameters_g": {
+        "ss": 0.16,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westborough",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.23,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westfield",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 114,
+        "risk_category_iii": 123,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westford",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 116,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.338,
+        "s1": 0.074,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westhampton",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 114,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.164,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westminster",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1007,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 106,
+        "risk_category_ii": 115,
+        "risk_category_iii": 124,
+        "risk_category_iv": 128
+      },
+      "seismic_parameters_g": {
+        "ss": 0.262,
+        "s1": 0.067,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Weston",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 128,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.269,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westport",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 119,
+        "risk_category_ii": 128,
+        "risk_category_iii": 137,
+        "risk_category_iv": 141
+      },
+      "seismic_parameters_g": {
+        "ss": 0.195,
+        "s1": 0.053,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Westwood",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 121,
+        "risk_category_iii": 129,
+        "risk_category_iv": 134
+      },
+      "seismic_parameters_g": {
+        "ss": 0.238,
+        "s1": 0.062,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Weymouth",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.236,
+        "s1": 0.061,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Whately",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.169,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Whitman",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 114,
+        "risk_category_ii": 124,
+        "risk_category_iii": 132,
+        "risk_category_iv": 137
+      },
+      "seismic_parameters_g": {
+        "ss": 0.219,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wilbraham",
+      "ground_snow_load_pg_psf": 35,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 107,
+        "risk_category_ii": 115,
+        "risk_category_iii": 125,
+        "risk_category_iv": 129
+      },
+      "seismic_parameters_g": {
+        "ss": 0.17,
+        "s1": 0.055,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Williamsburg",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 121,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Williamstown",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 103,
+        "risk_category_ii": 111,
+        "risk_category_iii": 119,
+        "risk_category_iv": 124
+      },
+      "seismic_parameters_g": {
+        "ss": 0.173,
+        "s1": 0.059,
+        "pga": null
+      },
+      "note_refs": [
+        2
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wilmington",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 118,
+        "risk_category_iii": 126,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.327,
+        "s1": 0.072,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Winchendon",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 105,
+        "risk_category_ii": 113,
+        "risk_category_iii": 122,
+        "risk_category_iv": 127
+      },
+      "seismic_parameters_g": {
+        "ss": 0.269,
+        "s1": 0.068,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Winchester",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 119,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.296,
+        "s1": 0.069,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Windsor",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1857,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 112,
+        "risk_category_iii": 120,
+        "risk_category_iv": 125
+      },
+      "seismic_parameters_g": {
+        "ss": 0.165,
+        "s1": 0.057,
+        "pga": null
+      },
+      "note_refs": [
+        2,
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Winthrop",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 110,
+        "risk_category_ii": 120,
+        "risk_category_iii": 129,
+        "risk_category_iv": 133
+      },
+      "seismic_parameters_g": {
+        "ss": 0.274,
+        "s1": 0.066,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Woburn",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 30,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 109,
+        "risk_category_ii": 118,
+        "risk_category_iii": 127,
+        "risk_category_iv": 132
+      },
+      "seismic_parameters_g": {
+        "ss": 0.305,
+        "s1": 0.07,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Worcester",
+      "ground_snow_load_pg_psf": 50,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 108,
+        "risk_category_ii": 117,
+        "risk_category_iii": 127,
+        "risk_category_iv": 131
+      },
+      "seismic_parameters_g": {
+        "ss": 0.21,
+        "s1": 0.06,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Worthington",
+      "ground_snow_load_pg_psf": 60,
+      "ground_snow_load_mean_elevation_ft": 1386,
+      "minimum_flat_roof_snow_load_pf_psf": 40,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 104,
+        "risk_category_ii": 113,
+        "risk_category_iii": 120,
+        "risk_category_iv": 126
+      },
+      "seismic_parameters_g": {
+        "ss": 0.163,
+        "s1": 0.056,
+        "pga": null
+      },
+      "note_refs": [
+        3
+      ],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Wrentham",
+      "ground_snow_load_pg_psf": 40,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 35,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 112,
+        "risk_category_ii": 122,
+        "risk_category_iii": 130,
+        "risk_category_iv": 135
+      },
+      "seismic_parameters_g": {
+        "ss": 0.213,
+        "s1": 0.058,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    },
+    {
+      "city_town": "Yarmouth",
+      "ground_snow_load_pg_psf": 30,
+      "ground_snow_load_mean_elevation_ft": null,
+      "minimum_flat_roof_snow_load_pf_psf": 25,
+      "basic_wind_speed_v_mph": {
+        "risk_category_i": 123,
+        "risk_category_ii": 131,
+        "risk_category_iii": 139,
+        "risk_category_iv": 145
+      },
+      "seismic_parameters_g": {
+        "ss": 0.152,
+        "s1": 0.048,
+        "pga": null
+      },
+      "note_refs": [],
+      "source_table": "780 CMR Table 1604.11"
+    }
+  ]
+}
