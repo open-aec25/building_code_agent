@@ -394,15 +394,15 @@ def get_cp_roof_flat(h_over_L: float) -> list[dict]:
 
     Reference: ASCE 7-16 Figure 27.3-2
     """
-    if h_over_L < 0.5:
+    if h_over_L <= 0.5:
         return [
-            {"zone": "0 to h",   "Cp": [-0.9, -0.18], "note": "Use both values — worst case governs"},
-            {"zone": "h to 2h",  "Cp": -0.9},
-            {"zone": "beyond 2h","Cp": -0.5},
+            {"zone": "0 to h",   "Cp": -0.9},
+            {"zone": "h to 2h",  "Cp": -0.5},
+            {"zone": "beyond 2h","Cp": -0.3},
         ]
-    else:  # h/L >= 0.5
+    else:  # h/L > 0.5
         return [
-            {"zone": "0 to h",   "Cp": [-1.3, -0.18], "note": "Use both values — worst case governs"},
+            {"zone": "0 to h",   "Cp": -1.3},
             {"zone": "beyond h", "Cp": -0.7},
         ]
 
@@ -556,6 +556,165 @@ def apply_minimum_pressure(p: float, surface: str) -> tuple[float, bool]:
         governing = minimum if p >= 0 else -minimum
         return governing, True
     return p, False
+
+
+def _pressure_result(raw_pressure: float, surface: str) -> dict:
+    """Return calculated pressure data while flagging minimum-check thresholds."""
+    _, below_minimum = apply_minimum_pressure(raw_pressure, surface)
+    return {
+        "raw_psf": raw_pressure,
+        "design_psf": raw_pressure,
+        "minimum_governed": False,
+        "below_minimum": below_minimum,
+    }
+
+
+def _roof_zone_extents(zone_name: str, h: float, along_wind_depth: float) -> tuple[float, float]:
+    """Return start/end roof-zone extents measured from the windward edge."""
+    if zone_name == "0 to h":
+        start, end = 0.0, h
+    elif zone_name == "h to 2h":
+        start, end = h, 2.0 * h
+    elif zone_name == "beyond 2h":
+        start, end = 2.0 * h, along_wind_depth
+    elif zone_name == "beyond h":
+        start, end = h, along_wind_depth
+    elif zone_name == "0 to h/2":
+        start, end = 0.0, h / 2.0
+    elif zone_name == "h/2 to h":
+        start, end = h / 2.0, h
+    else:
+        start, end = 0.0, along_wind_depth
+    return start, min(end, along_wind_depth)
+
+
+def _roof_zone_geometry(zone_name: str, h: float, along_wind_depth: float, transverse_width: float) -> dict | None:
+    start, end = _roof_zone_extents(zone_name, h, along_wind_depth)
+    width = round(max(0.0, end - start), 3)
+    if width <= 0:
+        return None
+    return {
+        "distance_from_windward_edge_ft": [round(start, 3), round(end, 3)],
+        "zone_width_ft": width,
+        "transverse_width_ft": transverse_width,
+        "area_ft2": round(width * transverse_width, 3),
+    }
+
+
+def _force_kips(pressure_psf: float, area_ft2: float) -> float:
+    return round(pressure_psf * area_ft2 / 1000.0, 3)
+
+
+def _surface_governing_case(pos_raw: float, neg_raw: float) -> str:
+    return "+GCpi" if abs(pos_raw) >= abs(neg_raw) else "-GCpi"
+
+
+def _direction_case_summary(
+    wind_direction: str,
+    along_wind_depth: float,
+    transverse_width: float,
+    h: float,
+    qh: float,
+    roof_type: RoofType,
+    roof_slope_deg: float,
+    ridge_orientation: Optional[RidgeOrientation],
+) -> dict:
+    """Summarize direction-specific Cp, roof zones, and MWFRS force checks."""
+    h_over_L = round(h / along_wind_depth, 4)
+    L_over_B = round(along_wind_depth / transverse_width, 4)
+    wall_area = round(transverse_width * h, 3)
+    cp_windward = 0.8
+    cp_leeward = get_cp_leeward_wall(L_over_B)
+    cp_side = -0.7
+
+    wall_rows = {}
+    for name, cp in [
+        ("windward_wall", cp_windward),
+        ("leeward_wall", cp_leeward),
+        ("side_walls", cp_side),
+    ]:
+        pos_raw = calc_design_pressure(qh, cp, qh, GCpi_positive)
+        neg_raw = calc_design_pressure(qh, cp, qh, GCpi_negative)
+        area = wall_area if name in ("windward_wall", "leeward_wall") else None
+        wall_rows[name] = {
+            "Cp": cp,
+            "p_GCpi_pos_raw_psf": pos_raw,
+            "p_GCpi_neg_raw_psf": neg_raw,
+            "governing_gcpi": _surface_governing_case(pos_raw, neg_raw),
+            "area_ft2": area,
+            "force_GCpi_pos_kips": _force_kips(pos_raw, area) if area else None,
+            "force_GCpi_neg_kips": _force_kips(neg_raw, area) if area else None,
+        }
+
+    roof_rows = {}
+    roof_vertical_area = 0.0
+    if roof_type == RoofType.FLAT:
+        for zone in get_cp_roof_flat(h_over_L):
+            geometry = _roof_zone_geometry(zone["zone"], h, along_wind_depth, transverse_width)
+            if geometry is None:
+                continue
+            cp = zone["Cp"]
+            pos_raw = calc_design_pressure(qh, cp, qh, GCpi_positive)
+            neg_raw = calc_design_pressure(qh, cp, qh, GCpi_negative)
+            roof_rows[zone["zone"]] = {
+                "Cp": cp,
+                "geometry": geometry,
+                "p_GCpi_pos_raw_psf": pos_raw,
+                "p_GCpi_neg_raw_psf": neg_raw,
+                "governing_gcpi": _surface_governing_case(pos_raw, neg_raw),
+                "force_GCpi_pos_kips": _force_kips(pos_raw, geometry["area_ft2"]),
+                "force_GCpi_neg_kips": _force_kips(neg_raw, geometry["area_ft2"]),
+            }
+    elif roof_type in (RoofType.GABLE, RoofType.HIP):
+        roof_rows["note"] = "Direction-specific roof zone geometry is not yet expanded for sloped roofs."
+    elif roof_type == RoofType.MONOSLOPE:
+        roof_rows["note"] = "Monoslope roof Cp requires manual lookup."
+
+    calculated_pos_force = round(
+        abs(wall_rows["windward_wall"]["force_GCpi_pos_kips"] or 0.0)
+        + abs(wall_rows["leeward_wall"]["force_GCpi_pos_kips"] or 0.0),
+        3,
+    )
+    calculated_neg_force = round(
+        abs(wall_rows["windward_wall"]["force_GCpi_neg_kips"] or 0.0)
+        + abs(wall_rows["leeward_wall"]["force_GCpi_neg_kips"] or 0.0),
+        3,
+    )
+    minimum_horizontal_force = round(
+        (MIN_WALL_PRESSURE_PSF * wall_area + MIN_ROOF_PRESSURE_PSF * roof_vertical_area) / 1000.0,
+        3,
+    )
+    governing_calculated_force = max(calculated_pos_force, calculated_neg_force)
+
+    return {
+        "wind_direction": wind_direction,
+        "along_wind_depth_ft": along_wind_depth,
+        "transverse_width_ft": transverse_width,
+        "h_over_L": h_over_L,
+        "L_over_B": L_over_B,
+        "wall_area_ft2": wall_area,
+        "roof_vertical_area_ft2": roof_vertical_area,
+        "walls": wall_rows,
+        "roof": roof_rows,
+        "overall_horizontal_loading": {
+            "load_cases": {
+                "+GCpi": {
+                    "calculated_force_kips": calculated_pos_force,
+                    "governing_force_kips": max(calculated_pos_force, minimum_horizontal_force),
+                    "minimum_controls": minimum_horizontal_force > calculated_pos_force,
+                },
+                "-GCpi": {
+                    "calculated_force_kips": calculated_neg_force,
+                    "governing_force_kips": max(calculated_neg_force, minimum_horizontal_force),
+                    "minimum_controls": minimum_horizontal_force > calculated_neg_force,
+                },
+            },
+            "calculated_force_kips": governing_calculated_force,
+            "minimum_force_kips": minimum_horizontal_force,
+            "governing_force_kips": max(governing_calculated_force, minimum_horizontal_force),
+            "minimum_controls": minimum_horizontal_force > governing_calculated_force,
+        },
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -728,15 +887,18 @@ def run_wind_load_calculation(inputs: BuildingInputs) -> dict:
         qz  = row["qz_psf"]
         p_pos_gcpi = calc_design_pressure(qz, Cp_windward_wall, qh, GCpi_positive)
         p_neg_gcpi = calc_design_pressure(qz, Cp_windward_wall, qh, GCpi_negative)
-        p_pos_gov, pos_min = apply_minimum_pressure(p_pos_gcpi, "wall")
-        p_neg_gov, neg_min = apply_minimum_pressure(p_neg_gcpi, "wall")
+        pos_result = _pressure_result(p_pos_gcpi, "wall")
+        neg_result = _pressure_result(p_neg_gcpi, "wall")
         ww_pressures.append({
             "height_ft":         z,
             "qz_psf":            qz,
-            "p_GCpi_pos_psf":    p_pos_gov,
-            "p_GCpi_neg_psf":    p_neg_gov,
-            "min_governed_pos":  pos_min,
-            "min_governed_neg":  neg_min,
+            "p_GCpi_pos_raw_psf": p_pos_gcpi,
+            "p_GCpi_neg_raw_psf": p_neg_gcpi,
+            "p_GCpi_pos_psf":    pos_result["design_psf"],
+            "p_GCpi_neg_psf":    neg_result["design_psf"],
+            "min_governed_pos":  pos_result["minimum_governed"],
+            "min_governed_neg":  neg_result["minimum_governed"],
+            "governing_gcpi":    _surface_governing_case(p_pos_gcpi, p_neg_gcpi),
         })
 
     wall_pressures["windward_wall"] = {
@@ -748,31 +910,37 @@ def run_wind_load_calculation(inputs: BuildingInputs) -> dict:
     # Leeward wall — constant pressure (uses qh)
     lw_pos = calc_design_pressure(qh, Cp_leeward_wall, qh, GCpi_positive)
     lw_neg = calc_design_pressure(qh, Cp_leeward_wall, qh, GCpi_negative)
-    lw_pos_gov, lw_pos_min = apply_minimum_pressure(lw_pos, "wall")
-    lw_neg_gov, lw_neg_min = apply_minimum_pressure(lw_neg, "wall")
+    lw_pos_result = _pressure_result(lw_pos, "wall")
+    lw_neg_result = _pressure_result(lw_neg, "wall")
 
     wall_pressures["leeward_wall"] = {
         "Cp":             Cp_leeward_wall,
         "L_over_B":       L_over_B,
-        "p_GCpi_pos_psf": lw_pos_gov,
-        "p_GCpi_neg_psf": lw_neg_gov,
-        "min_governed_pos": lw_pos_min,
-        "min_governed_neg": lw_neg_min,
+        "p_GCpi_pos_raw_psf": lw_pos,
+        "p_GCpi_neg_raw_psf": lw_neg,
+        "p_GCpi_pos_psf": lw_pos_result["design_psf"],
+        "p_GCpi_neg_psf": lw_neg_result["design_psf"],
+        "min_governed_pos": lw_pos_result["minimum_governed"],
+        "min_governed_neg": lw_neg_result["minimum_governed"],
+        "governing_gcpi": _surface_governing_case(lw_pos, lw_neg),
         "note": "Constant pressure — uses qh"
     }
 
     # Side walls — constant pressure (uses qh)
     sw_pos = calc_design_pressure(qh, Cp_side_wall, qh, GCpi_positive)
     sw_neg = calc_design_pressure(qh, Cp_side_wall, qh, GCpi_negative)
-    sw_pos_gov, sw_pos_min = apply_minimum_pressure(sw_pos, "wall")
-    sw_neg_gov, sw_neg_min = apply_minimum_pressure(sw_neg, "wall")
+    sw_pos_result = _pressure_result(sw_pos, "wall")
+    sw_neg_result = _pressure_result(sw_neg, "wall")
 
     wall_pressures["side_walls"] = {
         "Cp":             Cp_side_wall,
-        "p_GCpi_pos_psf": sw_pos_gov,
-        "p_GCpi_neg_psf": sw_neg_gov,
-        "min_governed_pos": sw_pos_min,
-        "min_governed_neg": sw_neg_min,
+        "p_GCpi_pos_raw_psf": sw_pos,
+        "p_GCpi_neg_raw_psf": sw_neg,
+        "p_GCpi_pos_psf": sw_pos_result["design_psf"],
+        "p_GCpi_neg_psf": sw_neg_result["design_psf"],
+        "min_governed_pos": sw_pos_result["minimum_governed"],
+        "min_governed_neg": sw_neg_result["minimum_governed"],
+        "governing_gcpi": _surface_governing_case(sw_pos, sw_neg),
         "note": "Constant pressure — uses qh"
     }
 
@@ -789,33 +957,24 @@ def run_wind_load_calculation(inputs: BuildingInputs) -> dict:
     if inputs.roof_type == RoofType.FLAT:
         for zone in get_cp_roof_flat(h_over_L):
             cp_val = zone["Cp"]
-            # If two Cp values, compute both and take worst case
-            if isinstance(cp_val, list):
-                pressures = []
-                for cp in cp_val:
-                    p_pos = calc_design_pressure(qh, cp, qh, GCpi_positive)
-                    p_neg = calc_design_pressure(qh, cp, qh, GCpi_negative)
-                    p_pos_gov, _ = apply_minimum_pressure(p_pos, "roof")
-                    p_neg_gov, _ = apply_minimum_pressure(p_neg, "roof")
-                    pressures.append({
-                        "Cp": cp,
-                        "p_GCpi_pos_psf": p_pos_gov,
-                        "p_GCpi_neg_psf": p_neg_gov,
-                    })
-                roof_pressures[zone["zone"]] = {
-                    "note": zone.get("note", ""),
-                    "cases": pressures
-                }
-            else:
-                p_pos = calc_design_pressure(qh, cp_val, qh, GCpi_positive)
-                p_neg = calc_design_pressure(qh, cp_val, qh, GCpi_negative)
-                p_pos_gov, _ = apply_minimum_pressure(p_pos, "roof")
-                p_neg_gov, _ = apply_minimum_pressure(p_neg, "roof")
-                roof_pressures[zone["zone"]] = {
-                    "Cp":             cp_val,
-                    "p_GCpi_pos_psf": p_pos_gov,
-                    "p_GCpi_neg_psf": p_neg_gov,
-                }
+            geometry = _roof_zone_geometry(zone["zone"], h, L, B)
+            if geometry is None:
+                continue
+            p_pos = calc_design_pressure(qh, cp_val, qh, GCpi_positive)
+            p_neg = calc_design_pressure(qh, cp_val, qh, GCpi_negative)
+            pos_result = _pressure_result(p_pos, "roof")
+            neg_result = _pressure_result(p_neg, "roof")
+            roof_pressures[zone["zone"]] = {
+                "Cp": cp_val,
+                "geometry": geometry,
+                "p_GCpi_pos_raw_psf": p_pos,
+                "p_GCpi_neg_raw_psf": p_neg,
+                "p_GCpi_pos_psf": pos_result["design_psf"],
+                "p_GCpi_neg_psf": neg_result["design_psf"],
+                "min_governed_pos": pos_result["minimum_governed"],
+                "min_governed_neg": neg_result["minimum_governed"],
+                "governing_gcpi": _surface_governing_case(p_pos, p_neg),
+            }
 
     elif inputs.roof_type in (RoofType.GABLE, RoofType.HIP):
         roof_cp_result = get_cp_roof_gable(
@@ -826,24 +985,38 @@ def run_wind_load_calculation(inputs: BuildingInputs) -> dict:
                 cp_val = roof_cp_result[slope_label]["Cp"]
                 p_pos  = calc_design_pressure(qh, cp_val, qh, GCpi_positive)
                 p_neg  = calc_design_pressure(qh, cp_val, qh, GCpi_negative)
-                p_pos_gov, _ = apply_minimum_pressure(p_pos, "roof")
-                p_neg_gov, _ = apply_minimum_pressure(p_neg, "roof")
+                pos_result = _pressure_result(p_pos, "roof")
+                neg_result = _pressure_result(p_neg, "roof")
                 roof_pressures[slope_label] = {
                     "Cp":             cp_val,
-                    "p_GCpi_pos_psf": p_pos_gov,
-                    "p_GCpi_neg_psf": p_neg_gov,
+                    "p_GCpi_pos_raw_psf": p_pos,
+                    "p_GCpi_neg_raw_psf": p_neg,
+                    "p_GCpi_pos_psf": pos_result["design_psf"],
+                    "p_GCpi_neg_psf": neg_result["design_psf"],
+                    "min_governed_pos": pos_result["minimum_governed"],
+                    "min_governed_neg": neg_result["minimum_governed"],
+                    "governing_gcpi": _surface_governing_case(p_pos, p_neg),
                 }
         else:
             for zone in roof_cp_result["zones"]:
                 cp_val = zone["Cp"]
                 p_pos  = calc_design_pressure(qh, cp_val, qh, GCpi_positive)
                 p_neg  = calc_design_pressure(qh, cp_val, qh, GCpi_negative)
-                p_pos_gov, _ = apply_minimum_pressure(p_pos, "roof")
-                p_neg_gov, _ = apply_minimum_pressure(p_neg, "roof")
+                geometry = _roof_zone_geometry(zone["zone"], h, L, B)
+                if geometry is None:
+                    continue
+                pos_result = _pressure_result(p_pos, "roof")
+                neg_result = _pressure_result(p_neg, "roof")
                 roof_pressures[zone["zone"]] = {
                     "Cp":             cp_val,
-                    "p_GCpi_pos_psf": p_pos_gov,
-                    "p_GCpi_neg_psf": p_neg_gov,
+                    "geometry": geometry,
+                    "p_GCpi_pos_raw_psf": p_pos,
+                    "p_GCpi_neg_raw_psf": p_neg,
+                    "p_GCpi_pos_psf": pos_result["design_psf"],
+                    "p_GCpi_neg_psf": neg_result["design_psf"],
+                    "min_governed_pos": pos_result["minimum_governed"],
+                    "min_governed_neg": neg_result["minimum_governed"],
+                    "governing_gcpi": _surface_governing_case(p_pos, p_neg),
                 }
 
     elif inputs.roof_type == RoofType.MONOSLOPE:
@@ -859,7 +1032,40 @@ def run_wind_load_calculation(inputs: BuildingInputs) -> dict:
     }
 
     # --------------------------------------------------
-    # Step 8: Summary of governing pressures
+    # Step 8: Direction checks and MWFRS force summaries
+    # --------------------------------------------------
+    results["wind_direction_cases"] = {
+        "reference": "ASCE 7-16 Chapter 27 MWFRS checks for orthogonal wind directions",
+        "note": (
+            "Wind 0 uses building_length_L as along-wind depth. "
+            "Wind 90 swaps length and width for direction-specific L/B, h/L, roof zones, and force checks."
+        ),
+        "cases": [
+            _direction_case_summary(
+                "0",
+                L,
+                B,
+                h,
+                qh,
+                inputs.roof_type,
+                inputs.roof_slope_deg,
+                inputs.ridge_orientation,
+            ),
+            _direction_case_summary(
+                "90",
+                B,
+                L,
+                h,
+                qh,
+                inputs.roof_type,
+                inputs.roof_slope_deg,
+                inputs.ridge_orientation,
+            ),
+        ],
+    }
+
+    # --------------------------------------------------
+    # Step 9: Summary of governing pressures
     # --------------------------------------------------
     results["summary"] = {
         "reference":       "ASCE 7-16 Chapter 27 — Directional Procedure",

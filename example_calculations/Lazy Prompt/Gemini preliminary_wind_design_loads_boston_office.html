@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Cloud Engineering | Wind Design Load Workspace</title>
+    <!-- Import Google Fonts for Material Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --google-red: #ea4335;
+            --google-yellow: #fbbc05;
+            --google-green: #34a853;
+            --text-dark: #202124;
+            --text-muted: #5f6368;
+            --bg-light: #f8f9fa;
+            --border-color: #dadce0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Google Workspace Style Header */
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-dark);
+        }
+
+        .logo-dots {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .dot-b { background-color: var(--google-blue); }
+        .dot-r { background-color: var(--google-red); }
+        .dot-y { background-color: var(--google-yellow); }
+        .dot-g { background-color: var(--google-green); }
+
+        .badge {
+            background-color: #e8f0fe;
+            color: var(--google-blue);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1000px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .meta-subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        /* Material Card Style */
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: none;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: var(--google-blue);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Google Material Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        th {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            text-align: left;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color);
+            padding: 12px 16px;
+            background-color: #ffffff;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        tr:hover td {
+            background-color: #f8f9fa;
+        }
+
+        /* Inline Math and Code Blocks */
+        .math {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #b06000;
+        }
+
+        .formula-block {
+            background-color: #f1f3f4;
+            border-left: 4px solid var(--google-blue);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            margin: 16px 0;
+            color: #202124;
+        }
+
+        .highlight-result {
+            font-size: 16px;
+            color: var(--google-green);
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        /* Structural Dimension List */
+        .dim-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dim-item {
+            background: var(--bg-light);
+            padding: 12px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .dim-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .dim-value {
+            font-size: 18px;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        footer {
+            margin-top: 64px;
+            padding: 24px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <div class="logo-dots">
+                <span class="dot dot-b"></span>
+                <span class="dot dot-r"></span>
+                <span class="dot dot-y"></span>
+                <span class="dot dot-g"></span>
+            </div>
+            Google Structural Engine
+        </div>
+        <div class="badge">ASCE 7-16 Pro</div>
+    </header>
+
+    <div class="container">
+        <h1>Wind Design Load Configurations</h1>
+        <div class="meta-subtitle">
+            Project Environment: <strong>Boston, Massachusetts</strong> &nbsp;|&nbsp; 
+            Standard: <strong>IBC 2021 / ASCE 7-16</strong> &nbsp;|&nbsp; 
+            Classification: <strong>Commercial Office</strong>
+        </div>
+
+        <!-- Section: Building Dimensions -->
+        <div class="card">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--google-blue);"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                Target Geometry Parameters
+            </div>
+            <ul class="dim-list">
+                <li class="dim-item">
+                    <div class="dim-label">Width (B)</div>
+                    <div class="dim-value">30 ft</div>
+                </li>
+                <li class="dim-item">
+                    <div class="dim-label">Length (L)</div>
+                    <div class="dim-value">30 ft</div>
+                </li>
+                <li class="dim-item">
+                    <div class="dim-label">Mean Roof Height (h)</div>
+                    <div class="dim-value">15 ft <span style="font-size:12px;color:var(--text-muted);">(Flat)</span></div>
+                </li>
+                <li class="dim-item">
+                    <div class="dim-label">Risk Category</div>
+                    <div class="dim-value">II</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Section: Design Parameters -->
+        <div class="card">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--google-yellow);"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                Environmental Coefficients
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter Metric</th>
+                        <th>Standard Index</th>
+                        <th>Reference Criteria</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Basic Wind Speed (V)</td>
+                        <td><span class="math">128 mph</span></td>
+                        <td>ASCE 7-16 Hazard maps for Boston MSA</td>
+                    </tr>
+                    <tr>
+                        <td>Exposure Category</td>
+                        <td><span class="math">B</span></td>
+                        <td>Urban / Suburban landscape profile</td>
+                    </tr>
+                    <tr>
+                        <td>Directionality Factor (K<sub>d</sub>)</td>
+                        <td><span class="math">0.85</span></td>
+                        <td>Table 26.6-1 (Main Frames & Components)</td>
+                    </tr>
+                    <tr>
+                        <td>Topographic Factor (K<sub>zt</sub>)</td>
+                        <td><span class="math">1.00</span></td>
+                        <td>Section 26.8 (Homogeneous flat ground profile)</td>
+                    </tr>
+                    <tr>
+                        <td>Ground Elevation Factor (K<sub>e</sub>)</td>
+                        <td><span class="math">1.00</span></td>
+                        <td>Table 26.9-1 (Calculated at Sea Level)</td>
+                    </tr>
+                    <tr>
+                        <td>Velocity Pressure Coeff. (K<sub>z</sub>)</td>
+                        <td><span class="math">0.57</span></td>
+                        <td>Table 26.10-1 (Exposure B, Height &le; 15ft)</td>
+                    </tr>
+                    <tr>
+                        <td>Gust Effect Factor (G)</td>
+                        <td><span class="math">0.85</span></td>
+                        <td>Section 26.11 (Rigid Body assumption)</td>
+                    </tr>
+                    <tr>
+                        <td>Internal Pressure Coeff. (GC<sub>pi</sub>)</td>
+                        <td><span class="math">&plusmn; 0.18</span></td>
+                        <td>Table 26.13-1 (Enclosed Envelope Standard)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section: Velocity Pressure Calc -->
+        <div class="card">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--google-blue);"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 6h-2v2h2v2h-2v2h-2v-2H9v-2h2V9H9V7h2V5h2v2h2v2z"/></svg>
+                Velocity Pressure Evaluation (q<sub>z</sub>)
+            </div>
+            <p>Evaluation of velocity pressure at mean building height (<span class="math">h = 15 ft</span>):</p>
+            <div class="formula-block">
+                q<sub>z</sub> = 0.00256 &times; K<sub>z</sub> &times; K<sub>zt</sub> &times; K<sub>d</sub> &times; K<sub>e</sub> &times; V<sup>2</sup><br>
+                q<sub>h</sub> = 0.00256 &times; 0.57 &times; 1.0 &times; 0.85 &times; 1.0 &times; (128)<sup>2</sup>
+                <div class="highlight-result">q<sub>h</sub> = 20.32 psf</div>
+            </div>
+        </div>
+
+        <!-- Section: MWFRS Wall Pressures -->
+        <div class="card">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--google-red);"><path d="M12 2L2 22h20L12 2zm0 3.99L19.53 19H4.47L12 5.99zM13 16h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+                MWFRS Structural Design Pressures
+            </div>
+            <p style="font-size:14px; color:var(--text-muted);">Analytical Framework: <span class="math">p = q &times; G &times; C<sub>p</sub> - q<sub>i</sub> &times; (GC<sub>pi</sub>)</span> where <span class="math">q = q<sub>i</sub> = q<sub>h</sub></span>.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Surface Boundary</th>
+                        <th>External Coeff. (C<sub>p</sub>)</th>
+                        <th>Max Inward Pressure</th>
+                        <th>Max Outward Pressure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Windward Wall</strong></td>
+                        <td><span class="math">+0.8</span></td>
+                        <td style="color:var(--google-blue); font-weight:500;">+17.48 psf</td>
+                        <td>+10.16 psf</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Leeward Wall</strong></td>
+                        <td><span class="math">-0.5</span></td>
+                        <td>-4.98 psf</td>
+                        <td style="color:var(--google-red); font-weight:500;">-12.29 psf</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Side Walls</strong></td>
+                        <td><span class="math">-0.7</span></td>
+                        <td>-8.43 psf</td>
+                        <td style="color:var(--google-red); font-weight:500;">-15.75 psf</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section: Component and Cladding -->
+        <div class="card">
+            <div class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--google-green);"><path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
+                Component & Cladding (C&C) Localized Pressures
+            </div>
+            <p style="font-size:14px; color:var(--text-muted);">Localized tributary skin stress profiles assuming a fundamental 10 sq. ft. effective area.</p>
+            
+            <h3>Wall Cladding Systems</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Structural Zone Allocation</th>
+                        <th>Combined Coeff. (GC<sub>p</sub>)</th>
+                        <th>Design Pressure Limits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Zone 4 (Interior Wall Field)</td>
+                        <td><span class="math">+1.00 / -1.10</span></td>
+                        <td>+23.98 / -26.01 psf</td>
+                    </tr>
+                    <tr>
+                        <td>Zone 5 (Wall Corner Regions)</td>
+                        <td><span class="math">+1.00 / -1.40</span></td>
+                        <td style="color:var(--google-red); font-weight:500;">+23.98 / -32.11 psf</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top:24px;">Roof Cladding & Diaphragm Systems</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Structural Zone Allocation</th>
+                        <th>Combined Coeff. (GC<sub>p</sub>)</th>
+                        <th>Design Pressure Limits</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Zone 1 (Roof Interior Field)</td>
+                        <td><span class="math">+0.30 / -1.00</span></td>
+                        <td>+9.75 / -23.98 psf</td>
+                    </tr>
+                    <tr>
+                        <td>Zone 2 (Roof Perimeters & Eaves)</td>
+                        <td><span class="math">+0.30 / -1.80</span></td>
+                        <td>+9.75 / -40.24 psf</td>
+                    </tr>
+                    <tr>
+                        <td>Zone 3 (Roof Geometric Corners)</td>
+                        <td><span class="math">+0.30 / -2.80</span></td>
+                        <td style="color:var(--google-red); font-weight:500;">+9.75 / -60.56 psf</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer>
+            Google Structural Tooling Api Sandbox — For Informational and Analysis Verification Workflows Only.
+        </footer>
+    </div>
+
+</body>
+</html>

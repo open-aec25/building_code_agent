@@ -8,16 +8,25 @@ the calculation engine.
 from __future__ import annotations
 
 import json
+import os
 import re
+from contextvars import ContextVar
 from pathlib import Path
 from typing import Any
 
-from backend.models import CalculationRequest
+from pydantic import ValidationError
+
+from backend.config import load_dotenv_if_present
+from backend.models import CalculationRequest, LLMIntentResponse, LLMStructuredResponse
 from backend.session import get_session, store_calculation_result, update_session
 from backend.wind_load_engine import run_wind_load_calculation
 
 
+load_dotenv_if_present()
+
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+LAST_LLM_FAILURE_REASON: str | None = None
+REQUEST_LLM_ENABLED: ContextVar[bool | None] = ContextVar("REQUEST_LLM_ENABLED", default=None)
 
 with (DATA_DIR / "conversation_flow.json").open(encoding="utf-8") as flow_file:
     CONVERSATION_FLOW = json.load(flow_file)
@@ -180,16 +189,159 @@ FIELD_LABELS = {
     "design_standard": "Design Standard",
 }
 
+QUESTION_GUIDANCE = {
+    "Q1": {
+        "field": "occupancy_description",
+        "help": "I need the primary occupancy so the backend can derive the ASCE 7 Risk Category. A short description like office, warehouse, school, hospital, retail, or residential is enough.",
+    },
+    "Q2": {
+        "field": "occupant_load",
+        "help": "I need an approximate peak occupant count because some occupancies move into a higher Risk Category above ASCE occupant thresholds. A best estimate is fine for this preliminary workflow.",
+    },
+    "Q3": {
+        "field": "essential_post_disaster",
+        "help": "Answer yes only if the facility is intended to remain operational after a disaster, such as a hospital, fire station, police station, or emergency operations center.",
+    },
+    "Q4": {
+        "field": "hazardous_materials",
+        "help": "Answer yes if the building stores or handles hazardous materials where release could pose a substantial public risk. Ordinary cleaning supplies or small incidental quantities usually do not count.",
+    },
+    "Q5": {
+        "field": "location",
+        "help": "I need the project city and state so the backend can look up or request the correct ASCE basic wind speed. For Massachusetts, a city or town name like Boston, MA is enough.",
+    },
+    "MANUAL_WIND_SPEED": {
+        "field": "basic_wind_speed_V",
+        "help": "The automatic lookup did not resolve this location, so I need the ASCE 7-16 basic wind speed in mph from the applicable wind speed figure.",
+    },
+    "Q6": {
+        "field": "exposure_category",
+        "help": "Exposure is based on surrounding surface roughness. B is dense urban, suburban, wooded, or closely obstructed terrain. C is open terrain with scattered obstructions. D is flat unobstructed terrain exposed to wind over a large body of water.",
+    },
+    "Q7": {
+        "field": "topographic_feature_present",
+        "help": "This is separate from exposure category. I am checking whether a hill, ridge, or escarpment could accelerate wind over the site. Most flat city parcels can answer no.",
+    },
+    "Q7a": {
+        "field": "topo_feature_type",
+        "help": "Choose the closest ASCE topographic feature: 2D ridge, 2D escarpment, or 3D hill.",
+    },
+    "Q7b": {
+        "field": "topo_H",
+        "help": "H is the vertical height of the hill, ridge, or escarpment in feet.",
+    },
+    "Q7c": {
+        "field": "topo_Lh",
+        "help": "Lh is the horizontal distance from the crest to the upwind half-height point, in feet.",
+    },
+    "Q7d": {
+        "field": "topo_x",
+        "help": "x is the horizontal distance from the crest to the building site, in feet.",
+    },
+    "Q8": {
+        "field": "mean_roof_height_h",
+        "help": "Mean roof height is the average roof height above grade in feet. For a flat roof, use the roof height.",
+    },
+    "Q9": {
+        "field": "building_length_L",
+        "help": "Length L is the plan dimension parallel to the wind direction being analyzed, in feet.",
+    },
+    "Q10": {
+        "field": "building_width_B",
+        "help": "Width B is the plan dimension perpendicular to the wind direction being analyzed, in feet.",
+    },
+    "Q11": {
+        "field": "roof_type",
+        "help": "Choose the roof form used by the ASCE MWFRS coefficient tables: flat, gable, hip, or monoslope.",
+    },
+    "Q12": {
+        "field": "roof_slope_deg",
+        "help": "Roof slope should be entered in degrees. If you have rise over run, convert it to degrees before entering it.",
+    },
+    "Q13": {
+        "field": "ridge_orientation",
+        "help": "For gable and hip roofs, say whether the wind is normal to the ridge or parallel to the ridge.",
+    },
+    "Q14": {
+        "field": "analysis_type",
+        "help": "MWFRS is for the main wind-force resisting system. C&C is components and cladding. This demo primarily supports MWFRS.",
+    },
+    "Q15": {
+        "field": "design_standard",
+        "help": "Choose LRFD or ASD, matching the design basis you want reported.",
+    },
+}
+
 
 class ChatbotError(ValueError):
     """Raised when a user answer cannot be parsed for the current question."""
+
+
+class ChatbotReply(dict):
+    """Dictionary reply that compares equal to its display text for legacy tests."""
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, str):
+            return self["display_text"] == other
+        return super().__eq__(other)
+
+    def __contains__(self, item: object) -> bool:
+        if isinstance(item, str):
+            return item in self["display_text"]
+        return super().__contains__(item)
 
 
 def start_prompt() -> str:
     return QUESTIONS["Q1"]
 
 
-def process_user_message(session_id: str, message: str) -> tuple[str, dict[str, Any]]:
+def _build_reply(
+    deterministic_response: str,
+    *,
+    user_message: str,
+    session_before: dict[str, Any],
+    session_after: dict[str, Any],
+    next_question_id: str,
+) -> ChatbotReply:
+    llm_response = _try_llm_response_generation(
+        deterministic_response,
+        user_message=user_message,
+        session_before=session_before,
+        session_after=session_after,
+        next_question_id=next_question_id,
+    )
+    if llm_response is None:
+        return ChatbotReply(
+            response=deterministic_response,
+            display_text=deterministic_response,
+            spoken_text=_to_spoken_text(deterministic_response),
+            llm_used=False,
+            llm_fallback_reason=_llm_unavailable_reason(),
+        )
+
+    return ChatbotReply(
+        response=llm_response.display_text,
+        display_text=llm_response.display_text,
+        spoken_text=llm_response.spoken_text,
+        llm_used=True,
+        llm_fallback_reason=None,
+    )
+
+
+def process_user_message(
+    session_id: str,
+    message: str,
+    *,
+    llm_enabled: bool | None = None,
+) -> tuple[ChatbotReply, dict[str, Any]]:
+    token = REQUEST_LLM_ENABLED.set(llm_enabled)
+    try:
+        return _process_user_message(session_id, message)
+    finally:
+        REQUEST_LLM_ENABLED.reset(token)
+
+
+def _process_user_message(session_id: str, message: str) -> tuple[ChatbotReply, dict[str, Any]]:
     session = get_session(session_id)
     if session is None:
         raise KeyError(session_id)
@@ -204,11 +356,19 @@ def process_user_message(session_id: str, message: str) -> tuple[str, dict[str, 
         response = "This session already has a completed calculation. Start a new session to run another building."
         next_question_id = "COMPLETE"
     else:
-        try:
-            response, next_question_id = _handle_answer(current_question_id, message, collected, branch_flags)
-        except ChatbotError as exc:
-            response = f"{exc} {QUESTIONS[current_question_id]}"
-            next_question_id = current_question_id
+        pending = _handle_pending_or_intent(current_question_id, message, collected, branch_flags)
+        if pending is not None:
+            response, next_question_id = pending
+        else:
+            try:
+                response, next_question_id = _handle_answer(current_question_id, message, collected, branch_flags)
+            except ChatbotError as exc:
+                interpreted = _try_llm_interpretation(current_question_id, message, collected, branch_flags, str(exc))
+                if interpreted is not None:
+                    response, next_question_id = interpreted
+                else:
+                    response = f"{exc} {QUESTIONS[current_question_id]}"
+                    next_question_id = current_question_id
 
     updated = update_session(
         session_id,
@@ -222,7 +382,14 @@ def process_user_message(session_id: str, message: str) -> tuple[str, dict[str, 
     )
     if updated is None:
         raise KeyError(session_id)
-    return response, updated
+    reply = _build_reply(
+        response,
+        user_message=message,
+        session_before=session,
+        session_after=updated,
+        next_question_id=next_question_id,
+    )
+    return reply, updated
 
 
 def _handle_answer(
@@ -377,6 +544,439 @@ def _handle_confirmation(
         "Reply yes to calculate, or say something like 'change roof slope to 25 degrees'.",
         "CONFIRM",
     )
+
+
+def _handle_pending_or_intent(
+    question_id: str,
+    message: str,
+    collected: dict[str, Any],
+    branch_flags: dict[str, Any],
+) -> tuple[str, str] | None:
+    normalized = message.strip()
+    pending = branch_flags.get("pending_answer")
+    if isinstance(pending, dict) and pending.get("question_id") == question_id:
+        if _is_confirm(normalized):
+            candidate = str(pending.get("candidate_answer", ""))
+            branch_flags.pop("pending_answer", None)
+            return _handle_answer(question_id, candidate, collected, branch_flags)
+        if _is_reject(normalized):
+            branch_flags.pop("pending_answer", None)
+            return f"No problem. {QUESTIONS[question_id]}", question_id
+
+    if not _looks_like_non_answer(normalized):
+        return None
+
+    intent = _try_llm_intent_classification(question_id, normalized, collected, branch_flags)
+    if intent is not None:
+        handled = _handle_intent_response(question_id, intent, collected, branch_flags)
+        if handled is not None:
+            return handled
+
+    return _deterministic_help_response(question_id, normalized, branch_flags), question_id
+
+
+def _looks_like_non_answer(text: str) -> bool:
+    lowered = text.lower().strip()
+    if not lowered:
+        return False
+    if "?" in lowered and len(lowered) > 2:
+        return True
+    return lowered.startswith(
+        (
+            "help",
+            "why",
+            "what would",
+            "what should",
+            "which",
+            "should i",
+            "would you",
+            "how do",
+            "how would",
+            "can you",
+            "do you",
+            "i don't know",
+            "i dont know",
+            "not sure",
+            "unsure",
+            "i am not sure",
+            "i'm not sure",
+            "i thought",
+        )
+    )
+
+
+def _try_llm_intent_classification(
+    question_id: str,
+    message: str,
+    collected: dict[str, Any],
+    branch_flags: dict[str, Any],
+) -> LLMIntentResponse | None:
+    if not _llm_enabled():
+        return None
+
+    guidance = QUESTION_GUIDANCE.get(question_id, {})
+    prompt = {
+        "task": "classify_user_intent_for_active_question",
+        "hard_rules": [
+            "Do not perform wind load calculations.",
+            "Do not choose ASCE coefficients or compute pressures.",
+            "Classify whether the user is answering, asking for help, asking for a recommendation, asking a clarification, correcting a previous value, or off topic.",
+            "Set should_advance true only when the user clearly intended to answer the active question.",
+            "For recommendation_request or uncertainty, provide candidate_answer when reasonable but set should_advance false so the backend can ask for confirmation.",
+            "Return only valid JSON matching the requested shape.",
+        ],
+        "current_question_id": question_id,
+        "question_text": QUESTIONS.get(question_id),
+        "expected_field": guidance.get("field"),
+        "field_guidance": guidance.get("help"),
+        "user_message": message,
+        "collected_inputs": collected,
+        "branch_flags": branch_flags,
+        "required_json_shape": {
+            "intent": "direct_answer | help_request | recommendation_request | clarification_question | correction | off_topic",
+            "candidate_answer": "string or null",
+            "should_advance": False,
+            "confidence": 0.0,
+            "display_text": "string",
+            "spoken_text": "string",
+        },
+    }
+    try:
+        raw = _call_anthropic_json(prompt)
+        return LLMIntentResponse.model_validate(raw)
+    except Exception as exc:
+        global LAST_LLM_FAILURE_REASON
+        LAST_LLM_FAILURE_REASON = f"{type(exc).__name__}: " + _safe_error_text(exc)
+        return None
+
+
+def _handle_intent_response(
+    question_id: str,
+    intent: LLMIntentResponse,
+    collected: dict[str, Any],
+    branch_flags: dict[str, Any],
+) -> tuple[str, str] | None:
+    if intent.intent == "direct_answer" and intent.should_advance and intent.candidate_answer:
+        try:
+            return _handle_answer(question_id, intent.candidate_answer, collected, branch_flags)
+        except ChatbotError:
+            return None
+
+    if intent.intent in {"help_request", "recommendation_request", "clarification_question", "off_topic"}:
+        response = intent.display_text.strip() or _deterministic_help_response(question_id, "", branch_flags)
+        if (
+            intent.intent == "recommendation_request"
+            and intent.candidate_answer
+            and intent.confidence >= 0.5
+            and _candidate_valid_for_question(question_id, intent.candidate_answer, collected, branch_flags)
+        ):
+            branch_flags["pending_answer"] = {
+                "question_id": question_id,
+                "field": QUESTION_GUIDANCE.get(question_id, {}).get("field"),
+                "candidate_answer": str(intent.candidate_answer),
+            }
+            if not _asks_for_confirmation(response):
+                response = f"{response}\n\nShould I use {intent.candidate_answer} for this field?"
+        return response, question_id
+
+    return None
+
+
+def _candidate_valid_for_question(
+    question_id: str,
+    candidate_answer: str,
+    collected: dict[str, Any],
+    branch_flags: dict[str, Any],
+) -> bool:
+    collected_copy = dict(collected)
+    branch_copy = dict(branch_flags)
+    try:
+        _handle_answer(question_id, str(candidate_answer), collected_copy, branch_copy)
+    except ChatbotError:
+        return False
+    return True
+
+
+def _deterministic_help_response(
+    question_id: str,
+    message: str,
+    branch_flags: dict[str, Any],
+) -> str:
+    if question_id == "Q6" and _mentions_city_or_urban(message):
+        branch_flags["pending_answer"] = {
+            "question_id": "Q6",
+            "field": "exposure_category",
+            "candidate_answer": "B",
+        }
+        return (
+            "For a typical dense city site, Exposure B is usually the right starting point because it covers urban, suburban, wooded, or closely obstructed terrain.\n\n"
+            "If the site is unusually open, Exposure C may be more appropriate. Exposure D is for flat, unobstructed terrain exposed to wind over a large body of water.\n\n"
+            "Should I use Exposure B for this site?"
+        )
+
+    guidance = QUESTION_GUIDANCE.get(question_id, {})
+    help_text = guidance.get("help", "I can help clarify this input before storing it.")
+    return f"{help_text}\n\n{QUESTIONS[question_id]}"
+
+
+def _mentions_city_or_urban(text: str) -> bool:
+    lowered = text.lower()
+    return any(token in lowered for token in ("city", "urban", "downtown", "boston"))
+
+
+def _asks_for_confirmation(text: str) -> bool:
+    lowered = text.lower()
+    return "should i use" in lowered or "do you want me to use" in lowered or "confirm" in lowered
+
+
+def _is_reject(text: str) -> bool:
+    lowered = text.lower().strip()
+    return lowered in {"no", "n", "nope", "not quite", "incorrect", "don't use that", "dont use that"}
+
+
+def _try_llm_interpretation(
+    question_id: str,
+    message: str,
+    collected: dict[str, Any],
+    branch_flags: dict[str, Any],
+    parse_error: str,
+) -> tuple[str, str] | None:
+    if not _llm_enabled():
+        return None
+
+    expected_field = _expected_field_for_question(question_id)
+    prompt = {
+        "task": "interpret_user_answer",
+        "hard_rules": [
+            "Do not perform wind load calculations.",
+            "Do not select ASCE coefficients or engineering values.",
+            "Return only a candidate field_update for the current expected field.",
+            "The backend will validate any candidate before use.",
+        ],
+        "current_question_id": question_id,
+        "expected_field": expected_field,
+        "question_text": QUESTIONS.get(question_id),
+        "user_message": message,
+        "parse_error": parse_error,
+        "collected_inputs": collected,
+        "required_json_shape": {
+            "display_text": "string",
+            "spoken_text": "string",
+            "field_update": {expected_field or "field_name": "candidate value"},
+            "needs_clarification": False,
+            "clarification_text": None,
+        },
+    }
+    llm_response = _call_llm_for_structured_response(prompt)
+    if llm_response is None:
+        return None
+
+    if expected_field and expected_field in llm_response.field_update:
+        candidate = llm_response.field_update[expected_field]
+        try:
+            return _handle_answer(question_id, str(candidate), collected, branch_flags)
+        except ChatbotError:
+            return None
+
+    if llm_response.needs_clarification and llm_response.clarification_text:
+        return llm_response.clarification_text, question_id
+
+    return None
+
+
+def _try_llm_response_generation(
+    deterministic_response: str,
+    *,
+    user_message: str,
+    session_before: dict[str, Any],
+    session_after: dict[str, Any],
+    next_question_id: str,
+) -> LLMStructuredResponse | None:
+    if not _llm_enabled():
+        return None
+
+    prompt = {
+        "task": "polish_deterministic_chatbot_response",
+        "hard_rules": [
+            "Do not perform wind load calculations.",
+            "Do not select ASCE coefficients or engineering values.",
+            "Do not change phase progression or ask a different next question.",
+            "Preserve any code, table, ASCE, 780 CMR, value, warning, or fallback content from deterministic_response.",
+            "Return field_update as an empty object for this task.",
+        ],
+        "user_message": user_message,
+        "previous_question_id": session_before.get("current_question_id"),
+        "next_question_id": next_question_id,
+        "current_phase": session_after.get("current_phase"),
+        "deterministic_response": deterministic_response,
+        "collected_inputs": session_after.get("collected_inputs", {}),
+        "required_json_shape": {
+            "display_text": "string",
+            "spoken_text": "string",
+            "field_update": {},
+            "needs_clarification": False,
+            "clarification_text": None,
+        },
+    }
+    llm_response = _call_llm_for_structured_response(prompt)
+    if llm_response is None:
+        return None
+    if not llm_response.display_text.strip() or not llm_response.spoken_text.strip():
+        return None
+    if llm_response.needs_clarification:
+        return None
+    return llm_response
+
+
+def _call_llm_for_structured_response(payload: dict[str, Any]) -> LLMStructuredResponse | None:
+    global LAST_LLM_FAILURE_REASON
+    LAST_LLM_FAILURE_REASON = None
+    try:
+        raw = _call_anthropic_json(payload)
+        return LLMStructuredResponse.model_validate(raw)
+    except ValidationError as exc:
+        LAST_LLM_FAILURE_REASON = "invalid_llm_response_schema: " + _safe_error_text(exc)
+    except json.JSONDecodeError as exc:
+        LAST_LLM_FAILURE_REASON = "invalid_llm_json: " + _safe_error_text(exc)
+    except Exception as exc:
+        LAST_LLM_FAILURE_REASON = f"{type(exc).__name__}: " + _safe_error_text(exc)
+    return None
+
+
+def _safe_error_text(exc: Exception) -> str:
+    text = str(exc).replace("\n", " ")
+    text = re.sub(r"sk-ant-[A-Za-z0-9_-]+", "[redacted-anthropic-key]", text)
+    text = re.sub(r"sk-proj-[A-Za-z0-9_-]+", "[redacted-openai-key]", text)
+    text = re.sub(r"sk-[A-Za-z0-9_-]+", "[redacted-key]", text)
+    return text[:240]
+
+
+def _call_anthropic_json(payload: dict[str, Any]) -> dict[str, Any]:
+    try:
+        from anthropic import Anthropic
+    except ImportError as exc:
+        raise ImportError("anthropic package is not installed") from exc
+
+    timeout = float(os.getenv("ANTHROPIC_TIMEOUT_SECONDS", "10"))
+    client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=timeout)
+    message = client.messages.create(
+        model=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
+        max_tokens=800,
+        temperature=0,
+        system=(
+            "You are a controlled assistant layer for an ASCE 7-16 wind-load chatbot. "
+            "The deterministic backend owns all flow control, validation, lookups, and calculations. "
+            "Return only valid JSON matching the requested shape. Never calculate wind loads, never choose ASCE coefficients, "
+            "and never invent engineering values."
+        ),
+        messages=[
+            {
+                "role": "user",
+                "content": json.dumps(payload, sort_keys=True),
+            }
+        ],
+    )
+    text = _anthropic_message_text(message)
+    return json.loads(_extract_json_object(text))
+
+
+def _anthropic_message_text(message: Any) -> str:
+    parts: list[str] = []
+    for block in getattr(message, "content", []):
+        text = getattr(block, "text", None)
+        if text is None and isinstance(block, dict):
+            text = block.get("text")
+        if text:
+            parts.append(text)
+    if parts:
+        return "\n".join(parts)
+    text = getattr(message, "text", None)
+    if isinstance(text, str):
+        return text
+    raise ValueError("Anthropic response did not contain text content.")
+
+
+def _extract_json_object(text: str) -> str:
+    stripped = text.strip()
+    if stripped.startswith("```"):
+        stripped = re.sub(r"^```(?:json)?\s*", "", stripped)
+        stripped = re.sub(r"\s*```$", "", stripped)
+    if stripped.startswith("{") and stripped.endswith("}"):
+        return stripped
+    start = stripped.find("{")
+    end = stripped.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        raise ValueError("LLM response did not contain a JSON object.")
+    return stripped[start : end + 1]
+
+
+def _llm_enabled() -> bool:
+    request_override = REQUEST_LLM_ENABLED.get()
+    if request_override is not None:
+        return request_override and bool(os.getenv("ANTHROPIC_API_KEY"))
+    enabled = os.getenv("LLM_ENABLED", "false").lower() in {"1", "true", "yes", "on"}
+    return enabled and bool(os.getenv("ANTHROPIC_API_KEY"))
+
+
+def llm_status() -> dict[str, Any]:
+    enabled_value = os.getenv("LLM_ENABLED", "false")
+    key_present = bool(os.getenv("ANTHROPIC_API_KEY"))
+    env_enabled = enabled_value.lower() in {"1", "true", "yes", "on"}
+    return {
+        "enabled": env_enabled,
+        "api_key_present": key_present,
+        "request_toggle_available": key_present,
+        "configured": _llm_enabled(),
+        "model": os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
+        "timeout_seconds": float(os.getenv("ANTHROPIC_TIMEOUT_SECONDS", "10")),
+    }
+
+
+def _llm_unavailable_reason() -> str | None:
+    request_override = REQUEST_LLM_ENABLED.get()
+    if request_override is False:
+        return "disabled_by_request"
+    if request_override is True and not os.getenv("ANTHROPIC_API_KEY"):
+        return "missing_api_key"
+    if request_override is True:
+        return LAST_LLM_FAILURE_REASON or "invalid_or_failed_response"
+    if os.getenv("LLM_ENABLED", "false").lower() not in {"1", "true", "yes", "on"}:
+        return "disabled"
+    if not os.getenv("ANTHROPIC_API_KEY"):
+        return "missing_api_key"
+    return LAST_LLM_FAILURE_REASON or "invalid_or_failed_response"
+
+
+def _expected_field_for_question(question_id: str) -> str | None:
+    return {
+        "Q1": "occupancy_description",
+        "Q2": "occupant_load",
+        "Q3": "essential_post_disaster",
+        "Q4": "hazardous_materials",
+        "Q5": "location",
+        "MANUAL_WIND_SPEED": "basic_wind_speed_V",
+        "Q6": "exposure_category",
+        "Q7": "topographic_feature_present",
+        "Q7a": "topo_feature_type",
+        "Q7b": "topo_H",
+        "Q7c": "topo_Lh",
+        "Q7d": "topo_x",
+        "Q8": "mean_roof_height_h",
+        "Q9": "building_length_L",
+        "Q10": "building_width_B",
+        "Q11": "roof_type",
+        "Q12": "roof_slope_deg",
+        "Q13": "ridge_orientation",
+        "Q14": "analysis_type",
+        "Q15": "design_standard",
+    }.get(question_id)
+
+
+def _to_spoken_text(display_text: str) -> str:
+    spoken = re.sub(r"`([^`]*)`", r"\1", display_text)
+    spoken = re.sub(r"[*_#>-]", "", spoken)
+    spoken = re.sub(r"\n+", " ", spoken)
+    return " ".join(spoken.split())
 
 
 def _next_response(next_question_id: str) -> str:

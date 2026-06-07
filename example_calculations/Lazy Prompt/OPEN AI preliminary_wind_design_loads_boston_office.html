@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preliminary Wind Design Loads - Boston Office Building</title>
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --surface: #ffffff;
+      --surface-soft: #f3f3ee;
+      --text: #202123;
+      --muted: #6b6f76;
+      --border: #deded6;
+      --border-strong: #c8c8bd;
+      --accent: #10a37f;
+      --accent-dark: #0f7f68;
+      --accent-soft: #e6f4f0;
+      --warning-bg: #fff7e6;
+      --warning-border: #f0c36a;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.06);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(16, 163, 127, 0.10), transparent 30%),
+        linear-gradient(180deg, #fbfbf8 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border-strong);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--surface);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      font-size: 18px;
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      color: var(--muted);
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 38px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--accent-dark);
+      font-size: 0.86rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 0 10px;
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 5vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.055em;
+      margin: 0;
+      max-width: 880px;
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 760px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .meta-card {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .meta-label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-bottom: 5px;
+    }
+
+    .meta-value {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .notice {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      color: #4f3b0d;
+      margin: 22px 0;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 20px;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+    }
+
+    nav .nav-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+
+    nav a {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      padding: 9px 10px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+    }
+
+    nav a:hover {
+      background: var(--surface-soft);
+      color: var(--accent-dark);
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.035);
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      line-height: 1.25;
+      letter-spacing: -0.035em;
+      margin: 0 0 16px;
+    }
+
+    h3 {
+      font-size: 1.06rem;
+      margin-top: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 12px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 16px 0 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-soft);
+      color: #313331;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td:last-child, th:last-child {
+      text-align: right;
+    }
+
+    .equation-block {
+      font-family: var(--mono);
+      background: #111;
+      color: #f4f4f0;
+      border-radius: 14px;
+      padding: 13px 15px;
+      margin: 12px 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 0.94rem;
+    }
+
+    .boxed {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent-soft);
+      border: 1px solid rgba(16, 163, 127, 0.35);
+      color: #064d3f;
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-weight: 750;
+      letter-spacing: -0.015em;
+      margin-top: 6px;
+    }
+
+    .summary-box {
+      background: linear-gradient(135deg, var(--accent-soft), #f6fbf9);
+      border: 1px solid rgba(16, 163, 127, 0.28);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin: 14px 0;
+      color: #064d3f;
+    }
+
+    ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: relative;
+        top: auto;
+      }
+
+      .meta-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 20px 14px 40px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero, section {
+        padding: 22px;
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      td:last-child, th:last-child {
+        text-align: left;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        padding: 0;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .content {
+        display: block;
+      }
+
+      .hero, section, .notice {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      section {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>OpenAI-styled calculation report</div>
+      </div>
+      <div class="pill">Preliminary engineering aid · Not for construction</div>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">Wind Load Calculation</p>
+      <h1>Preliminary Wind Design Loads</h1>
+      <p class="subtitle">Office Building — Boston, Massachusetts. Flat roof, 30 ft × 30 ft plan, 15 ft mean roof height.</p>
+
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-label">Basic Wind Speed</div>
+          <div class="meta-value">120 mph</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Exposure</div>
+          <div class="meta-value">C assumed</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Risk Category</div>
+          <div class="meta-value">II</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Velocity Pressure</div>
+          <div class="meta-value">26.6 psf</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="notice">
+      <strong>Important:</strong> This is a preliminary ASCE-style wind load calculation for discussion and coordination purposes only.
+      It is <strong>not</strong> a stamped structural design. For permit or construction use, a Massachusetts-licensed Professional Engineer should verify the exact site, exposure, enclosure classification, applicable code edition, roof zones, parapets, components and cladding pressures, and load combinations.
+    </div>
+
+    <div class="content">
+      <nav aria-label="Table of contents">
+        <p class="nav-title">Contents</p>
+        <a href="#building-info">Building Information</a>
+        <a href="#assumptions">Wind Assumptions</a>
+        <a href="#velocity">Velocity Pressure</a>
+        <a href="#coefficients">MWFRS Coefficients</a>
+        <a href="#wall-pressures">Wall Pressures</a>
+        <a href="#lateral-force">Lateral Force</a>
+        <a href="#base-shear">Base Shear</a>
+        <a href="#overturning">Overturning</a>
+        <a href="#roof-uplift">Roof Uplift</a>
+        <a href="#summary">Summary</a>
+        <a href="#notes">Design Notes</a>
+      </nav>
+
+      <main>
+        <section id="building-info">
+          <h2>1. Building Information</h2>
+          <table>
+            <tr><th>Item</th><th>Value</th></tr>
+            <tr><td>Location</td><td>Boston, Massachusetts</td></tr>
+            <tr><td>Building Use</td><td>Office</td></tr>
+            <tr><td>Risk Category</td><td>II</td></tr>
+            <tr><td>Building Type</td><td>Enclosed, rigid, rectangular</td></tr>
+            <tr><td>Roof Type</td><td>Flat</td></tr>
+            <tr><td>Plan Dimensions</td><td>30 ft × 30 ft</td></tr>
+            <tr><td>Mean Roof Height</td><td>15 ft</td></tr>
+            <tr><td>Eave Height</td><td>15 ft</td></tr>
+          </table>
+        </section>
+
+        <section id="assumptions">
+          <h2>2. Wind Design Assumptions</h2>
+          <table>
+            <tr><th>Parameter</th><th>Assumed Value</th></tr>
+            <tr><td>Design Standard</td><td>ASCE 7-16 style directional procedure</td></tr>
+            <tr><td>Basic Wind Speed, V</td><td>120 mph</td></tr>
+            <tr><td>Exposure Category</td><td>C</td></tr>
+            <tr><td>Topographic Factor, Kzt</td><td>1.0</td></tr>
+            <tr><td>Ground Elevation Factor, Ke</td><td>1.0</td></tr>
+            <tr><td>Wind Directionality Factor, Kd</td><td>0.85</td></tr>
+            <tr><td>Gust Effect Factor, G</td><td>0.85</td></tr>
+            <tr><td>Internal Pressure Coefficient, GCpi</td><td>±0.18</td></tr>
+            <tr><td>Velocity Pressure Exposure Coefficient at 15 ft, Kz</td><td>0.85</td></tr>
+          </table>
+        </section>
+
+        <section id="velocity">
+          <h2>3. Velocity Pressure at Mean Roof Height</h2>
+          <p>Velocity pressure is calculated as:</p>
+          <div class="equation-block">qh = 0.00256 Kz Kzt Kd Ke V²</div>
+
+          <p>Substituting values:</p>
+          <div class="equation-block">qh = 0.00256(0.85)(1.0)(0.85)(1.0)(120²)</div>
+          <div class="equation-block">qh = 26.6 psf</div>
+
+          <p><span class="boxed">qh = 26.6 psf</span></p>
+        </section>
+
+        <section id="coefficients">
+          <h2>4. MWFRS Wall Pressure Coefficients</h2>
+          <table>
+            <tr><th>Surface</th><th>External Pressure Coefficient, Cp</th></tr>
+            <tr><td>Windward Wall</td><td>+0.8</td></tr>
+            <tr><td>Leeward Wall, L/B = 1.0</td><td>-0.5</td></tr>
+            <tr><td>Side Walls</td><td>-0.7</td></tr>
+          </table>
+
+          <p>Net pressure is calculated as:</p>
+          <div class="equation-block">p = qh(GCp - GCpi)</div>
+          <p>Where:</p>
+          <div class="equation-block">GCp = G Cp</div>
+        </section>
+
+        <section id="wall-pressures">
+          <h2>5. Wall Pressures</h2>
+
+          <h3>Windward Wall</h3>
+          <div class="equation-block">Cp = +0.8</div>
+          <div class="equation-block">GCp = 0.85(0.8) = 0.68</div>
+          <div class="equation-block">p = 26.6(0.68 ± 0.18)</div>
+
+          <table>
+            <tr><th>Case</th><th>Pressure</th></tr>
+            <tr><td>Lower Net Inward Pressure</td><td>+13.3 psf</td></tr>
+            <tr><td>Higher Net Inward Pressure</td><td>+22.9 psf</td></tr>
+          </table>
+
+          <p><span class="boxed">pwindward = +22.9 psf</span></p>
+
+          <h3>Leeward Wall</h3>
+          <div class="equation-block">Cp = -0.5</div>
+          <div class="equation-block">GCp = 0.85(-0.5) = -0.425</div>
+          <p>Worst outward suction occurs with positive internal pressure:</p>
+          <div class="equation-block">p = 26.6(-0.425 - 0.18)</div>
+          <div class="equation-block">p = -16.1 psf</div>
+
+          <p><span class="boxed">pleeward = -16.1 psf</span></p>
+
+          <h3>Side Wall</h3>
+          <div class="equation-block">Cp = -0.7</div>
+          <div class="equation-block">GCp = 0.85(-0.7) = -0.595</div>
+          <p>Worst outward suction occurs with positive internal pressure:</p>
+          <div class="equation-block">p = 26.6(-0.595 - 0.18)</div>
+          <div class="equation-block">p = -20.6 psf</div>
+
+          <p><span class="boxed">psidewall = -20.6 psf</span></p>
+        </section>
+
+        <section id="lateral-force">
+          <h2>6. Overall Lateral MWFRS Wind Force</h2>
+          <p>
+            For the main lateral force-resisting system, internal pressure is typically not included in the total building base shear
+            because it acts internally and cancels out for the global force calculation.
+          </p>
+
+          <div class="equation-block">pnet = qh G(Cp,windward - Cp,leeward)</div>
+          <div class="equation-block">pnet = 26.6(0.85)(0.8 - (-0.5))</div>
+          <div class="equation-block">pnet = 26.6(0.85)(1.3)</div>
+          <div class="equation-block">pnet = 29.4 psf</div>
+
+          <p>Projected wall area:</p>
+          <div class="equation-block">A = 30 ft × 15 ft = 450 sf</div>
+
+          <p>Total lateral wind force:</p>
+          <div class="equation-block">F = 29.4(450)</div>
+          <div class="equation-block">F = 13,230 lb = 13.2 kips</div>
+
+          <p><span class="boxed">F = 13.2 kips</span></p>
+
+          <p>Because the building is square in plan, this lateral wind force is the same in either principal building direction.</p>
+        </section>
+
+        <section id="base-shear">
+          <h2>7. Base Shear</h2>
+          <p><span class="boxed">Vbase = 13.2 kips</span></p>
+        </section>
+
+        <section id="overturning">
+          <h2>8. Base Overturning Moment</h2>
+          <p>Assuming the resultant lateral wind force acts at mid-height:</p>
+          <div class="equation-block">M = F(h / 2)</div>
+          <div class="equation-block">M = 13.23 kips × 7.5 ft</div>
+          <div class="equation-block">M = 99.2 kip-ft</div>
+
+          <p><span class="boxed">MOT = 99.2 kip-ft</span></p>
+        </section>
+
+        <section id="roof-uplift">
+          <h2>9. Approximate Flat Roof Uplift Pressure</h2>
+          <p>For a simplified MWFRS flat roof uplift estimate, use approximate external pressure coefficient:</p>
+          <div class="equation-block">Cp ≈ -0.9</div>
+          <div class="equation-block">GCp = 0.85(-0.9) = -0.765</div>
+
+          <p>Worst uplift occurs with positive internal pressure:</p>
+          <div class="equation-block">p = qh(-0.765 - 0.18)</div>
+          <div class="equation-block">p = 26.6(-0.945)</div>
+          <div class="equation-block">p = -25.1 psf</div>
+
+          <p><span class="boxed">proof,uplift ≈ -25.1 psf</span></p>
+
+          <p>Roof area:</p>
+          <div class="equation-block">A = 30 ft × 30 ft = 900 sf</div>
+
+          <p>Total approximate roof uplift:</p>
+          <div class="equation-block">Fuplift = 25.1(900)</div>
+          <div class="equation-block">Fuplift = 22,590 lb = 22.6 kips upward</div>
+
+          <p><span class="boxed">Froof,uplift ≈ 22.6 kips upward</span></p>
+        </section>
+
+        <section id="summary">
+          <h2>10. Summary of Results</h2>
+          <div class="summary-box">
+            <strong>Primary preliminary design results:</strong>
+          </div>
+
+          <table>
+            <tr><th>Load Item</th><th>Result</th></tr>
+            <tr><td>Velocity Pressure at Roof Height, qh</td><td>26.6 psf</td></tr>
+            <tr><td>Windward Wall Pressure</td><td>+22.9 psf max inward</td></tr>
+            <tr><td>Leeward Wall Pressure</td><td>-16.1 psf outward</td></tr>
+            <tr><td>Side Wall Pressure</td><td>-20.6 psf outward</td></tr>
+            <tr><td>Net Lateral MWFRS Pressure</td><td>29.4 psf</td></tr>
+            <tr><td>Total Base Shear</td><td>13.2 kips</td></tr>
+            <tr><td>Base Overturning Moment</td><td>99.2 kip-ft</td></tr>
+            <tr><td>Approximate Roof Uplift Pressure</td><td>-25.1 psf</td></tr>
+            <tr><td>Approximate Total Roof Uplift</td><td>22.6 kips upward</td></tr>
+          </table>
+        </section>
+
+        <section id="notes">
+          <h2>11. Exposure Category Note</h2>
+          <p>
+            This calculation assumes <strong>Exposure C</strong>, which may be conservative for parts of Boston depending on the actual site surroundings.
+          </p>
+
+          <p>If the building is located in dense urban terrain and meets the code requirements for <strong>Exposure B</strong>, the velocity pressure may be lower. For example, using an approximate Exposure B value at 15 ft:</p>
+
+          <div class="equation-block">Kz ≈ 0.57</div>
+          <div class="equation-block">qh = 0.00256(0.57)(1.0)(0.85)(1.0)(120²)</div>
+          <div class="equation-block">qh ≈ 17.9 psf</div>
+
+          <p>
+            This is roughly a <strong>33% reduction</strong> compared with the Exposure C value of 26.6 psf.
+            However, <strong>Exposure B should not be assumed unless the surrounding terrain qualifies in all relevant wind directions.</strong>
+          </p>
+
+          <h2>12. Important Design Notes</h2>
+          <ul>
+            <li>This calculation is for <strong>MWFRS-level preliminary wind loads</strong> only.</li>
+            <li><strong>Components and cladding pressures</strong> for roof decking, fasteners, wall cladding, doors, windows, and edge/corner zones may be significantly higher.</li>
+            <li>Parapets, roof overhangs, rooftop equipment, canopies, mechanical screens, and openings can change the design pressures.</li>
+            <li>Site-specific wind speed, exposure, topographic effects, and enclosure classification should be verified before final design.</li>
+            <li>Applicable load combinations should be applied separately based on the governing building code.</li>
+          </ul>
+        </section>
+
+        <p class="footer">Generated as an OpenAI-styled preliminary calculation aid.</p>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

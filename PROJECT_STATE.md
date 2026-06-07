@@ -1,7 +1,20 @@
 # PROJECT_STATE.md
-Last updated: 2026-04-25 by Codex
+Last updated: 2026-05-18 by Codex
 
 ## Completed Tasks
+- Phase 10 - Open Source Demo Readiness - completed 2026-04-26
+  - Added `README.md` with project overview, architecture summary, supported scope, limitations, local setup, deterministic-only mode, backend/frontend run commands, test commands, demo scenarios, and safety disclaimer.
+  - Added `.env.example` documenting optional LLM and TTS runtime environment variables without secrets.
+  - Added `CONTRIBUTING.md` with project map, safe contribution guidance, test workflow, and guardrails for calculation changes.
+  - Added an MIT `LICENSE`.
+  - Expanded `.gitignore` for local virtual environments, env files, logs, and build artifacts while preserving `.env.example`.
+- Phase 8 - Build Production Frontend - completed 2026-04-26
+  - Added the production vanilla HTML/CSS/JS frontend in `frontend/`.
+  - Creates or restores a backend session on load, stores the active tab session ID in `sessionStorage`, and supports a new-session reset action.
+  - Renders chat messages from backend `display_text`, tracks 7-phase progress, and shows collecting/confirming/finished flow state.
+  - Fetches `/session/{session_id}/calculate` after conversation completion and renders backend `formatted_display` as the primary results view, including summary values, wall pressures, roof pressures, defaults, minimum checks, warnings, and markdown report.
+  - Integrates `/tts` using backend-provided `spoken_text`, with a persisted mute toggle and graceful hiding/fallback when TTS is disabled.
+  - Added local CORS allowance in `backend/main.py` for the static frontend dev server.
 - Phase 0 - Normalize The Project Structure - completed 2026-04-18
   - Created `backend/`, `data/`, `tests/`, `frontend/`, and `minimal_ui/`.
   - Copied the deterministic wind load engine to `backend/wind_load_engine.py`.
@@ -38,29 +51,62 @@ Last updated: 2026-04-25 by Codex
   - Selects `basic_wind_speed_v_mph` by the already-derived Risk Category and stores it as `basic_wind_speed_V`.
   - Confirms successful lookups with a `780 CMR Table 1604.11` citation and warns on note ref `2` for Special Wind Region/local-condition review.
   - Preserves manual wind-speed fallback for non-Massachusetts, unresolved Massachusetts, and unsupported lookup inputs.
+- Phase 6 - Add LLM Integration Safely - completed 2026-04-25
+  - Added an optional Anthropic-backed response/interpreter layer around the deterministic controller.
+  - Added schema validation for LLM output with deterministic fallback on disabled, missing-key, failed, or malformed responses.
+  - Added `display_text` and `spoken_text` to chat responses while preserving the existing `response` field.
+  - Kept deterministic backend ownership of phase progression, validation, risk derivation, Massachusetts wind-speed lookup, corrections, and calculation triggering.
+- Phase 7 - Add TTS Backend Module - completed 2026-04-25
+  - Added `backend/tts.py` with backend-only OpenAI speech synthesis using `OPENAI_API_KEY`, `TTS_ENABLED`, `TTS_VOICE`, and optional `TTS_MODEL`.
+  - Added `POST /tts`, returning `audio/mpeg` on success and a safe JSON fallback when disabled, unconfigured, or failed.
+  - Added mocked TTS tests for successful synthesis, disabled behavior, upstream failure, and route success/fallback paths.
+- Phase 9 - Build Report Formatter - completed 2026-04-26
+  - Added `backend/report_formatter.py` with UI-friendly display formatting and markdown report generation.
+  - Integrated formatted calculation output into `/session/{session_id}/calculate` while preserving raw engine results.
+  - Surfaced inputs, derived ratios, assumptions/defaults, Kzt, velocity pressure, Cp values, wall/roof pressures, minimum pressure checks, references, and limitations.
+  - Added dedicated formatter tests for flat roof, gable roof, topographic, assumptions/defaults, minimum pressure checks, and markdown sections.
+- TEDDS-style MWFRS benchmark alignment - completed 2026-05-18
+  - Corrected flat-roof Cp selection at `h/L = 0.5` to align with the reference flat-roof MWFRS example.
+  - Preserved calculated wall and roof pressures instead of substituting minimum pressures into individual surface pressure rows.
+  - Added flat-roof zone geometry/area output and suppresses zero-width roof zones from final pressure rows.
+  - Added 0° and 90° wind direction summaries with direction-specific `L/B`, `h/L`, roof zones, and overall horizontal force checks.
+  - Reworked overall horizontal force checks to keep `+GCpi` and `-GCpi` load cases consistent before comparing against the ASCE 7-16 §27.1.5 minimum force.
+  - Updated report formatting to show calculated pressures and direction-case force checks.
+  - Added benchmark-oriented tests for flat-roof Cp selection, raw pressure preservation, orthogonal direction swapping, and formatted output.
+- Demo launcher log-lock hardening - completed 2026-05-18
+  - Updated `run_demo.ps1` so locked log files from previous backend/frontend processes do not abort startup.
+  - The launcher now falls back to timestamped log files when a standard log path is held open.
 
 ## In Progress
 - None.
 
 ## Pending
 - Phase 1 - Stabilize The Calculation Core
-- Phase 6 - Add LLM Integration Safely
-- Phase 7 - Add TTS Backend Module
-- Phase 8 - Build Production Frontend
-- Phase 9 - Build Report Formatter
-- Phase 10 - Commercial Readiness Hardening
+- Future commercial readiness hardening if this demo becomes a production product.
 
 ## Known Issues / Decisions
 - Existing `python_files/` and `json_files/` source directories were left in place for compatibility during normalization.
 - The calculation engine still embeds tables/constants in Python; JSON-backed loading remains a later migration.
 - `wind_speed_lookup.json` has not been built yet as a national lookup; the chatbot still asks the user to enter the ASCE 7-16 basic wind speed manually for non-Massachusetts or unresolved locations.
 - Massachusetts municipal lookup is wired into `backend/chatbot.py` using `data/ma_780_cmr_table_1604_11.json`; bare ZIP-code-only inputs are not supported by this municipal table and fall back to manual entry.
-- Architecture notes mention 65 passing tests, but this repository currently contains 52 engine tests.
+- LLM integration is feature-flagged with `LLM_ENABLED=true` and requires `ANTHROPIC_API_KEY`; when disabled or unavailable, the deterministic flow continues unchanged.
+- TTS integration is feature-flagged with `TTS_ENABLED=true` and requires `OPENAI_API_KEY`; when disabled or unavailable, `/tts` returns `{ "tts_available": false, "detail": "..." }`.
+- Calculation responses now include raw `results`, `formatted_display`, and `formatted_markdown`.
+- Engine outputs now preserve calculated pressures in surface pressure rows; ASCE minimum pressure/force behavior is surfaced through separate checks rather than silently replacing leeward, side-wall, or roof pressure values.
+- Flat-roof direction/zone force summaries are benchmark-aligned for the current TEDDS-style MWFRS example; sloped-roof direction-specific zone geometry remains a future improvement.
+- The latest authoritative test status is the newest `python -m pytest -q` entry below; older entries are retained as history only.
 
 ## Test Status
-- `python -m pytest -q`: 75 passed on 2026-04-25.
+- `python -m pytest -q`: 94 passed on 2026-05-18 after TEDDS-style benchmark alignment and launcher log-lock hardening.
+- `python -m pytest -q`: 91 passed on 2026-04-26 after Phase 10 open-source demo readiness updates.
+- `python -m pytest -q`: 91 passed on 2026-04-26 after Phase 8 frontend work.
+- Phase 8 frontend HTTP smoke test: completed a Boston, MA flat-roof conversation through `COMPLETE`, fetched `/session/{session_id}/calculate`, and received formatted display output with wall and roof pressure rows on 2026-04-26.
+- Phase 8 local dev servers: FastAPI running at `http://127.0.0.1:8000`; static frontend running at `http://127.0.0.1:5500/index.html`.
 - Phase 2 API smoke test: session creation, state lookup, message persistence, calculation, and missing-session 404 passed on 2026-04-18.
 - Phase 3 API tests: 10 API tests passing on 2026-04-18.
 - Phase 4 deterministic conversation tests: flat roof, gable roof, topographic branch, correction flow, and confirmation calculation passing on 2026-04-18.
 - Phase 5 risk/manual wind-speed tests: manual fallback, positive wind-speed validation, and Risk Categories I/III/IV passing on 2026-04-25.
 - MA Table 1604.11 scraper QA: 351 unique municipality records, 38 records with Special Wind Region note ref `2`, 55 records with elevation adjustment note ref `3`.
+- Phase 6 LLM safety tests: disabled fallback, mocked successful response generation, malformed response fallback, interpretation candidate validation, and unavailable-call fallback passing on 2026-04-25.
+- Phase 7 TTS tests: mocked OpenAI synthesis, disabled fallback, upstream failure fallback, and `/tts` route success/fallback passing on 2026-04-25.
+- Phase 9 formatter tests: flat roof, gable roof, topographic result, assumptions/defaults, minimum pressure checks, markdown sections, and API formatted-output response passing on 2026-04-26.

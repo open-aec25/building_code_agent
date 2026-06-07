@@ -2,6 +2,7 @@
 
 from fastapi.testclient import TestClient
 
+import backend.chatbot as chatbot
 from backend.main import app
 
 
@@ -79,6 +80,170 @@ def test_message_endpoint_persists_user_and_controller_response_messages():
     assert state_response.json()["messages"] == messages
 
 
+def test_message_response_includes_display_and_spoken_text_when_llm_disabled(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "false")
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    session_id = _new_session()
+
+    response = _send(session_id, "office")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["response"] == body["display_text"]
+    assert body["spoken_text"]
+    assert "Approximately how many people" in body["display_text"]
+
+
+def test_mocked_successful_llm_response_can_polish_display_and_spoken_text(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        assert payload["task"] == "polish_deterministic_chatbot_response"
+        return {
+            "display_text": "Polished question: about how many people occupy it at peak times?",
+            "spoken_text": "About how many people occupy it at peak times?",
+            "field_update": {},
+            "needs_clarification": False,
+            "clarification_text": None,
+        }
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+
+    response = _send(session_id, "office")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["display_text"].startswith("Polished question")
+    assert body["spoken_text"] == "About how many people occupy it at peak times?"
+    assert body["session_state"]["current_question_id"] == "Q2"
+    assert body["session_state"]["collected_inputs"]["occupancy_type"] == "office"
+
+
+def test_message_can_force_deterministic_mode_when_global_llm_enabled(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        raise AssertionError("LLM should not be called when llm_enabled is false.")
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+
+    response = client.post(
+        f"/session/{session_id}/message",
+        json={"message": "office", "llm_enabled": False},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["llm_used"] is False
+    assert body["llm_fallback_reason"] == "disabled_by_request"
+    assert "Approximately how many people" in body["display_text"]
+
+
+def test_message_can_enable_llm_per_request_when_global_llm_disabled(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "false")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        assert payload["task"] == "polish_deterministic_chatbot_response"
+        return {
+            "display_text": "Per-request LLM polish.",
+            "spoken_text": "Per request LLM polish.",
+            "field_update": {},
+            "needs_clarification": False,
+            "clarification_text": None,
+        }
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+
+    response = client.post(
+        f"/session/{session_id}/message",
+        json={"message": "office", "llm_enabled": True},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["llm_used"] is True
+    assert body["display_text"] == "Per-request LLM polish."
+
+
+def test_mocked_malformed_llm_response_falls_back_to_deterministic_text(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        return {"display_text": "missing required fields"}
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+
+    response = _send(session_id, "office")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert "Approximately how many people" in body["response"]
+    assert body["response"] == body["display_text"]
+    assert body["session_state"]["current_question_id"] == "Q2"
+
+
+def test_llm_interpretation_candidate_still_uses_backend_validation(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        if payload["task"] == "interpret_user_answer":
+            assert payload["expected_field"] == "essential_post_disaster"
+            return {
+                "display_text": "",
+                "spoken_text": "",
+                "field_update": {"essential_post_disaster": "yes"},
+                "needs_clarification": False,
+                "clarification_text": None,
+            }
+        return {
+            "display_text": payload["deterministic_response"],
+            "spoken_text": payload["deterministic_response"],
+            "field_update": {},
+            "needs_clarification": False,
+            "clarification_text": None,
+        }
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+    for answer in ["hospital", "100"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "affirmative")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q4"
+    assert body["session_state"]["collected_inputs"]["essential_post_disaster"] is True
+
+
+def test_deterministic_flow_still_works_when_llm_call_fails(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        raise RuntimeError("network unavailable")
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+
+    response = _send(session_id, "office")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert "Approximately how many people" in body["response"]
+    assert body["session_state"]["current_question_id"] == "Q2"
+
+
 def test_calculate_with_valid_payload_returns_engine_results_and_updates_session():
     session_id = _new_session()
     payload = _valid_calculation_payload()
@@ -90,6 +255,8 @@ def test_calculate_with_valid_payload_returns_engine_results_and_updates_session
     assert body["session_id"] == session_id
     assert body["results"]["summary"]["qh_psf"] == 29.929
     assert body["results"]["inputs"]["roof_type"] == "flat"
+    assert body["formatted_display"]["project_summary"]["qh_psf"] == 29.929
+    assert "## Final Wall Pressures" in body["formatted_markdown"]
     assert "wall_pressures" in body["results"]
     assert body["session_state"]["ready_to_calculate"] is True
     assert body["session_state"]["collected_inputs"]["basic_wind_speed_V"] == 115.0
@@ -308,6 +475,87 @@ def test_manual_wind_speed_must_be_positive_and_keeps_question_active():
     assert body["session_state"]["current_question_id"] == "MANUAL_WIND_SPEED"
     assert "number greater than 0" in body["response"]
     assert "basic_wind_speed_V" not in body["session_state"]["collected_inputs"]
+
+
+def test_help_request_stays_on_current_question_until_recommendation_is_confirmed():
+    session_id = _new_session()
+    for answer in ["office", "300", "no", "no", "Boston, MA"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "what would you consider it since its in the city?")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q6"
+    assert body["session_state"]["branch_flags"]["pending_answer"]["candidate_answer"] == "B"
+    assert "Exposure B" in body["response"]
+    assert "exposure_category" not in body["session_state"]["collected_inputs"]
+
+    confirm_response = _send(session_id, "yes")
+
+    assert confirm_response.status_code == 200
+    confirm_body = confirm_response.json()
+    assert confirm_body["session_state"]["current_question_id"] == "Q7"
+    assert confirm_body["session_state"]["collected_inputs"]["exposure_category"] == "B"
+    assert "pending_answer" not in confirm_body["session_state"]["branch_flags"]
+
+
+def test_general_help_request_does_not_advance_state():
+    session_id = _new_session()
+
+    response = _send(session_id, "why do you need that?")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q1"
+    assert body["session_state"]["collected_inputs"] == {}
+    assert "primary occupancy" in body["response"]
+
+
+def test_llm_recommendation_on_any_question_requires_confirmation(monkeypatch):
+    monkeypatch.setenv("LLM_ENABLED", "true")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+
+    def fake_call(payload):
+        if payload["task"] == "classify_user_intent_for_active_question":
+            assert payload["current_question_id"] == "Q11"
+            return {
+                "intent": "recommendation_request",
+                "candidate_answer": "flat",
+                "should_advance": False,
+                "confidence": 0.9,
+                "display_text": "Based on your description, flat sounds appropriate. Should I use flat?",
+                "spoken_text": "Based on your description, flat sounds appropriate. Should I use flat?",
+            }
+        return {
+            "display_text": payload["deterministic_response"],
+            "spoken_text": payload["deterministic_response"],
+            "field_update": {},
+            "needs_clarification": False,
+            "clarification_text": None,
+        }
+
+    monkeypatch.setattr(chatbot, "_call_anthropic_json", fake_call)
+    session_id = _new_session()
+    for answer in ["office", "300", "no", "no", "Boston, MA", "B", "no", "30", "100", "60"]:
+        response = _send(session_id, answer)
+        assert response.status_code == 200
+
+    response = _send(session_id, "which roof type should I choose?")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["session_state"]["current_question_id"] == "Q11"
+    assert body["session_state"]["branch_flags"]["pending_answer"]["candidate_answer"] == "flat"
+    assert "roof_type" not in body["session_state"]["collected_inputs"]
+
+    confirm_response = _send(session_id, "yes")
+
+    assert confirm_response.status_code == 200
+    confirm_body = confirm_response.json()
+    assert confirm_body["session_state"]["current_question_id"] == "Q14"
+    assert confirm_body["session_state"]["collected_inputs"]["roof_type"] == "flat"
 
 
 def test_risk_category_iii_is_derived_for_large_school():

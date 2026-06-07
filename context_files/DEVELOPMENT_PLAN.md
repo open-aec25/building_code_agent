@@ -8,16 +8,22 @@ The project goal is to build a conversational web application that collects buil
 
 ## Current Repository State
 
-The current workspace is earlier-stage than the target architecture described in `context_files/ARCHITECTURE.md`.
+As of 2026-05-18, the repository has reached open-source demo readiness and has completed a TEDDS-style benchmark alignment pass for a flat-roof ASCE 7-16 Chapter 27 MWFRS example. The backend, deterministic conversation controller, optional LLM polish, Massachusetts wind lookup, backend TTS route, report formatter, production vanilla frontend, public docs, and Windows demo launchers are implemented.
 
 ### Existing Folders
 
 ```text
 asce716/
+backend/
 context_files/
+data/
+frontend/
 json_files/
+logs/                         generated locally by run_demo.ps1; ignored
+minimal_ui/
 outputs/
 python_files/
+tests/
 ```
 
 ### Existing Assets
@@ -25,15 +31,29 @@ python_files/
 ```text
 asce716/                         ASCE 7-16 reference PDFs
 context_files/ARCHITECTURE.md    Architecture and agent task specification
+backend/main.py                  FastAPI app with session, chat, calculate, and TTS routes
+backend/chatbot.py               Deterministic 7-phase conversation controller with optional LLM polish
+backend/report_formatter.py      UI-friendly and markdown calculation formatting
+backend/tts.py                   Optional backend-only OpenAI TTS integration
+frontend/index.html              Production demo UI shell
+frontend/app.js                  Session, chat, formatted results, TTS, and dynamic apiBase handling
+frontend/styles.css              Responsive frontend styling
+README.md                        Public setup, scope, limitations, and demo scenarios
+CONTRIBUTING.md                  Contributor guidance and calculation-change guardrails
+.env.example                     Runtime configuration template without secrets
+run_demo.ps1                     Windows PowerShell launcher with logs, dynamic ports, and timestamped fallback logs if previous processes lock log files
+run_demo.bat                     Batch wrapper for the PowerShell launcher
 json_files/*.json                Existing data/config JSON files
-python_files/wind_load_engine.py Deterministic wind load calculation engine
-python_files/test_wind_load_engine.py
+data/ma_780_cmr_table_1604_11.*  Massachusetts 780 CMR Table 1604.11 lookup data
+data/raw_780_cmr_chapter_16_cornell.html  Raw Cornell LII source for MA Table 1604.11
+python_files/scrape_780_cmr_table_1604_11.py  Regenerates MA Table 1604.11 JSON/JSONL/CSV
 outputs/app_logic_flow.csv       Step-by-step app logic flow
+tests/*.py                       Pytest suite for engine, API, TTS, and formatter behavior
 ```
 
 ### Current Test Status
 
-The calculation engine test suite currently passes when run from `python_files/`:
+The current project test suite passes from the repository root:
 
 ```powershell
 python -m pytest -q
@@ -42,44 +62,30 @@ python -m pytest -q
 Observed result:
 
 ```text
-52 passed
+94 passed
 ```
 
-Note: `ARCHITECTURE.md` references 65 passing tests, but the current repository contains 52 passing tests. Treat the repository as source of truth unless the architecture document is updated.
+The test suite includes engine coverage, API/conversation flows, Massachusetts lookup behavior, mocked LLM fallback/polish behavior, mocked TTS behavior, report formatter checks, and benchmark-oriented checks for flat-roof Cp selection, raw pressure preservation, orthogonal wind direction summaries, and overall horizontal force checks.
 
-## Missing From Current Repository
+## Remaining Known Gaps
 
-The following target files/folders do not exist yet:
-
-```text
-backend/
-frontend/
-minimal_ui/
-tests/
-data/
-requirements.txt
-PROJECT_STATE.md
-backend/main.py
-backend/models.py
-backend/session.py
-backend/chatbot.py
-backend/tts.py
-backend/report_formatter.py
-data/wind_speed_lookup.json
-tests/test_api.py
-tests/test_chatbot.py
-tests/test_tts.py
-```
+- `data/wind_speed_lookup.json` is still missing as a national lookup.
+- Massachusetts city/town lookup is integrated through `data/ma_780_cmr_table_1604_11.json`; ZIP-only lookup is not supported by the current municipal-table path.
+- The calculation engine still embeds many constants/tables in Python; JSON-backed migration remains a future task.
+- Sloped-roof direction-specific roof zone geometry/force expansion is still limited compared with the flat-roof benchmark path.
+- In-memory sessions are acceptable for the demo but reset when the backend process restarts.
+- C&C, ASCE 7-22, non-US locations, partially enclosed/open buildings, flexible structures, and commercial persistence/auth are out of scope for the current demo.
 
 ## Architectural Principles To Preserve
 
-1. The LLM handles conversation, interpretation, and explanation only.
-2. The LLM must never perform wind load arithmetic.
-3. Python calculation code owns all calculations and ASCE table lookups.
-4. JSON files are passive read-only sources of truth.
-5. Hardcoded assumptions must be explicitly flagged to the user.
-6. Every output value should be traceable to an ASCE 7-16 section, table, figure, or equation.
-7. Do not weaken or remove the existing calculation engine tests.
+1. The deterministic backend owns conversation progression, validation, lookups, and calculation handoff.
+2. The optional LLM handles interpretation fallback and response polish only.
+3. The LLM must never perform wind load arithmetic.
+4. Python calculation code owns all calculations and ASCE table lookups.
+5. JSON files are passive read-only sources of truth.
+6. Hardcoded assumptions must be explicitly flagged to the user.
+7. Every output value should be traceable to an ASCE 7-16 section, table, figure, or equation.
+8. Do not weaken or remove the existing calculation engine tests.
 
 ## Important Current Mismatch
 
@@ -90,6 +96,50 @@ The current implementation in `python_files/wind_load_engine.py` embeds many con
 For near-term development, do not refactor this immediately. Preserve the current engine behavior first, get the backend working, then plan a later migration from embedded constants/tables to JSON-backed data loading.
 
 ## Recommended Development Sequence
+
+---
+
+## Completed 2026-05-18 - TEDDS-Style MWFRS Benchmark Alignment
+
+### Goal
+
+Improve trust in the deterministic calculation engine by aligning a simple flat-roof ASCE 7-16 Chapter 27 MWFRS benchmark with a commercial TEDDS-style reference calculation.
+
+### Implemented
+
+1. Corrected flat-roof Cp selection at the important `h/L = 0.5` boundary:
+
+```text
+h/L <= 0.5:
+0 to h     Cp = -0.9
+h to 2h    Cp = -0.5
+beyond 2h  Cp = -0.3
+```
+
+2. Preserved raw calculated surface pressures instead of substituting ASCE minimum pressures into individual leeward, side-wall, or roof pressure rows.
+3. Added roof zone geometry and area output for flat-roof zones, suppressing zero-width zones from pressure rows.
+4. Added 0° and 90° wind direction case summaries by swapping along-wind/transverse dimensions.
+5. Reworked overall horizontal force checks to use consistent `+GCpi` and `-GCpi` load cases before comparing to the §27.1.5 minimum horizontal force.
+6. Updated the report formatter to show calculated pressures and wind-direction horizontal force checks.
+7. Updated `run_demo.ps1` so locked log files from previous background processes do not abort startup; it now falls back to timestamped log files.
+8. Added/updated tests for the TEDDS-style flat-roof benchmark, wind direction dimension swapping, raw pressure preservation, and formatted output.
+
+### Verification
+
+```powershell
+python -m pytest -q
+```
+
+Observed:
+
+```text
+94 passed
+```
+
+### Remaining Notes
+
+- The flat-roof benchmark path is now much closer to the commercial reference. For the 30 ft x 30 ft, h = 15 ft, Exposure C, V = 120 mph case, `qh = 26.634 psf`, roof Cp values are `-0.9` and `-0.5`, and the overall horizontal force check reports approximately `13.244 kips` versus a `7.2 kips` minimum.
+- Sloped roof direction-specific zone geometry and commercial-style force tables remain future improvements.
 
 ---
 
@@ -321,10 +371,14 @@ Non-flat roof -> collect slope and ridge orientation.
 
 Implement deterministic derivations and lookup behavior required by the conversation.
 
+Current status: Risk category logic, manual wind-speed fallback, and Massachusetts city/town wind-speed lookup are implemented in `backend/chatbot.py`. The national `data/wind_speed_lookup.json` remains pending.
+
 ### Tasks
 
 1. Add helper logic for `data/risk_category.json`.
-2. Build `data/wind_speed_lookup.json`.
+2. Build or integrate wind-speed lookup data.
+   - National lookup is still pending as `data/wind_speed_lookup.json`.
+   - Massachusetts lookup should use `data/ma_780_cmr_table_1604_11.json` first; do not hand-copy its values.
 3. Implement location lookup for:
 
 ```text
@@ -337,17 +391,49 @@ ZIP or ZIP prefix
 4. Add fallback behavior when lookup fails.
 5. Add tests for risk category and wind speed lookup.
 
+### Massachusetts Lookup Workflow
+
+Use this workflow before a national lookup exists:
+
+1. Detect Massachusetts locations from user text such as `Boston`, `Boston MA`, `Boston, Massachusetts`, or a future geocoder result.
+2. Resolve the input to a `city_town` in `data/ma_780_cmr_table_1604_11.json`.
+3. Select the basic wind speed by derived Risk Category:
+
+```text
+Risk Category I   -> basic_wind_speed_v_mph.risk_category_i
+Risk Category II  -> basic_wind_speed_v_mph.risk_category_ii
+Risk Category III -> basic_wind_speed_v_mph.risk_category_iii
+Risk Category IV  -> basic_wind_speed_v_mph.risk_category_iv
+```
+
+4. Store the selected speed as the engine input `basic_wind_speed_V`.
+5. Cite `780 CMR Table 1604.11` in the confirmation message.
+6. If `note_refs` contains `2`, tell the user that the municipality is flagged for Special Wind Region/local-condition review and that the AHJ or ASCE hazard data may govern a higher value.
+7. If MA lookup fails, fall back to the existing manual wind-speed prompt.
+
+The JSONL file, `data/ma_780_cmr_table_1604_11.jsonl`, is optimized for RAG/indexing. Runtime code should prefer the canonical JSON file.
+
+To regenerate the MA dataset from the saved Cornell HTML:
+
+```powershell
+python python_files\scrape_780_cmr_table_1604_11.py
+```
+
 ### Acceptance Criteria
 
 - Risk Category can be derived from Phase 1 answers.
 - Basic wind speed can be resolved from known locations.
+- Massachusetts municipalities can resolve from `data/ma_780_cmr_table_1604_11.json`.
 - Failed lookup asks the user for manual wind speed entry.
 - Tests cover at least representative normal and failure cases.
+- Tests cover Massachusetts examples including Boston, Cambridge, Worcester, Chatham, Aquinnah (Gay Head), Mount Washington, and an unknown municipality fallback.
 
 ### Do Not Change
 
 - Do not let the LLM guess wind speed.
 - Do not claim full national wind-speed map coverage unless the data actually supports it.
+- Do not present the MA municipal dataset as a full ASCE 7-16 national lookup.
+- Do not ignore note ref `2` on Massachusetts records; it is a Special Wind Region/local-conditions warning.
 - Do not hide manual lookup fallback from the user.
 
 ---
@@ -448,6 +534,10 @@ TTS_ENABLED
 
 Create a browser UI connected to the FastAPI backend.
 
+### Current Status
+
+Completed 2026-04-26. `frontend/index.html`, `frontend/app.js`, and `frontend/styles.css` implement the production demo UI. The UI creates/restores sessions, renders backend `display_text`, tracks conversation phase, posts user messages, requests backend `/tts` with `spoken_text`, hides voice controls when TTS is unavailable, and renders backend `formatted_display`/`formatted_markdown` after completion. `frontend/app.js` also accepts `?apiBase=...` so `run_demo.ps1` can use dynamic backend ports safely.
+
 ### Recommendation
 
 Skip or de-prioritize the direct-browser API-key `minimal_ui` unless a throwaway demo is specifically required. It is useful for speed, but it is not a production-safe architecture.
@@ -501,6 +591,10 @@ TTS mute/unmute behavior
 
 Convert raw calculation output into a defensible engineering report.
 
+### Current Status
+
+Completed 2026-04-26. `backend/report_formatter.py` returns both `formatted_display` for the frontend and `formatted_markdown` for a readable calculation report. `/session/{session_id}/calculate` returns raw `results`, `formatted_display`, and `formatted_markdown`.
+
 ### Tasks
 
 1. Create `backend/report_formatter.py`.
@@ -545,7 +639,51 @@ Warnings or limitations
 
 ---
 
-## Phase 10 - Commercial Readiness Hardening
+## Phase 10 - Open Source Demo Readiness
+
+### Goal
+
+Prepare the project for public open-source demo sharing without turning it into commercial-production infrastructure.
+
+### Current Status
+
+Completed 2026-04-26.
+
+Implemented:
+
+- `README.md` with project purpose, scope, local setup, deterministic-only mode, backend/frontend run instructions, tests, demo flows, and engineering disclaimer.
+- `.env.example` documenting `LLM_ENABLED`, `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`, `TTS_ENABLED`, `OPENAI_API_KEY`, `TTS_VOICE`, and `TTS_MODEL`.
+- `CONTRIBUTING.md` with project map, safe contribution guidance, and calculation-change guardrails.
+- MIT `LICENSE`.
+- `.gitignore` additions for env files, virtual environments, logs, build output, and caches.
+- `run_demo.ps1` and `run_demo.bat` for Windows-friendly startup.
+- `run_demo.ps1` now falls back to timestamped log files when previous background processes keep standard log files locked.
+
+Launcher behavior:
+
+- Starts FastAPI and the static frontend.
+- Defaults to no `--reload`; use `.\run_demo.ps1 -Reload` for development reload behavior.
+- Writes backend/frontend stdout/stderr to `logs/`.
+- Uses alternate timestamped log files instead of failing if a log file is locked by an earlier process.
+- Checks backend `/health` and frontend HTTP availability.
+- Prints recent log lines if startup fails.
+- Chooses available ports and passes the selected backend URL to the frontend with `?apiBase=...`.
+
+Verification:
+
+```powershell
+python -m pytest -q
+```
+
+Observed result:
+
+```text
+94 passed
+```
+
+---
+
+## Future Phase - Commercial Readiness Hardening
 
 ### Goal
 
@@ -576,31 +714,32 @@ Move from MVP toward a credible commercial application.
 
 ---
 
-## Immediate Next Sprint
+## Recommended Next Sprint
 
-If only one sprint is assigned next, do this:
+The open-source demo is runnable. Good next work should improve trust, reproducibility, and contributor experience without changing engineering outputs casually.
 
-1. Normalize repo into `backend/`, `data/`, and `tests/`.
-2. Add `requirements.txt`.
-3. Add `PROJECT_STATE.md`.
-4. Move engine and tests.
-5. Confirm current tests still pass.
-6. Build FastAPI backend skeleton.
-7. Add `/session/{session_id}/calculate` endpoint.
-8. Add API tests.
+Recommended options:
 
-## First MVP Milestone
+1. Add screenshots or a short demo GIF referenced from `README.md`.
+2. Add a short `docs/ma-wind-lookup.md` explaining the 780 CMR data provenance and ZIP-code limitation.
+3. Add browser smoke testing for `frontend/` against the local backend.
+4. Improve frontend accessibility and visible error messages.
+5. Add a stop script for demo processes or a `-StopExisting` launcher option.
+6. Expand sloped-roof direction-specific roof zone geometry and force summaries.
+7. Begin a scoped design note for migrating embedded engine constants/tables to JSON without changing outputs.
 
-The first milestone should be:
+## Current MVP Milestone
+
+The current MVP spine is complete:
 
 ```text
-User submits a complete BuildingInputs payload to FastAPI.
-FastAPI calls wind_load_engine.py.
-Backend returns structured calculation results.
-Tests prove the flow works.
+User completes the chat flow in frontend/.
+FastAPI stores session state and deterministic collected inputs.
+The chatbot confirms inputs and hands calculation payloads to wind_load_engine.py.
+The backend returns raw results, formatted_display, and formatted_markdown.
+The frontend renders formatted results and optionally requests backend TTS.
+Tests prove the core flow works.
 ```
-
-This creates a stable application spine. Chatbot logic, frontend UI, TTS, and reporting should build around that spine rather than before it.
 
 ## Agent Handoff Template
 
@@ -650,4 +789,3 @@ Expected:
 All tests pass.
 ```
 ```
-

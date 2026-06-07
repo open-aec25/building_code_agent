@@ -23,11 +23,87 @@ class SessionResponse(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, description="User message for the session.")
+    llm_enabled: bool | None = Field(
+        default=None,
+        description=(
+            "Optional per-message LLM preference. True uses the server-side Anthropic key "
+            "when present; false forces deterministic-only behavior for this turn."
+        ),
+    )
 
 
 class ChatResponse(BaseModel):
     response: str = Field(description="Backend response text.")
+    display_text: str = Field(description="Display-ready assistant text for the UI.")
+    spoken_text: str = Field(description="Plain prose assistant text suitable for future TTS.")
+    llm_used: bool = Field(
+        default=False,
+        description="Whether optional LLM polishing or interpretation was used for this turn.",
+    )
+    llm_fallback_reason: str | None = Field(
+        default=None,
+        description="Why the deterministic response was used when LLM mode was unavailable or failed.",
+    )
     session_state: dict[str, Any] = Field(description="Updated in-memory session state.")
+
+
+class TTSRequest(BaseModel):
+    text: str = Field(
+        min_length=1,
+        description="Plain prose text to synthesize, typically chatbot spoken_text.",
+    )
+    session_id: str | None = Field(
+        default=None,
+        description="Optional session identifier associated with the spoken text.",
+    )
+    voice: str | None = Field(
+        default=None,
+        description="Optional OpenAI TTS voice override. Defaults to TTS_VOICE or alloy.",
+    )
+
+
+class LLMStructuredResponse(BaseModel):
+    display_text: str = Field(description="Markdown-capable text for the chat UI.")
+    spoken_text: str = Field(description="Plain prose text for future text-to-speech.")
+    field_update: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Candidate structured field values. Backend validation remains authoritative.",
+    )
+    needs_clarification: bool = Field(
+        default=False,
+        description="Whether the model believes the user answer needs a narrower follow-up.",
+    )
+    clarification_text: str | None = Field(
+        default=None,
+        description="Optional clarification copy when the model cannot interpret the answer safely.",
+    )
+
+
+class LLMIntentResponse(BaseModel):
+    intent: Literal[
+        "direct_answer",
+        "help_request",
+        "recommendation_request",
+        "clarification_question",
+        "correction",
+        "off_topic",
+    ] = Field(description="User intent relative to the active question.")
+    candidate_answer: str | None = Field(
+        default=None,
+        description="Candidate answer for the active question, if one is being suggested.",
+    )
+    should_advance: bool = Field(
+        default=False,
+        description="Whether the user clearly intended to answer the current question.",
+    )
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Model confidence in the intent and candidate answer.",
+    )
+    display_text: str = Field(description="Response text for the user.")
+    spoken_text: str = Field(description="Plain prose response text for TTS.")
 
 
 class TopographicInputsRequest(BaseModel):
@@ -101,5 +177,6 @@ class CalculationRequest(BaseModel):
 class CalculationResponse(BaseModel):
     session_id: str = Field(description="Session that owns this calculation.")
     results: dict[str, Any] = Field(description="Full calculation result from the engine.")
+    formatted_display: dict[str, Any] = Field(description="UI-friendly formatted calculation result.")
+    formatted_markdown: str = Field(description="Markdown calculation report.")
     session_state: dict[str, Any] = Field(description="Updated in-memory session state.")
-

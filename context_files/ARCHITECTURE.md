@@ -4,12 +4,21 @@
 
 ## 1. Project Overview
 
+**Current implementation status (2026-05-18):**
+- FastAPI backend, deterministic chatbot flow, Massachusetts wind lookup, optional Anthropic polish, optional OpenAI TTS, report formatter, and vanilla frontend are implemented.
+- The default app path works without API keys when `LLM_ENABLED=false` and `TTS_ENABLED=false`.
+- Public demo readiness docs and launchers exist: `README.md`, `.env.example`, `CONTRIBUTING.md`, `LICENSE`, `run_demo.ps1`, and `run_demo.bat`.
+- `run_demo.ps1` starts backend/frontend, writes logs under `logs/`, chooses open ports when needed, passes the selected backend URL to the frontend via `?apiBase=...`, and falls back to timestamped log files if a previous process has a log locked.
+- Calculation benchmark alignment against a TEDDS-style flat-roof ASCE 7-16 MWFRS example is implemented: flat roof Cp selection at `h/L = 0.5`, raw pressure preservation, orthogonal wind direction summaries, roof zone geometry/areas, and overall horizontal minimum force checks.
+- Current verification: `python -m pytest -q` passes with 94 tests.
+
 A conversational web application that guides users through a structured question flow to collect building parameters, then executes a full ASCE 7-16 Chapter 27 Directional Procedure wind load calculation and returns a structured engineering report.
 
 **Target Users:** Engineers, architects, and construction professionals performing preliminary wind load calculations.
 
 **Core Design Principles:**
-- The LLM handles conversation, interpretation, and explanation — never arithmetic
+- The deterministic backend owns conversation state, validation, lookups, and calculations
+- The optional LLM handles answer interpretation fallback and response polishing only; it never performs arithmetic
 - All table lookups and calculations are executed by the Python engine — never the LLM
 - All hardcoded assumptions are explicitly flagged to the user
 - Every output value is traceable to a specific ASCE 7-16 section or equation
@@ -64,8 +73,8 @@ A conversational web application that guides users through a structured question
 | Component | Responsibility | Technology |
 |---|---|---|
 | Frontend Chat UI | Render conversation, collect user inputs, display results, play TTS audio | HTML / vanilla JS |
-| FastAPI Backend | Route requests, manage session state, orchestrate LLM + engine | Python / FastAPI |
-| Chatbot Layer | Drive conversation flow, interpret free-text answers, explain results, generate spoken summaries | Anthropic Claude API |
+| FastAPI Backend | Route requests, manage session state, orchestrate deterministic chatbot, optional LLM polish, engine, formatter, and TTS | Python / FastAPI |
+| Chatbot Layer | Drive deterministic 7-phase flow, parse answers, derive risk category, perform Massachusetts lookup, optionally use Anthropic for interpretation/polish | Python + optional Anthropic Claude API |
 | TTS Module | Convert assistant text to audio and stream to frontend | `tts.py` → OpenAI TTS API |
 | Calculation Engine | Execute all ASCE 7-16 math — no LLM involvement | `wind_load_engine.py` |
 | Data Layer | JSON files encoding all ASCE 7-16 tables, constants, and flow logic | JSON |
@@ -75,7 +84,7 @@ A conversational web application that guides users through a structured question
 
 ## 3. Conversation Flow Summary
 
-The chatbot collects inputs across 7 phases. The LLM never computes — it only collects, interprets, and explains.
+The chatbot collects inputs across 7 phases. The deterministic controller owns progression and validation. When enabled, the LLM may interpret ambiguous answers or polish `display_text`/`spoken_text`; it never computes.
 
 ```
 Phase 1 — Building Classification
@@ -87,7 +96,8 @@ Phase 1 — Building Classification
 
 Phase 2 — Site & Wind Speed
   Q5: City/state or zip code
-  → Derive: Basic wind speed V (mph) from wind_speed_lookup.json
+  → Derive: Basic wind speed V (mph) from wind_speed_lookup.json when national lookup is available
+  → Massachusetts interim path: lookup city/town in data/ma_780_cmr_table_1604_11.json and select basic_wind_speed_v_mph by derived Risk Category
 
 Phase 3 — Exposure Category
   Q6: Terrain description (guided multiple choice → B / C / D)
@@ -141,13 +151,46 @@ All ASCE 7-16 reference data is encoded in JSON. The calculation engine reads th
 | `kzt_topographic_26_8.json` | K1/K2/K3 tables and Kzt formula per Fig. 26.8-1 | ✅ Complete |
 | `conversation_flow.json` | Full chatbot Q&A flow with branching logic | ✅ Complete |
 | `wind_speed_lookup.json` | Basic wind speed V by location (city/state/zip) | ❌ Not built |
+| `ma_780_cmr_table_1604_11.json` | Massachusetts 780 CMR Table 1604.11 municipal snow loads, wind speeds, and seismic parameters with metadata and note refs | ✅ Complete for MA |
+| `ma_780_cmr_table_1604_11.jsonl` | One JSON record per municipality from Table 1604.11; best for RAG/retrieval indexing | ✅ Complete for MA |
+| `ma_780_cmr_table_1604_11.csv` | Flat inspection/import copy of Table 1604.11 | ✅ Complete for MA |
+| `raw_780_cmr_chapter_16_cornell.html` | Raw Cornell LII HTML source used to generate the MA Table 1604.11 files | ✅ Preserved source |
+
+### Massachusetts Wind Speed Lookup Dataset
+
+Use `data/ma_780_cmr_table_1604_11.json` as the canonical Massachusetts lookup source until a national `wind_speed_lookup.json` exists. The JSON contains:
+
+- `metadata`: source URL, scrape date, units, table notes, and an LLM usage hint.
+- `records`: one object per unique Massachusetts municipality.
+- `city_town`: exact municipality name used for lookup.
+- `basic_wind_speed_v_mph`: object keyed by `risk_category_i`, `risk_category_ii`, `risk_category_iii`, and `risk_category_iv`.
+- `note_refs`: table footnote references. If this contains `2`, warn that the town is in or near a Special Wind Region and local/ASCE/AHJ confirmation may be required. If this contains `3`, ground snow load may require elevation adjustment.
+
+Workflow for Q5 when the project location is in Massachusetts:
+
+1. Resolve the user location to a Massachusetts municipality. For now this can be exact/fuzzy city/town matching; a later enhancement should use MassGIS town boundaries or a geocoder for addresses.
+2. Select the wind key using the already-derived Risk Category:
+   - Risk Category I -> `basic_wind_speed_v_mph.risk_category_i`
+   - Risk Category II -> `basic_wind_speed_v_mph.risk_category_ii`
+   - Risk Category III -> `basic_wind_speed_v_mph.risk_category_iii`
+   - Risk Category IV -> `basic_wind_speed_v_mph.risk_category_iv`
+3. Confirm the value with the user and cite `780 CMR Table 1604.11`.
+4. If `note_refs` includes `2`, include a warning that local conditions may require higher speeds than the tabulated value and the AHJ/ASCE hazard data should be checked.
+
+Regenerate the dataset with:
+
+```powershell
+python python_files\scrape_780_cmr_table_1604_11.py
+```
+
+The scraper expects `data/raw_780_cmr_chapter_16_cornell.html` to exist. It deduplicates exact duplicate municipality rows and fails if duplicates conflict.
 
 ---
 
 ## 5. Calculation Engine
 
 **File:** `wind_load_engine.py`
-**Status:** ✅ Complete — 65/65 tests passing
+**Status:** ✅ Complete in current repo; covered by the project pytest suite.
 
 ### Public API
 
@@ -185,8 +228,9 @@ results
 ├── Cp_values
 │   ├── walls       — windward, leeward, side wall Cp
 │   └── roof        — Cp zones by roof type
-├── wall_pressures  — p (psf) per surface, both GCpi cases, min check applied
-├── roof_pressures  — p (psf) per roof zone, both GCpi cases, min check applied
+├── wall_pressures  — calculated p (psf) per surface, both GCpi cases, raw values preserved
+├── roof_pressures  — calculated p (psf) per roof zone, both GCpi cases, with zone geometry where available
+├── wind_direction_cases — 0° and 90° MWFRS summaries with direction-specific ratios, roof zones, and overall horizontal force checks
 └── summary         — qh, Kzt, Kh, design standard, minimum load references
 ```
 
@@ -201,8 +245,17 @@ results
 | `get_cp_roof_flat()` | Figure 27.3-2 | h/L → zone list with Cp |
 | `get_cp_roof_gable()` | Figure 27.3-2 | slope, h/L, orientation → Cp dict |
 | `calc_design_pressure()` | Eq. 27.3-1 | q, Cp, qi, GCpi → p (psf) |
-| `apply_minimum_pressure()` | §27.1.5 | p, surface → governing p, bool |
+| `apply_minimum_pressure()` | §27.1.5 | p, surface → threshold-adjusted check value, bool; raw pressure outputs remain preserved |
 | `run_wind_load_calculation()` | Chapter 27 | BuildingInputs → full results dict |
+
+### Benchmark Alignment Notes
+
+As of 2026-05-18, the engine/reporting path has a TEDDS-style flat-roof benchmark alignment pass:
+
+- For flat roofs with `h/L <= 0.5`, Cp zones are `0 to h = -0.9`, `h to 2h = -0.5`, and `beyond 2h = -0.3`; zero-width zones are suppressed from final pressure rows.
+- Surface pressure tables preserve calculated pressures for both `GCpi = +0.18` and `GCpi = -0.18`; the wall/roof minimums are not substituted into individual leeward/side/roof pressure rows.
+- Overall horizontal MWFRS checks are reported by consistent `+GCpi` and `-GCpi` load cases, then compared to the §27.1.5 minimum horizontal force.
+- Direction summaries check both 0° and 90° wind directions by swapping along-wind and transverse plan dimensions. For square buildings the results are expected to match; for rectangular buildings, `L/B`, `h/L`, roof zones, and forces may differ.
 
 ---
 
@@ -226,24 +279,34 @@ wind-load-calculator/
 │   ├── cp_coefficients_27_3.json   # ✅ Complete
 │   ├── kzt_topographic_26_8.json   # ✅ Complete
 │   ├── conversation_flow.json      # ✅ Complete
-│   └── wind_speed_lookup.json      # ❌ Needs to be built
+│   ├── ma_780_cmr_table_1604_11.json   # ✅ MA municipal Table 1604.11 canonical data
+│   ├── ma_780_cmr_table_1604_11.jsonl  # ✅ MA Table 1604.11 retrieval/indexing copy
+│   ├── ma_780_cmr_table_1604_11.csv    # ✅ MA Table 1604.11 inspection copy
+│   ├── raw_780_cmr_chapter_16_cornell.html # ✅ Raw scrape source
+│   └── wind_speed_lookup.json      # ❌ National lookup still needs to be built
 │
 ├── minimal_ui/
 │   └── index.html                  # ❌ TASK NEW-A — single-file demo UI with TTS
 │                                   # Calls Anthropic API directly, no backend needed
 │                                   # Stepping stone before full frontend build
 │
-├── frontend/                       # ❌ Built in TASK 06 — production UI
+├── frontend/                       # ✅ Production vanilla UI
 │   ├── index.html                  # Chat UI shell
 │   ├── app.js                      # Conversation state, API calls, TTS audio player
 │   └── styles.css                  # Styling
 │
 ├── tests/
 │   ├── test_wind_load_engine.py    # ✅ 65 tests passing
-│   ├── test_tts.py                 # ❌ Needs to be built (TASK NEW-B)
-│   ├── test_chatbot.py             # ❌ Needs to be built
-│   └── test_api.py                 # ❌ Needs to be built
+│   ├── test_tts.py                 # ✅ Mocked backend TTS coverage
+│   ├── test_report_formatter.py    # ✅ Formatter coverage
+│   └── test_api.py                 # ✅ API and conversation coverage
 │
+├── README.md                       # Open-source demo setup and scope
+├── CONTRIBUTING.md                 # Contributor guidance
+├── LICENSE                         # MIT license
+├── .env.example                    # Runtime configuration template
+├── run_demo.ps1                    # Windows PowerShell demo launcher
+├── run_demo.bat                    # Batch wrapper for run_demo.ps1
 ├── PROJECT_STATE.md                # Master agent maintains this
 ├── ARCHITECTURE.md                 # This file
 └── requirements.txt                # Python dependencies
@@ -305,7 +368,7 @@ This file is a stepping stone only — it will be superseded by the production f
 #### TASK NEW-B — TTS Backend Module
 **Assigned to:** Backend Sub-Agent
 **Depends on:** TASK 02 (FastAPI skeleton)
-**Status:** ❌ Not started
+**Status:** ✅ Completed 2026-04-25
 
 **Description:**
 Build `backend/tts.py` — the TTS integration module that the production backend uses to convert chatbot responses to audio. This replaces the direct browser-to-OpenAI call from TASK NEW-A with a proper server-side implementation.
@@ -347,10 +410,12 @@ TTS_ENABLED=true          # set to false to disable TTS entirely
 #### TASK 01 — Wind Speed Lookup JSON
 **Assigned to:** Data Sub-Agent
 **Depends on:** Nothing
-**Status:** ❌ Not started
+**Status:** 🔄 Partially complete for Massachusetts
 
 **Description:**
 Build `data/wind_speed_lookup.json` encoding basic wind speed V (mph) by US location for all three risk category maps (ASCE 7-16 Figures 26.5-1A, 26.5-1B, 26.5-1C).
+
+Massachusetts has an interim authoritative municipal source in `data/ma_780_cmr_table_1604_11.json`, scraped from Cornell LII's 780 CMR Chapter 16 Table 1604.11. This should be used for MA lookup integration before attempting a national ASCE figure digitization.
 
 **Acceptance Criteria:**
 - Coverage of all 50 US states at minimum city/county granularity
@@ -359,6 +424,7 @@ Build `data/wind_speed_lookup.json` encoding basic wind speed V (mph) by US loca
 - Hurricane-prone coastal regions (Gulf Coast, Atlantic Coast, FL, TX coast) have higher resolution entries
 - Schema includes a `source_note` field referencing the applicable ASCE 7-16 figure
 - A fallback entry exists for locations not found: `"lookup_failed": true` flag with instruction to prompt user for manual entry
+- For Massachusetts, either wrap/import `ma_780_cmr_table_1604_11.json` into the lookup service or support it as a separate first-class data source. Do not duplicate values by hand.
 
 **Schema:**
 ```json
@@ -454,10 +520,12 @@ Build `backend/chatbot.py` — the LLM-powered conversation manager that drives 
 #### TASK 05 — Wind Speed Lookup Integration
 **Assigned to:** Backend Sub-Agent
 **Depends on:** TASK 01, TASK 04
-**Status:** ❌ Not started
+**Status:** 🔄 Partially unblocked for Massachusetts
 
 **Description:**
 Integrate `wind_speed_lookup.json` into the chatbot layer so Q5 (location) triggers an automatic lookup of V rather than requiring manual user entry.
+
+For Massachusetts locations, integrate `data/ma_780_cmr_table_1604_11.json` first. It provides city/town-level values for Risk Categories I-IV from 780 CMR Table 1604.11, which is enough to remove the manual wind-speed prompt for MA municipalities.
 
 **Acceptance Criteria:**
 - Fuzzy location matching — "Boston", "Boston MA", "Boston, Massachusetts", and zip "02101" all resolve to the same entry
@@ -465,13 +533,15 @@ Integrate `wind_speed_lookup.json` into the chatbot layer so Q5 (location) trigg
 - On failed lookup: chatbot prompts user to manually enter V from the ASCE 7-16 figure, specifying which figure based on risk category
 - Lookup uses the correct figure (1A, 1B, or 1C) based on the already-derived Risk Category
 - Unit test: at least 20 representative locations resolve correctly including coastal high-wind zones
+- Massachusetts-specific tests should cover at least Boston, Cambridge, Worcester, Chatham, Aquinnah (Gay Head), Mount Washington, Adams, and a non-MA/unknown fallback.
+- If a Massachusetts record has note ref `2`, chatbot output must warn that the location may be in a Special Wind Region and AHJ/ASCE confirmation may be required.
 
 ---
 
 #### TASK 06 — Production Frontend Chat UI
 **Assigned to:** Frontend Sub-Agent
 **Depends on:** TASK 02, TASK NEW-B (needs TTS route available)
-**Status:** ❌ Not started
+**Status:** ✅ Completed 2026-04-26
 
 **Description:**
 Build the production chat UI in `frontend/`. This replaces `minimal_ui/index.html` with a full implementation connected to the FastAPI backend. Carries forward the TTS audio player pattern from TASK NEW-A.
@@ -497,7 +567,7 @@ Build the production chat UI in `frontend/`. This replaces `minimal_ui/index.htm
 #### TASK 07 — Results Report Formatter
 **Assigned to:** Backend Sub-Agent
 **Depends on:** TASK 04
-**Status:** ❌ Not started
+**Status:** ✅ Completed 2026-04-26
 
 **Description:**
 Build a report formatter that converts the raw `run_wind_load_calculation()` output dict into a structured, human-readable format suitable for both display in the UI and export as a PDF/markdown calculation sheet.
@@ -514,7 +584,7 @@ Build a report formatter that converts the raw `run_wind_load_calculation()` out
 #### TASK 08 — API Integration Tests
 **Assigned to:** QA Sub-Agent
 **Depends on:** TASK 04, TASK 05
-**Status:** ❌ Not started
+**Status:** ✅ Completed incrementally through Phases 3-9
 
 **Description:**
 Build `tests/test_api.py` — end-to-end integration tests that exercise the full API stack.
@@ -548,43 +618,52 @@ Extend `wind_load_engine.py` to support Components & Cladding (C&C) pressure cal
 
 ---
 
-## 8. Project State File Template
+#### TASK 10 — Open Source Demo Readiness
+**Assigned to:** Codex
+**Depends on:** Production frontend and backend demo flow
+**Status:** ✅ Completed 2026-04-26
 
-The master agent must maintain `PROJECT_STATE.md` in this format:
+**Implemented:**
+- Added `README.md` with setup, architecture, scope, limitations, deterministic-only mode, run commands, tests, and demo scenarios.
+- Added `.env.example`, `CONTRIBUTING.md`, and MIT `LICENSE`.
+- Added/updated `.gitignore` for local envs, logs, build output, and cache files.
+- Added `run_demo.ps1` and `run_demo.bat` for Windows local demo startup.
+- `run_demo.ps1` starts backend/frontend, logs stdout/stderr to `logs/`, checks backend `/health`, prints log tails on failure, and supports dynamic frontend/backend ports.
+
+---
+
+## 8. Project State File Expectations
+
+`PROJECT_STATE.md` is the source of truth for completed work, pending work, known limitations, and latest test status. As of 2026-05-18, the current suite is `python -m pytest -q` with 94 passing tests. The legacy example below is retained only as a formatting example; update concrete phase lists from `PROJECT_STATE.md`, not from the historical sample.
+
+The master agent should keep `PROJECT_STATE.md` aligned with the current repository state. A current example:
 
 ```markdown
-# PROJECT_STATE.md
-Last updated: [date] by Master Agent
-
 ## Completed Tasks
-- TASK 01 — Wind Speed Lookup JSON ✅ [date]
-- TASK 02 — FastAPI Backend Skeleton ✅ [date]
+- Phase 0 - Normalize The Project Structure
+- Phase 2 - Build FastAPI Backend Skeleton
+- Phase 3 - Add Backend API Tests
+- Phase 4 - Build Deterministic Conversation Controller
+- Phase 5 - Add Risk Category And Wind Speed Logic
+- Phase 6 - Add LLM Integration Safely
+- Phase 7 - Add TTS Backend Module
+- Phase 8 - Build Production Frontend
+- Phase 9 - Build Report Formatter
+- Phase 10 - Open Source Demo Readiness
+- TEDDS-style MWFRS benchmark alignment
+- Demo launcher log-lock hardening
 
 ## In Progress
-- TASK NEW-A — Minimal Chat UI with TTS 🔄 [assigned date]
-  - Sub-agent: Frontend Sub-Agent
-  - Blocker: None
+- None.
 
 ## Pending
-- TASK NEW-B — TTS Backend Module (waiting on TASK 02)
-- TASK 03 — Pydantic Models (waiting on TASK 02)
-- TASK 04 — Chatbot Conversation Layer (waiting on TASK 02, TASK 03)
-- TASK 05 — Wind Speed Lookup Integration (waiting on TASK 01, TASK 04)
-- TASK 06 — Production Frontend (waiting on TASK 02, TASK NEW-B)
-- TASK 07 — Results Report Formatter (waiting on TASK 04)
-- TASK 08 — API Integration Tests (waiting on TASK 04, TASK 05)
-- TASK 09 — C&C Module (v2 scope, not yet scheduled)
-
-## Known Issues / Decisions
-- Monoslope roof Cp (Fig. 27.3-3) not yet encoded — flagged in engine output
-- Wind speed lookup granularity TBD for high-wind coastal zones
-- TTS voice selection defaulting to "alloy" — can revisit after demo feedback
+- Phase 1 - Stabilize The Calculation Core
+- National wind-speed lookup data
+- C&C module (v2 scope)
+- Future commercial-readiness hardening if the demo becomes a product
 
 ## Test Status
-- wind_load_engine.py: 65/65 passing ✅
-- test_tts.py: not yet built ❌
-- test_chatbot.py: not yet built ❌
-- test_api.py: not yet built ❌
+- `python -m pytest -q`: 94 passed
 ```
 
 ---
@@ -611,17 +690,47 @@ When a sub-agent returns work:
 
 ## 10. Technology Stack
 
+### Local Demo Runtime
+
+Recommended Windows startup:
+
+```powershell
+.\run_demo.ps1 -OpenBrowser
+```
+
+or:
+
+```bat
+run_demo.bat
+```
+
+The launcher defaults to deterministic-only behavior unless `.env` enables optional services. It writes:
+
+- `logs/backend.log`
+- `logs/backend.err.log`
+- `logs/frontend.log`
+- `logs/frontend.err.log`
+
+Manual startup remains:
+
+```powershell
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+python -m http.server 5500 --bind 127.0.0.1 --directory frontend
+```
+
+If the backend runs on a non-default port, open the frontend with `?apiBase=<encoded backend URL>`.
+
 | Layer | Technology | Rationale |
 |---|---|---|
 | Backend framework | FastAPI | Fast, async-native, auto-generates OpenAPI docs |
-| LLM | Anthropic Claude API (`claude-sonnet-4-20250514`) | Conversation management only |
-| TTS | OpenAI TTS API (`tts-1`, voice: `alloy`) | Best quality-to-cost ratio; simple single API call; same vendor if OpenAI already in stack |
+| LLM | Optional Anthropic Claude API (`claude-sonnet-4-20250514`) | Interpretation fallback and response polish only; deterministic mode works without it |
+| TTS | Optional OpenAI TTS API (`tts-1`, voice: `alloy`) | Backend-only speech synthesis using `spoken_text`; deterministic mode works without it |
 | Calculation engine | Pure Python (stdlib only) | No dependencies, fully testable, deterministic |
 | Data encoding | JSON | Human-readable, easily versioned, LLM-readable for reference |
 | Session state | In-memory dict (v1) / Redis (v2) | Simple for v1, scalable for v2 |
 | Frontend | HTML / vanilla JS (v1) | No build tooling, fast to iterate |
 | Testing | pytest | Standard Python test runner |
-| Deployment | Docker + uvicorn | Portable, environment-consistent |
+| Demo launch | `run_demo.ps1` / `run_demo.bat` + uvicorn + Python static server | No frontend build step; easy local demo |
 
 ---
 

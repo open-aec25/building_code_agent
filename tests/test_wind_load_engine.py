@@ -183,17 +183,18 @@ class TestCpRoofFlat:
         zones = get_cp_roof_flat(0.8)
         assert len(zones) == 2
 
-    def test_first_zone_has_two_cp_values(self):
-        """First zone always has two Cp values per ASCE 7-16"""
+    def test_first_zone_uses_flat_roof_suction_cp(self):
         zones = get_cp_roof_flat(0.3)
-        assert isinstance(zones[0]["Cp"], list)
-        assert len(zones[0]["Cp"]) == 2
+        assert zones[0]["Cp"] == -0.9
 
     def test_h_over_L_0_5_boundary(self):
-        """Boundary at h/L = 0.5"""
+        """Boundary at h/L = 0.5 stays in the low h/L flat roof row."""
         zones_below = get_cp_roof_flat(0.49)
+        zones_at = get_cp_roof_flat(0.5)
         zones_above = get_cp_roof_flat(0.51)
         assert len(zones_below) == 3
+        assert len(zones_at) == 3
+        assert zones_at[0]["Cp"] == -0.9
         assert len(zones_above) == 2
 
 
@@ -380,18 +381,68 @@ class TestRunWindLoadCalculation:
         profile = result["windward_wall_profile"]["profile"]
         assert len(profile) >= 4  # at least 15, 20, 30, 40, 50
 
-    def test_minimum_wall_pressure_enforced(self):
-        """All wall pressures must be >= 16 psf magnitude"""
+    def test_wall_pressures_remain_raw_while_overall_minimum_is_checked(self):
+        """Surface pressures stay calculated; the 16 psf minimum is checked at the system level."""
         result = run_wind_load_calculation(self._base_inputs(basic_wind_speed_V=75))
         walls  = result["wall_pressures"]["surfaces"]
         for surface_name, surface_data in walls.items():
             if surface_name == "windward_wall":
                 for row in surface_data["pressures"]:
-                    assert abs(row["p_GCpi_pos_psf"]) >= 16.0
-                    assert abs(row["p_GCpi_neg_psf"]) >= 16.0
+                    assert "p_GCpi_pos_raw_psf" in row
+                    assert "p_GCpi_neg_raw_psf" in row
+                    assert row["p_GCpi_pos_psf"] == row["p_GCpi_pos_raw_psf"]
+                    assert row["p_GCpi_neg_psf"] == row["p_GCpi_neg_raw_psf"]
             else:
-                assert abs(surface_data["p_GCpi_pos_psf"]) >= 16.0
-                assert abs(surface_data["p_GCpi_neg_psf"]) >= 16.0
+                assert "p_GCpi_pos_raw_psf" in surface_data
+                assert "p_GCpi_neg_raw_psf" in surface_data
+                assert surface_data["p_GCpi_pos_psf"] == surface_data["p_GCpi_pos_raw_psf"]
+                assert surface_data["p_GCpi_neg_psf"] == surface_data["p_GCpi_neg_raw_psf"]
+
+        overall = result["wind_direction_cases"]["cases"][0]["overall_horizontal_loading"]
+        assert overall["minimum_force_kips"] > 0
+
+    def test_tedds_flat_roof_benchmark_coefficients_and_raw_pressures(self):
+        inputs = self._base_inputs(
+            basic_wind_speed_V=120.0,
+            exposure_category=ExposureCategory.C,
+            mean_roof_height_h=15.0,
+            building_length_L=30.0,
+            building_width_B=30.0,
+        )
+        result = run_wind_load_calculation(inputs)
+
+        assert result["velocity_pressure"]["qh"]["value"] == 26.634
+        roof = result["roof_pressures"]["surfaces"]
+        assert roof["0 to h"]["Cp"] == -0.9
+        assert roof["h to 2h"]["Cp"] == -0.5
+        assert abs(roof["0 to h"]["p_GCpi_pos_raw_psf"] - -25.174) < 0.01
+        assert abs(roof["h to 2h"]["p_GCpi_pos_raw_psf"] - -16.114) < 0.01
+        assert "beyond 2h" not in roof
+
+        walls = result["wall_pressures"]["surfaces"]
+        assert abs(walls["windward_wall"]["pressures"][0]["p_GCpi_pos_raw_psf"] - 13.317) < 0.01
+        assert abs(walls["windward_wall"]["pressures"][0]["p_GCpi_neg_raw_psf"] - 22.905) < 0.01
+        assert abs(walls["leeward_wall"]["p_GCpi_neg_psf"] - -6.525) < 0.01
+
+        overall = result["wind_direction_cases"]["cases"][0]["overall_horizontal_loading"]
+        assert abs(overall["calculated_force_kips"] - 13.244) < 0.01
+        assert overall["minimum_force_kips"] == 7.2
+
+    def test_wind_direction_cases_swap_rectangular_dimensions(self):
+        result = run_wind_load_calculation(
+            self._base_inputs(
+                mean_roof_height_h=20.0,
+                building_length_L=100.0,
+                building_width_B=50.0,
+            )
+        )
+        cases = result["wind_direction_cases"]["cases"]
+        assert cases[0]["wind_direction"] == "0"
+        assert cases[0]["L_over_B"] == 2.0
+        assert cases[1]["wind_direction"] == "90"
+        assert cases[1]["L_over_B"] == 0.5
+        assert cases[0]["roof"]
+        assert cases[1]["roof"]
 
     def test_invalid_height_raises(self):
         with pytest.raises(ValueError):

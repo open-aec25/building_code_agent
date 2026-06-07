@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ASCE 7-16 Wind Load Chat</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ASCE 7-16 Chapter 27</p>
+          <h1>Wind Load Assistant</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="llmToggle" class="icon-button" type="button" aria-label="Toggle Anthropic LLM" title="Toggle Anthropic LLM">
+            <span id="llmIcon">LLM off</span>
+          </button>
+          <button id="ttsToggle" class="icon-button" type="button" aria-label="Toggle voice" title="Toggle voice">
+            <span id="ttsIcon">Voice on</span>
+          </button>
+          <button id="newSessionButton" class="secondary-button" type="button">New session</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="chat-pane" aria-label="Conversation">
+          <div class="status-strip">
+            <div>
+              <span id="phaseLabel" class="phase-label">Phase 1 of 7</span>
+              <strong id="flowState">Collecting inputs</strong>
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div id="messageList" class="message-list" aria-live="polite"></div>
+
+          <form id="chatForm" class="composer">
+            <label class="sr-only" for="messageInput">Message</label>
+            <textarea id="messageInput" rows="2" placeholder="Type your answer..." autocomplete="off"></textarea>
+            <button id="sendButton" type="submit">Send</button>
+          </form>
+          <p id="connectionStatus" class="connection-status" role="status"></p>
+        </section>
+
+        <aside class="results-pane" aria-label="Calculation results">
+          <div class="results-header">
+            <div>
+              <p class="eyebrow">Calculation output</p>
+              <h2>Formatted Results</h2>
+            </div>
+            <button id="refreshResultsButton" class="secondary-button" type="button" disabled>Refresh</button>
+          </div>
+          <div id="resultsEmpty" class="empty-state">
+            Complete the conversation and confirm the inputs to generate formatted wind-load results.
+          </div>
+          <div id="resultsContent" class="results-content" hidden></div>
+        </aside>
+      </main>
+    </div>
+
+    <audio id="ttsAudio" preload="none"></audio>
+    <script src="./app.js"></script>
+  </body>
+</html>
