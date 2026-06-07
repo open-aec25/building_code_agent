@@ -12,3 +12,7 @@ env/
 logs/
 dist/
 build/
+asce716/
+example_calculations/
+outputs/
+tests/
