@@ -4,13 +4,14 @@
 
 ## 1. Project Overview
 
-**Current implementation status (2026-05-18):**
+**Current implementation status (2026-06-07):**
 - FastAPI backend, deterministic chatbot flow, Massachusetts wind lookup, optional Anthropic polish, optional OpenAI TTS, report formatter, and vanilla frontend are implemented.
 - The default app path works without API keys when `LLM_ENABLED=false` and `TTS_ENABLED=false`.
 - Public demo readiness docs and launchers exist: `README.md`, `.env.example`, `CONTRIBUTING.md`, `LICENSE`, `run_demo.ps1`, and `run_demo.bat`.
 - `run_demo.ps1` starts backend/frontend, writes logs under `logs/`, chooses open ports when needed, passes the selected backend URL to the frontend via `?apiBase=...`, and falls back to timestamped log files if a previous process has a log locked.
 - Calculation benchmark alignment against a TEDDS-style flat-roof ASCE 7-16 MWFRS example is implemented: flat roof Cp selection at `h/L = 0.5`, raw pressure preservation, orthogonal wind direction summaries, roof zone geometry/areas, and overall horizontal minimum force checks.
-- Current verification: `python -m pytest -q` passes with 94 tests.
+- `asce716/`, `example_calculations/`, `outputs/`, and `tests/` are ignored local-only folders and were removed from remote tracking in commit `06aa5c6`.
+- Current local verification: `python -m pytest` passes with 99 tests when the ignored local `tests/` folder is present.
 
 A conversational web application that guides users through a structured question flow to collect building parameters, then executes a full ASCE 7-16 Chapter 27 Directional Procedure wind load calculation and returns a structured engineering report.
 
@@ -56,8 +57,8 @@ A conversational web application that guides users through a structured question
 │  │                    Data Layer (JSON)                     │    │
 │  │  risk_category.json       kz_table_26_10_1.json         │    │
 │  │  constants_and_defaults.json  cp_coefficients_27_3.json │    │
-│  │  kzt_topographic_26_8.json    wind_speed_lookup.json     │    │
-│  │  conversation_flow.json                                  │    │
+│  │  kzt_topographic_26_8.json    conversation_flow.json      │    │
+│  │  ma_780_cmr_table_1604_11.json                           │    │
 │  └─────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────┘
                                          │ HTTP
@@ -77,7 +78,7 @@ A conversational web application that guides users through a structured question
 | Chatbot Layer | Drive deterministic 7-phase flow, parse answers, derive risk category, perform Massachusetts lookup, optionally use Anthropic for interpretation/polish | Python + optional Anthropic Claude API |
 | TTS Module | Convert assistant text to audio and stream to frontend | `tts.py` → OpenAI TTS API |
 | Calculation Engine | Execute all ASCE 7-16 math — no LLM involvement | `wind_load_engine.py` |
-| Data Layer | JSON files encoding all ASCE 7-16 tables, constants, and flow logic | JSON |
+| Data Layer | JSON files encoding app configuration, conversation flow, selected ASCE support tables, and Massachusetts lookup data; the engine still embeds some calculation constants/tables in Python | JSON + Python |
 | Session Store | Persist collected inputs between conversation turns | Server-side dict or Redis |
 
 ---
@@ -96,8 +97,8 @@ Phase 1 — Building Classification
 
 Phase 2 — Site & Wind Speed
   Q5: City/state or zip code
-  → Derive: Basic wind speed V (mph) from wind_speed_lookup.json when national lookup is available
-  → Massachusetts interim path: lookup city/town in data/ma_780_cmr_table_1604_11.json and select basic_wind_speed_v_mph by derived Risk Category
+  → Massachusetts path: lookup city/town in data/ma_780_cmr_table_1604_11.json and select basic_wind_speed_v_mph by derived Risk Category
+  → Non-Massachusetts, unresolved Massachusetts, and ZIP-only inputs fall back to manual ASCE 7-16 wind-speed entry
 
 Phase 3 — Exposure Category
   Q6: Terrain description (guided multiple choice → B / C / D)
@@ -140,7 +141,7 @@ Phase 7 — Confirmation
 
 ## 4. Data Layer Files
 
-All ASCE 7-16 reference data is encoded in JSON. The calculation engine reads these files — the LLM does not.
+Project data/configuration lives in the active `data/` folder. The legacy duplicate `json_files/` folder has been removed after verifying duplicate hashes matched the `data/` copies. The calculation engine still embeds several ASCE constants/tables directly in Python, and future migrations should preserve outputs with tests before moving additional tables into JSON. The LLM does not perform table lookup or calculation authority.
 
 | File | Contents | Status |
 |---|---|---|
@@ -150,7 +151,6 @@ All ASCE 7-16 reference data is encoded in JSON. The calculation engine reads th
 | `cp_coefficients_27_3.json` | Cp for walls (Fig. 27.3-1) and roofs (Fig. 27.3-2) | ✅ Complete |
 | `kzt_topographic_26_8.json` | K1/K2/K3 tables and Kzt formula per Fig. 26.8-1 | ✅ Complete |
 | `conversation_flow.json` | Full chatbot Q&A flow with branching logic | ✅ Complete |
-| `wind_speed_lookup.json` | Basic wind speed V by location (city/state/zip) | ❌ Not built |
 | `ma_780_cmr_table_1604_11.json` | Massachusetts 780 CMR Table 1604.11 municipal snow loads, wind speeds, and seismic parameters with metadata and note refs | ✅ Complete for MA |
 | `ma_780_cmr_table_1604_11.jsonl` | One JSON record per municipality from Table 1604.11; best for RAG/retrieval indexing | ✅ Complete for MA |
 | `ma_780_cmr_table_1604_11.csv` | Flat inspection/import copy of Table 1604.11 | ✅ Complete for MA |
@@ -158,7 +158,7 @@ All ASCE 7-16 reference data is encoded in JSON. The calculation engine reads th
 
 ### Massachusetts Wind Speed Lookup Dataset
 
-Use `data/ma_780_cmr_table_1604_11.json` as the canonical Massachusetts lookup source until a national `wind_speed_lookup.json` exists. The JSON contains:
+Use `data/ma_780_cmr_table_1604_11.json` as the canonical and only automatic wind-speed lookup source. The app supports Massachusetts city/town lookup from this table and deliberately falls back to manual wind-speed entry outside that supported scope. The JSON contains:
 
 - `metadata`: source URL, scrape date, units, table notes, and an LLM usage hint.
 - `records`: one object per unique Massachusetts municipality.
@@ -261,6 +261,8 @@ As of 2026-05-18, the engine/reporting path has a TEDDS-style flat-roof benchmar
 
 ## 6. File & Folder Structure
 
+Tracked source tree on the remote branch:
+
 ```
 wind-load-calculator/
 │
@@ -282,8 +284,7 @@ wind-load-calculator/
 │   ├── ma_780_cmr_table_1604_11.json   # ✅ MA municipal Table 1604.11 canonical data
 │   ├── ma_780_cmr_table_1604_11.jsonl  # ✅ MA Table 1604.11 retrieval/indexing copy
 │   ├── ma_780_cmr_table_1604_11.csv    # ✅ MA Table 1604.11 inspection copy
-│   ├── raw_780_cmr_chapter_16_cornell.html # ✅ Raw scrape source
-│   └── wind_speed_lookup.json      # ❌ National lookup still needs to be built
+│   └── raw_780_cmr_chapter_16_cornell.html # ✅ Raw scrape source
 │
 ├── minimal_ui/
 │   └── index.html                  # ❌ TASK NEW-A — single-file demo UI with TTS
@@ -295,12 +296,6 @@ wind-load-calculator/
 │   ├── app.js                      # Conversation state, API calls, TTS audio player
 │   └── styles.css                  # Styling
 │
-├── tests/
-│   ├── test_wind_load_engine.py    # ✅ 65 tests passing
-│   ├── test_tts.py                 # ✅ Mocked backend TTS coverage
-│   ├── test_report_formatter.py    # ✅ Formatter coverage
-│   └── test_api.py                 # ✅ API and conversation coverage
-│
 ├── README.md                       # Open-source demo setup and scope
 ├── CONTRIBUTING.md                 # Contributor guidance
 ├── LICENSE                         # MIT license
@@ -310,6 +305,15 @@ wind-load-calculator/
 ├── PROJECT_STATE.md                # Master agent maintains this
 ├── ARCHITECTURE.md                 # This file
 └── requirements.txt                # Python dependencies
+```
+
+Ignored local-only folders may exist in this workspace but are not tracked on the remote branch:
+
+```text
+asce716/                 # Local ASCE reference PDFs
+example_calculations/    # Local benchmark/example outputs
+outputs/                 # Generated diagrams and scratch outputs
+tests/                   # Local pytest suite; 99 passed on 2026-06-07
 ```
 
 ---
@@ -407,40 +411,20 @@ TTS_ENABLED=true          # set to false to disable TTS entirely
 
 ---
 
-#### TASK 01 — Wind Speed Lookup JSON
+#### TASK 01 — Massachusetts Wind Speed Lookup JSON
 **Assigned to:** Data Sub-Agent
 **Depends on:** Nothing
-**Status:** 🔄 Partially complete for Massachusetts
+**Status:** ✅ Complete for Massachusetts-only automatic lookup
 
 **Description:**
-Build `data/wind_speed_lookup.json` encoding basic wind speed V (mph) by US location for all three risk category maps (ASCE 7-16 Figures 26.5-1A, 26.5-1B, 26.5-1C).
-
-Massachusetts has an interim authoritative municipal source in `data/ma_780_cmr_table_1604_11.json`, scraped from Cornell LII's 780 CMR Chapter 16 Table 1604.11. This should be used for MA lookup integration before attempting a national ASCE figure digitization.
+Use `data/ma_780_cmr_table_1604_11.json`, scraped from Cornell LII's 780 CMR Chapter 16 Table 1604.11, as the automatic wind-speed lookup source for Massachusetts municipalities. Do not claim national wind-speed lookup support; non-Massachusetts and unresolved inputs fall back to manual ASCE 7-16 wind-speed entry.
 
 **Acceptance Criteria:**
-- Coverage of all 50 US states at minimum city/county granularity
-- Keys include city name, state abbreviation, and zip code prefix where possible
-- Three speed values per entry: `V_cat_I`, `V_cat_II`, `V_cat_III_IV`
-- Hurricane-prone coastal regions (Gulf Coast, Atlantic Coast, FL, TX coast) have higher resolution entries
-- Schema includes a `source_note` field referencing the applicable ASCE 7-16 figure
-- A fallback entry exists for locations not found: `"lookup_failed": true` flag with instruction to prompt user for manual entry
-- For Massachusetts, either wrap/import `ma_780_cmr_table_1604_11.json` into the lookup service or support it as a separate first-class data source. Do not duplicate values by hand.
-
-**Schema:**
-```json
-{
-  "lookup": {
-    "Boston_MA": {
-      "state": "MA",
-      "zip_prefixes": ["021", "022"],
-      "V_cat_I":     105,
-      "V_cat_II":    120,
-      "V_cat_III_IV": 130,
-      "source_note": "ASCE 7-16 Figures 26.5-1A/B/C — interpolated"
-    }
-  }
-}
-```
+- Resolve supported Massachusetts city/town names against `data/ma_780_cmr_table_1604_11.json`
+- Select `basic_wind_speed_v_mph` by the already-derived Risk Category
+- Cite `780 CMR Table 1604.11`
+- Warn when `note_refs` contains `2`
+- Preserve manual fallback for non-Massachusetts, unresolved Massachusetts, and ZIP-only inputs
 
 ---
 
@@ -517,23 +501,20 @@ Build `backend/chatbot.py` — the LLM-powered conversation manager that drives 
 
 ---
 
-#### TASK 05 — Wind Speed Lookup Integration
+#### TASK 05 — Massachusetts Wind Speed Lookup Integration
 **Assigned to:** Backend Sub-Agent
 **Depends on:** TASK 01, TASK 04
-**Status:** 🔄 Partially unblocked for Massachusetts
+**Status:** ✅ Complete for Massachusetts city/town lookup
 
 **Description:**
-Integrate `wind_speed_lookup.json` into the chatbot layer so Q5 (location) triggers an automatic lookup of V rather than requiring manual user entry.
-
-For Massachusetts locations, integrate `data/ma_780_cmr_table_1604_11.json` first. It provides city/town-level values for Risk Categories I-IV from 780 CMR Table 1604.11, which is enough to remove the manual wind-speed prompt for MA municipalities.
+Integrate `data/ma_780_cmr_table_1604_11.json` into the chatbot layer so Q5 can automatically resolve V for supported Massachusetts municipalities. Keep the manual wind-speed prompt for all unsupported locations.
 
 **Acceptance Criteria:**
-- Fuzzy location matching — "Boston", "Boston MA", "Boston, Massachusetts", and zip "02101" all resolve to the same entry
-- On successful lookup: chatbot confirms "Based on your location, V = X mph per ASCE 7-16 Figure 26.5-1_. Does that look right?"
-- On failed lookup: chatbot prompts user to manually enter V from the ASCE 7-16 figure, specifying which figure based on risk category
-- Lookup uses the correct figure (1A, 1B, or 1C) based on the already-derived Risk Category
-- Unit test: at least 20 representative locations resolve correctly including coastal high-wind zones
-- Massachusetts-specific tests should cover at least Boston, Cambridge, Worcester, Chatham, Aquinnah (Gay Head), Mount Washington, Adams, and a non-MA/unknown fallback.
+- City/town matching for inputs such as "Boston", "Boston MA", and "Boston, Massachusetts"
+- On successful lookup: chatbot confirms V in mph and cites `780 CMR Table 1604.11`
+- On failed lookup: chatbot prompts the user to manually enter V from the applicable ASCE 7-16 figure
+- Lookup uses the correct `basic_wind_speed_v_mph` key based on the already-derived Risk Category
+- Tests cover successful MA lookup, Risk Category-specific speed, unresolved MA fallback, non-MA fallback, and note ref `2`
 - If a Massachusetts record has note ref `2`, chatbot output must warn that the location may be in a Special Wind Region and AHJ/ASCE confirmation may be required.
 
 ---
@@ -626,7 +607,7 @@ Extend `wind_load_engine.py` to support Components & Cladding (C&C) pressure cal
 **Implemented:**
 - Added `README.md` with setup, architecture, scope, limitations, deterministic-only mode, run commands, tests, and demo scenarios.
 - Added `.env.example`, `CONTRIBUTING.md`, and MIT `LICENSE`.
-- Added/updated `.gitignore` for local envs, logs, build output, and cache files.
+- Added/updated `.gitignore` for local envs, logs, build output, cache files, local reference folders, generated outputs, example calculations, and the local-only test suite.
 - Added `run_demo.ps1` and `run_demo.bat` for Windows local demo startup.
 - `run_demo.ps1` starts backend/frontend, logs stdout/stderr to `logs/`, checks backend `/health`, prints log tails on failure, and supports dynamic frontend/backend ports.
 
@@ -634,7 +615,7 @@ Extend `wind_load_engine.py` to support Components & Cladding (C&C) pressure cal
 
 ## 8. Project State File Expectations
 
-`PROJECT_STATE.md` is the source of truth for completed work, pending work, known limitations, and latest test status. As of 2026-05-18, the current suite is `python -m pytest -q` with 94 passing tests. The legacy example below is retained only as a formatting example; update concrete phase lists from `PROJECT_STATE.md`, not from the historical sample.
+`PROJECT_STATE.md` is the source of truth for completed work, pending work, known limitations, and latest test status. As of 2026-06-07, the current local suite is `python -m pytest` with 99 passing tests when the ignored `tests/` folder is present. The legacy example below is retained only as a formatting example; update concrete phase lists from `PROJECT_STATE.md`, not from the historical sample.
 
 The master agent should keep `PROJECT_STATE.md` aligned with the current repository state. A current example:
 
@@ -652,6 +633,7 @@ The master agent should keep `PROJECT_STATE.md` aligned with the current reposit
 - Phase 10 - Open Source Demo Readiness
 - TEDDS-style MWFRS benchmark alignment
 - Demo launcher log-lock hardening
+- Repository hygiene after remote cleanup
 
 ## In Progress
 - None.
@@ -663,7 +645,7 @@ The master agent should keep `PROJECT_STATE.md` aligned with the current reposit
 - Future commercial-readiness hardening if the demo becomes a product
 
 ## Test Status
-- `python -m pytest -q`: 94 passed
+- `python -m pytest`: 99 passed locally
 ```
 
 ---
@@ -723,7 +705,7 @@ If the backend runs on a non-default port, open the frontend with `?apiBase=<enc
 | Layer | Technology | Rationale |
 |---|---|---|
 | Backend framework | FastAPI | Fast, async-native, auto-generates OpenAPI docs |
-| LLM | Optional Anthropic Claude API (`claude-sonnet-4-20250514`) | Interpretation fallback and response polish only; deterministic mode works without it |
+| LLM | Optional Anthropic Claude API (`claude-sonnet-4-6` by default via `ANTHROPIC_MODEL`) | Interpretation fallback and response polish only; deterministic mode works without it |
 | TTS | Optional OpenAI TTS API (`tts-1`, voice: `alloy`) | Backend-only speech synthesis using `spoken_text`; deterministic mode works without it |
 | Calculation engine | Pure Python (stdlib only) | No dependencies, fully testable, deterministic |
 | Data encoding | JSON | Human-readable, easily versioned, LLM-readable for reference |

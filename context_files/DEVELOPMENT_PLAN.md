@@ -8,28 +8,34 @@ The project goal is to build a conversational web application that collects buil
 
 ## Current Repository State
 
-As of 2026-05-18, the repository has reached open-source demo readiness and has completed a TEDDS-style benchmark alignment pass for a flat-roof ASCE 7-16 Chapter 27 MWFRS example. The backend, deterministic conversation controller, optional LLM polish, Massachusetts wind lookup, backend TTS route, report formatter, production vanilla frontend, public docs, and Windows demo launchers are implemented.
+As of 2026-06-07, the repository has reached open-source demo readiness, completed a TEDDS-style benchmark alignment pass for a flat-roof ASCE 7-16 Chapter 27 MWFRS example, and cleaned the remote branch so generated/reference/local verification folders are ignored rather than tracked. The backend, deterministic conversation controller, optional LLM polish, Massachusetts wind lookup, backend TTS route, report formatter, production vanilla frontend, public docs, and Windows demo launchers are implemented.
 
-### Existing Folders
+### Tracked Folders
 
 ```text
-asce716/
 backend/
 context_files/
 data/
 frontend/
-json_files/
 logs/                         generated locally by run_demo.ps1; ignored
 minimal_ui/
-outputs/
 python_files/
-tests/
+```
+
+### Local-Only Ignored Folders
+
+These may exist in this workspace, but they are intentionally ignored and no longer tracked on the remote branch as of 2026-06-07:
+
+```text
+asce716/                       local ASCE reference PDFs
+example_calculations/          local benchmark/example outputs
+outputs/                       generated diagrams and scratch outputs
+tests/                         local pytest suite used for verification
 ```
 
 ### Existing Assets
 
 ```text
-asce716/                         ASCE 7-16 reference PDFs
 context_files/ARCHITECTURE.md    Architecture and agent task specification
 backend/main.py                  FastAPI app with session, chat, calculate, and TTS routes
 backend/chatbot.py               Deterministic 7-phase conversation controller with optional LLM polish
@@ -43,12 +49,11 @@ CONTRIBUTING.md                  Contributor guidance and calculation-change gua
 .env.example                     Runtime configuration template without secrets
 run_demo.ps1                     Windows PowerShell launcher with logs, dynamic ports, and timestamped fallback logs if previous processes lock log files
 run_demo.bat                     Batch wrapper for the PowerShell launcher
-json_files/*.json                Existing data/config JSON files
+data/*.json                      Active runtime data/config JSON files
 data/ma_780_cmr_table_1604_11.*  Massachusetts 780 CMR Table 1604.11 lookup data
 data/raw_780_cmr_chapter_16_cornell.html  Raw Cornell LII source for MA Table 1604.11
 python_files/scrape_780_cmr_table_1604_11.py  Regenerates MA Table 1604.11 JSON/JSONL/CSV
-outputs/app_logic_flow.csv       Step-by-step app logic flow
-tests/*.py                       Pytest suite for engine, API, TTS, and formatter behavior
+tests/*.py                       Local-only ignored pytest suite for engine, API, TTS, and formatter behavior
 ```
 
 ### Current Test Status
@@ -62,15 +67,15 @@ python -m pytest -q
 Observed result:
 
 ```text
-94 passed
+99 passed
 ```
 
-The test suite includes engine coverage, API/conversation flows, Massachusetts lookup behavior, mocked LLM fallback/polish behavior, mocked TTS behavior, report formatter checks, and benchmark-oriented checks for flat-roof Cp selection, raw pressure preservation, orthogonal wind direction summaries, and overall horizontal force checks.
+The local test suite includes engine coverage, API/conversation flows, Massachusetts lookup behavior, mocked LLM fallback/polish behavior, mocked TTS behavior, report formatter checks, and benchmark-oriented checks for flat-roof Cp selection, raw pressure preservation, orthogonal wind direction summaries, and overall horizontal force checks. The suite currently lives under ignored `tests/`, so a clean remote clone will not include those local tests unless they are restored to tracking later.
 
 ## Remaining Known Gaps
 
-- `data/wind_speed_lookup.json` is still missing as a national lookup.
-- Massachusetts city/town lookup is integrated through `data/ma_780_cmr_table_1604_11.json`; ZIP-only lookup is not supported by the current municipal-table path.
+- Automatic wind-speed lookup is intentionally Massachusetts-only through `data/ma_780_cmr_table_1604_11.json`; non-Massachusetts, unresolved Massachusetts, and ZIP-only lookup inputs fall back to manual ASCE 7-16 wind-speed entry.
+- The legacy duplicate `json_files/` folder was removed after verifying its duplicate JSON files matched the active copies in `data/`.
 - The calculation engine still embeds many constants/tables in Python; JSON-backed migration remains a future task.
 - Sloped-roof direction-specific roof zone geometry/force expansion is still limited compared with the flat-roof benchmark path.
 - In-memory sessions are acceptable for the demo but reset when the backend process restarts.
@@ -166,7 +171,7 @@ minimal_ui/
 ```text
 python_files/wind_load_engine.py      -> backend/wind_load_engine.py
 python_files/test_wind_load_engine.py -> tests/test_wind_load_engine.py
-json_files/*.json                     -> data/*.json
+legacy JSON/config files              -> data/*.json
 ```
 
 3. Add `requirements.txt` with at least:
@@ -371,21 +376,21 @@ Non-flat roof -> collect slope and ridge orientation.
 
 Implement deterministic derivations and lookup behavior required by the conversation.
 
-Current status: Risk category logic, manual wind-speed fallback, and Massachusetts city/town wind-speed lookup are implemented in `backend/chatbot.py`. The national `data/wind_speed_lookup.json` remains pending.
+Current status: Risk category logic, manual wind-speed fallback, and Massachusetts city/town wind-speed lookup are implemented in `backend/chatbot.py`. The app does not currently plan or claim national wind-speed lookup support.
 
 ### Tasks
 
 1. Add helper logic for `data/risk_category.json`.
-2. Build or integrate wind-speed lookup data.
-   - National lookup is still pending as `data/wind_speed_lookup.json`.
-   - Massachusetts lookup should use `data/ma_780_cmr_table_1604_11.json` first; do not hand-copy its values.
+2. Use the Massachusetts wind-speed lookup data.
+   - Massachusetts lookup uses `data/ma_780_cmr_table_1604_11.json`; do not hand-copy its values.
+   - Non-Massachusetts, unresolved Massachusetts, and ZIP-only inputs must keep the manual wind-speed fallback.
 3. Implement location lookup for:
 
 ```text
 City
 City/state
 State abbreviation
-ZIP or ZIP prefix
+Massachusetts municipality name
 ```
 
 4. Add fallback behavior when lookup fails.
@@ -393,7 +398,7 @@ ZIP or ZIP prefix
 
 ### Massachusetts Lookup Workflow
 
-Use this workflow before a national lookup exists:
+Use this workflow for the supported Massachusetts-only automatic lookup:
 
 1. Detect Massachusetts locations from user text such as `Boston`, `Boston MA`, `Boston, Massachusetts`, or a future geocoder result.
 2. Resolve the input to a `city_town` in `data/ma_780_cmr_table_1604_11.json`.
@@ -422,7 +427,7 @@ python python_files\scrape_780_cmr_table_1604_11.py
 ### Acceptance Criteria
 
 - Risk Category can be derived from Phase 1 answers.
-- Basic wind speed can be resolved from known locations.
+- Basic wind speed can be resolved from supported Massachusetts municipalities.
 - Massachusetts municipalities can resolve from `data/ma_780_cmr_table_1604_11.json`.
 - Failed lookup asks the user for manual wind speed entry.
 - Tests cover at least representative normal and failure cases.
@@ -655,7 +660,7 @@ Implemented:
 - `.env.example` documenting `LLM_ENABLED`, `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`, `TTS_ENABLED`, `OPENAI_API_KEY`, `TTS_VOICE`, and `TTS_MODEL`.
 - `CONTRIBUTING.md` with project map, safe contribution guidance, and calculation-change guardrails.
 - MIT `LICENSE`.
-- `.gitignore` additions for env files, virtual environments, logs, build output, and caches.
+- `.gitignore` additions for env files, virtual environments, logs, build output, caches, local reference folders, generated outputs, example calculations, and local-only tests.
 - `run_demo.ps1` and `run_demo.bat` for Windows-friendly startup.
 - `run_demo.ps1` now falls back to timestamped log files when previous background processes keep standard log files locked.
 
@@ -678,8 +683,34 @@ python -m pytest -q
 Observed result:
 
 ```text
-94 passed
+99 passed
 ```
+
+---
+
+## Completed 2026-06-07 - Remote Repository Hygiene
+
+### Goal
+
+Keep the GitHub repository focused on source code, data needed by the app, docs, and launchers while leaving large reference materials, generated outputs, examples, and local verification files available only in the workspace.
+
+### Implemented
+
+1. Added these ignored folder patterns to `.gitignore`:
+
+```text
+asce716/
+example_calculations/
+outputs/
+tests/
+```
+
+2. Removed those folders from Git tracking with `git rm --cached -r`, preserving local files on disk.
+3. Pushed commit `06aa5c6 Stop tracking generated and local reference folders` to `main`.
+
+### Current Implication
+
+The local workspace may contain ignored `tests/` and reference/output folders. A fresh remote clone will not include them. Run local verification from this workspace when the ignored test suite is present, or restore tests to tracking before relying on remote-only CI.
 
 ---
 

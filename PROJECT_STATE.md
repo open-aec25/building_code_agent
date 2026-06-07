@@ -1,13 +1,18 @@
 # PROJECT_STATE.md
-Last updated: 2026-05-18 by Codex
+Last updated: 2026-06-07 by Codex
 
 ## Completed Tasks
+- Repository hygiene after remote cleanup - completed 2026-06-07
+  - Added `asce716/`, `example_calculations/`, `outputs/`, and `tests/` to `.gitignore`.
+  - Removed those folders from Git tracking and pushed the deletion so they no longer appear on the remote `main` branch.
+  - Preserved the local copies on disk for reference, generated artifacts, and local verification.
+  - Latest remote cleanup commit: `06aa5c6 Stop tracking generated and local reference folders`.
 - Phase 10 - Open Source Demo Readiness - completed 2026-04-26
   - Added `README.md` with project overview, architecture summary, supported scope, limitations, local setup, deterministic-only mode, backend/frontend run commands, test commands, demo scenarios, and safety disclaimer.
   - Added `.env.example` documenting optional LLM and TTS runtime environment variables without secrets.
   - Added `CONTRIBUTING.md` with project map, safe contribution guidance, test workflow, and guardrails for calculation changes.
   - Added an MIT `LICENSE`.
-  - Expanded `.gitignore` for local virtual environments, env files, logs, and build artifacts while preserving `.env.example`.
+  - Expanded `.gitignore` for local virtual environments, env files, logs, build artifacts, local reference folders, generated outputs, example calculations, and the local-only test suite while preserving `.env.example`.
 - Phase 8 - Build Production Frontend - completed 2026-04-26
   - Added the production vanilla HTML/CSS/JS frontend in `frontend/`.
   - Creates or restores a backend session on load, stores the active tab session ID in `sessionStorage`, and supports a new-session reset action.
@@ -35,7 +40,7 @@ Last updated: 2026-05-18 by Codex
   - Extended API tests to cover flat roof, gable roof, topographic branch, correction flow, and calculation from confirmation.
 - Phase 5 - Add Risk Category And Wind Speed Logic - completed 2026-04-25
   - Tightened deterministic Risk Category derivation from `data/risk_category.json`.
-  - Made wind-speed lookup fallback explicit: the controller asks the user for manual ASCE 7-16 wind speed entry because `wind_speed_lookup.json` is not ready.
+  - Made wind-speed lookup fallback explicit: the controller asks the user for manual ASCE 7-16 wind speed entry outside the supported Massachusetts municipal lookup path.
   - Added tests for manual wind-speed fallback, positive wind-speed validation, and Risk Categories I, III, and IV.
 - Massachusetts 780 CMR Table 1604.11 Data Extraction - completed 2026-04-25
   - Scraped Cornell LII 780 CMR Chapter 16 Table 1604.11 from `https://www.law.cornell.edu/regulations/massachusetts/780-CMR-CHAPTER-16`.
@@ -65,6 +70,10 @@ Last updated: 2026-05-18 by Codex
   - Integrated formatted calculation output into `/session/{session_id}/calculate` while preserving raw engine results.
   - Surfaced inputs, derived ratios, assumptions/defaults, Kzt, velocity pressure, Cp values, wall/roof pressures, minimum pressure checks, references, and limitations.
   - Added dedicated formatter tests for flat roof, gable roof, topographic, assumptions/defaults, minimum pressure checks, and markdown sections.
+- JSON data folder consolidation - completed 2026-06-07
+  - Verified duplicate files in `json_files/` matched the active copies in `data/`.
+  - Removed the legacy `json_files/` folder.
+  - Confirmed active app JSON inputs are under `data/`, including the Massachusetts Table 1604.11 wind-speed lookup.
 - TEDDS-style MWFRS benchmark alignment - completed 2026-05-18
   - Corrected flat-roof Cp selection at `h/L = 0.5` to align with the reference flat-roof MWFRS example.
   - Preserved calculated wall and roof pressures instead of substituting minimum pressures into individual surface pressure rows.
@@ -85,18 +94,20 @@ Last updated: 2026-05-18 by Codex
 - Future commercial readiness hardening if this demo becomes a production product.
 
 ## Known Issues / Decisions
-- Existing `python_files/` and `json_files/` source directories were left in place for compatibility during normalization.
+- Active runtime JSON lives in `data/`; the legacy duplicate `json_files/` folder was removed after hash verification.
+- `asce716/`, `example_calculations/`, `outputs/`, and `tests/` are intentionally local-only ignored folders as of 2026-06-07. They may exist in this workspace but are not tracked on the remote branch.
+- The local pytest suite currently lives under the ignored `tests/` folder. A clean remote clone will not include it unless tests are restored to tracking later.
 - The calculation engine still embeds tables/constants in Python; JSON-backed loading remains a later migration.
-- `wind_speed_lookup.json` has not been built yet as a national lookup; the chatbot still asks the user to enter the ASCE 7-16 basic wind speed manually for non-Massachusetts or unresolved locations.
-- Massachusetts municipal lookup is wired into `backend/chatbot.py` using `data/ma_780_cmr_table_1604_11.json`; bare ZIP-code-only inputs are not supported by this municipal table and fall back to manual entry.
+- Wind-speed lookup is intentionally Massachusetts-only for now, using `data/ma_780_cmr_table_1604_11.json`; non-Massachusetts, unresolved Massachusetts, and ZIP-only inputs fall back to manual ASCE 7-16 wind-speed entry.
 - LLM integration is feature-flagged with `LLM_ENABLED=true` and requires `ANTHROPIC_API_KEY`; when disabled or unavailable, the deterministic flow continues unchanged.
 - TTS integration is feature-flagged with `TTS_ENABLED=true` and requires `OPENAI_API_KEY`; when disabled or unavailable, `/tts` returns `{ "tts_available": false, "detail": "..." }`.
 - Calculation responses now include raw `results`, `formatted_display`, and `formatted_markdown`.
 - Engine outputs now preserve calculated pressures in surface pressure rows; ASCE minimum pressure/force behavior is surfaced through separate checks rather than silently replacing leeward, side-wall, or roof pressure values.
 - Flat-roof direction/zone force summaries are benchmark-aligned for the current TEDDS-style MWFRS example; sloped-roof direction-specific zone geometry remains a future improvement.
-- The latest authoritative test status is the newest `python -m pytest -q` entry below; older entries are retained as history only.
+- The latest authoritative test status is the newest pytest entry below; older entries are retained as history only.
 
 ## Test Status
+- `python -m pytest`: 99 passed on 2026-06-07 before the local-only `tests/` folder was removed from Git tracking.
 - `python -m pytest -q`: 94 passed on 2026-05-18 after TEDDS-style benchmark alignment and launcher log-lock hardening.
 - `python -m pytest -q`: 91 passed on 2026-04-26 after Phase 10 open-source demo readiness updates.
 - `python -m pytest -q`: 91 passed on 2026-04-26 after Phase 8 frontend work.
